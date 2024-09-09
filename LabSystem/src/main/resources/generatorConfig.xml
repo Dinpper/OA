@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!-- 设置mysql驱动路径 -->
+    <!-- 此处指定生成针对MyBatis3的DAO -->
+    <context id="context" targetRuntime="MyBatis3">
+        <!-- 分页插件-->
+        <plugin type="mybatis.generator.plugin.mysql.PaginationPlugin"/>
+        <plugin type="mybatis.generator.plugin.InsertBatchPlugin"/>
+        <plugin type="mybatis.generator.plugin.AnnotationPlugin"/>
+        <!-- 去除自动生成的注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- jdbc连接信息 -->
+
+        <jdbcConnection
+                driverClass="com.mysql.jdbc.Driver"
+                connectionURL="jdbc:mysql://localhost:3306/manage_system"
+                userId="root"
+                password="dinpper"/>
+        <!-- 生成vo对象(*.java)及生成用于查询的Example对象(*Example.java) -->
+        <javaModelGenerator
+                targetPackage="com.example.labsystem.orm.po"
+                targetProject="src/main/java"/>
+        <!-- dao配置文件 (*Mapper.xml) -->
+        <sqlMapGenerator
+                targetPackage="mappers"
+                targetProject="src/main/resources"/>
+        <!-- 生成DAO的类文件 (*Mapper.java) -->
+        <javaClientGenerator
+                targetPackage="com.example.labsystem.orm.dao"
+                targetProject="src/main/java"
+                type="xmlmapper"/>
+        <!-- 想要生成的数据库表,自动化工具会根据该表的结构生成相应的po对象 -->
+
+        <!--
+        <table catalog="" schema="" tableName="sys_berth" domainObjectName="SysBerth"></table>
+        <table catalog="" schema="" tableName="sys_sensor" domainObjectName="SysSensor"></table>
+        <table catalog="" schema="" tableName="sys_gateway" domainObjectName="SysGateway"></table>
+        <table catalog="" schema="" tableName="dev_gateway_status" domainObjectName="DevGatewayStatus"></table>
+        <table catalog="" schema="" tableName="dev_berth_status" domainObjectName="DevBerthStatus"></table>
+        <table catalog="" schema="" tableName="parking_berth" domainObjectName="ParkingBerth"></table>
+
+        <table catalog="" schema="" tableName="tra_order_arrear" domainObjectName="TraOrderArrear"></table>
+        <table catalog="" schema="" tableName="tra_order_arrear_his" domainObjectName="TraOrderArrearHis"></table>
+
+        <table catalog="" schema="" tableName="opm_inevidence_his" domainObjectName="OpmInevidenceHis"></table>-->
+        <!--<table catalog="" schema="" tableName="sys_config" domainObjectName="SysConfig"></table>-->
+        <!--<table catalog="" schema="" tableName="dev_sensor_status" domainObjectName="DevSensorStatus"></table>-->
+
+        <!--<table catalog="" schema="" tableName="parking_berth_highvideo" domainObjectName="ParkingBerthHighvideo"></table>-->
+        <!--        <table catalog="" schema="" tableName="parking_record_cache" domainObjectName="ParkingRecordCache">-->
+        <!--            <generatedKey column="code" sqlStatement="select fn_nextval_parking_record_cache();"/>-->
+        <!--        </table>-->
+        <!--        <table catalog="" schema="" tableName="parking_berth_cache" domainObjectName="ParkingBerthCache"></table>-->
+
+                <table catalog="" schema="" tableName="parking_already_pay" domainObjectName="ParkingAlreadyPay">
+                    <generatedKey column="code" sqlStatement="select fn_nextval_parking_already_pay();"/>
+                </table>
+        <!--        <table catalog="" schema="" tableName="parking_already_pay_today" domainObjectName="ParkingAlreadyPayToday"></table>-->
+        <!--        <table catalog="" schema="" tableName="opm_inevidence" domainObjectName="OpmInevidence"></table>-->
+                <table catalog="" schema="" tableName="parking_arrear_record_his" domainObjectName="ParkingArrearRecordHis"></table>
+                <table catalog="" schema="" tableName="parking_arrear_record" domainObjectName="ParkingArrearRecord">
+                    <generatedKey column="code" sqlStatement="select fn_nextval_parking_arrear_record();"/>
+                </table>
+        <!--        <table catalog="" schema="" tableName="bo_postpaid_his" domainObjectName="BoPostpaidHis"></table>-->
+        <!--        <table catalog="" schema="" tableName="tra_postpaid_his" domainObjectName="TraPostpaidHis"></table>-->
+        <!--        <table catalog="" schema="" tableName="tra_arrear_his" domainObjectName="TraArrearHis"></table>-->
+        <!--        <table catalog="" schema="" tableName="bo_settlement_his" domainObjectName="BoSettlementHis"></table>-->
+        <!--        <table catalog="" schema="" tableName="tra_settlement_his" domainObjectName="TraSettlementHis"></table>-->
+                <table catalog="" schema="" tableName="parking_record_his" domainObjectName="ParkingRecordHis"></table>
+                <table catalog="" schema="" tableName="parking_record_his_today" domainObjectName="ParkingRecordHisToday"></table>
+
+        <!--        <table catalog="" schema="" tableName="bo_settlement" domainObjectName="BoSettlement"></table>-->
+        <!--        <table catalog="" schema="" tableName="parking_settlement" domainObjectName="ParkingSettlement"></table>-->
+        <!--        <table catalog="" schema="" tableName="tra_postpaid" domainObjectName="TraPostpaid"></table>-->
+        <!--        <table catalog="" schema="" tableName="tra_postpaid_his" domainObjectName="TraPostpaidHis"></table>-->
+        <!--        <table catalog="" schema="" tableName="tra_arrear" domainObjectName="TraArrear"></table>-->
+        <!--        <table catalog="" schema="" tableName="tra_settlement" domainObjectName="TraSettlement"></table>-->
+
+        <!--        <table catalog="" schema="" tableName="vw_cbk_arrear_record" domainObjectName="VwCbkArrearRecord"></table>-->
+
+                <!--<table catalog="" schema="" tableName="dev_berth_status_his" domainObjectName="DevBerthStatusHis"></table>-->
+        <!--        <table catalog="" schema="" tableName="parking_record_cache_cancel" domainObjectName="ParkingRecordCacheCancel"></table>-->
+<!--        <table catalog="" schema="" tableName="opm_month_car_record" domainObjectName="OpmMonthCarRecord"></table>-->
+
+        <!--<table catalog="" schema="" tableName="tra_arrear_his" domainObjectName="TraArrearHis"></table>-->
+        <!--<table catalog="" schema="" tableName="tra_arrear" domainObjectName="TraArrear">-->
+            <!--<generatedKey column="code" sqlStatement="select fn_nextval_tra_arrear();"/>-->
+        <!--</table>-->
+        <!--<table catalog="" schema="" tableName="tra_order_arrear_his" domainObjectName="TraOrderArrearHis"></table>-->
+        <!--<table catalog="" schema="" tableName="tra_order_arrear" domainObjectName="TraOrderArrear"></table>-->
+
+                <!--<table catalog="" schema="" tableName="parking_already_pay_error" domainObjectName="ParkingAlreadyPayError">-->
+                <!--</table>-->
+        <!--<table catalog="" schema="" tableName="parking_record_his_month_car" domainObjectName="ParkingRecordHisMonthCar"></table>-->
+        <!--<table catalog="" schema="" tableName="bo_union" domainObjectName="BoUnion">-->
+            <!--<generatedKey column="code" sqlStatement="select fn_nextval_bo_union();"/>-->
+        <!--</table>-->
+        <!--<table catalog="" schema="" tableName="bo_union_his" domainObjectName="BoUnionHis"></table>-->
+
+<!--        <table catalog="" schema="" tableName="tra_union" domainObjectName="TraUnion">-->
+<!--            <generatedKey column="code" sqlStatement="select fn_nextval_tra_union();"/>-->
+<!--        </table>-->
+<!--        <table catalog="" schema="" tableName="tra_union_his" domainObjectName="TraUnionHis"></table>-->
+
+<!--        <table catalog="" schema="" tableName="opm_refund" domainObjectName="OpmRefund"></table>-->
+    </context>
+</generatorConfiguration>
