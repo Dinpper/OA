@@ -1,0 +1,15 @@
+spring:
+ application:
+  name: LabSystem
+ datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/manage_system
+  username: root
+  password: dinpper
+ rabbitmq:
+  host: dinpper.top
+  port: 5672
+  username: dinpper
+  password: dinpper
+  virtualHost: /
+
