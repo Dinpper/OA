@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.RecordMapper">
+
+    <resultMap type="com.example.labSystem.domain.Record" id="RecordMap">
+        <result property="recordId" column="recordId" jdbcType="INTEGER"/>
+        <result property="startDate" column="startDate" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="endDate" jdbcType="TIMESTAMP"/>
+        <result property="reportDate" column="reportDate" jdbcType="TIMESTAMP"/>
+        <result property="signDuration" column="signDuration" jdbcType="INTEGER"/>
+        <result property="statusType" column="statusType" jdbcType="INTEGER"/>
+        <result property="userCode" column="userCode" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryStatusType" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Integer">
+        SELECT statusType
+        FROM record
+        WHERE userCode = #{userCode}
+        ORDER BY createdAt DESC
+            LIMIT 1
+    </select>
+
+    <insert id="insert" keyProperty="recordId" useGeneratedKeys="true">
+        insert into record (startDate, endDate, reportDate, signDuration, statusType, userCode)
+        values (#{startDate}, #{endDate} , #{reportDate}, #{signDuration}, #{statusType}, #{userCode})
+    </insert>
+
+    <insert id="attendanceCheckIn" keyProperty="recordId" useGeneratedKeys="true">
+        insert into record (startDate, reportDate, statusType, userCode)
+        values (now(), DATE(now()), 0, #{userCode})
+    </insert>
+
+    <update id="attendanceCheckOut">
+        UPDATE record
+        SET endDate = now(),
+            signDuration = TIMESTAMPDIFF(MINUTE, startDate, NOW()),
+            statusType = 1
+        WHERE userCode = #{userCode}
+          AND statusType = 0
+        ORDER BY startDate DESC
+        LIMIT 1;
+    </update>
+
+</mapper>

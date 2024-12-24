@@ -1,15 +1,26 @@
+server:
+ port: 8080
+
 spring:
  application:
   name: LabSystem
  datasource:
   driver-class-name: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/manage_system
+  url: jdbc:mysql://localhost:3306/labsystem
   username: root
   password: dinpper
- rabbitmq:
-  host: dinpper.top
-  port: 5672
-  username: dinpper
-  password: dinpper
-  virtualHost: /
+
+mybatis:
+ mapper-locations: classpath:mapper/*.xml
+ type-aliases-package: com.example.labSystem.domain
+
+
+
+
+
+logging:
+ level:
+  root: INFO
+  org.mybatis: DEBUG
+  com.example.labSystem: DEBUG
 
