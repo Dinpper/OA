@@ -13,13 +13,35 @@
     </resultMap>
 
 
-    <select id="queryStatusType" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="queryStatusType" parameterType="java.lang.String"
             resultType="java.lang.Integer">
         SELECT statusType
         FROM record
-        WHERE userCode = #{userCode}
-        ORDER BY createdAt DESC
+        WHERE account = #{account}
+        ORDER BY recordId DESC
             LIMIT 1
+    </select>
+
+    <select id="querySignDurationByUserAndToDay" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Integer">
+        SELECT
+            SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
+                     ELSE CASE WHEN TIMESTAMPDIFF(MINUTE, startDate, NOW()) > 480 THEN 0 ELSE TIMESTAMPDIFF(MINUTE, startDate, NOW()) END
+                END) AS signDuration
+        FROM record
+        WHERE account = #{account}
+          AND reportDate = CURDATE()
+    </select>
+
+    <select id="querySignDurationByUserAndWeek" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Integer">
+        SELECT
+            SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
+                     ELSE CASE WHEN TIMESTAMPDIFF(MINUTE, startDate, NOW()) > 480 THEN 0 ELSE TIMESTAMPDIFF(MINUTE, startDate, NOW()) END
+                END) AS signDuration
+        FROM record
+        WHERE account = #{account}
+          AND YEARWEEK(reportDate, 1) = YEARWEEK(CURDATE(), 1)  -- 使用 YEARWEEK 判断本周的数据
     </select>
 
     <insert id="insert" keyProperty="recordId" useGeneratedKeys="true">
@@ -40,7 +62,7 @@
         WHERE userCode = #{userCode}
           AND statusType = 0
         ORDER BY startDate DESC
-        LIMIT 1;
+        LIMIT 1
     </update>
 
 </mapper>

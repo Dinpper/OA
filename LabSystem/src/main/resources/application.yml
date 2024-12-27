@@ -9,6 +9,19 @@ spring:
   url: jdbc:mysql://localhost:3306/labsystem
   username: root
   password: dinpper
+ mail:
+  host: smtp.qq.com
+  port: 465
+  username: 2434714918@qq.com
+  password: ysekssfshlswecgi
+  protocol: smtp
+  default-encoding: UTF-8
+  properties:
+    mail:
+      smtp:
+       auth: true
+       starttls.enable: true
+       ssl.enable: true
 
 mybatis:
  mapper-locations: classpath:mapper/*.xml
@@ -24,3 +37,5 @@ logging:
   org.mybatis: DEBUG
   com.example.labSystem: DEBUG
 
+#  username: 1772775873@qq.com
+#  password: sirebdlcvyoacejc

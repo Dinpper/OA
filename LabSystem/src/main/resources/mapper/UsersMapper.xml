@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.UsersMapper">
+
+    <resultMap type="com.example.labSystem.domain.Users" id="UsersMap">
+        <result property="userId" column="userId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="grade" column="grade" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="group" column="group" jdbcType="VARCHAR"/>
+        <result property="deleteFlag" column="deleteFlag" jdbcType="INTEGER"/>
+        <result property="stuNumber" column="stuNumber" jdbcType="VARCHAR"/>
+        <result property="className" column="className" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryIsUserExist" parameterType="java.lang.String"
+            resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM users
+        WHERE account = #{account}
+    </select>
+
+
+
+</mapper>

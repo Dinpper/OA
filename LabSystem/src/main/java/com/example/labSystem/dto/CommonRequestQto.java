@@ -53,5 +53,5 @@ public class CommonRequestQto {
 
     private String radiantDataList;
 
-    private String userCode;
+    private String account;
 }
