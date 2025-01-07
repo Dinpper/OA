@@ -1,5 +1,5 @@
 server:
- port: 8080
+ port: 8880
 
 spring:
  application:
@@ -12,8 +12,8 @@ spring:
  mail:
   host: smtp.qq.com
   port: 465
-  username: 2434714918@qq.com
-  password: ysekssfshlswecgi
+  username: 1772775873@qq.com
+  password: sirebdlcvyoacejc
   protocol: smtp
   default-encoding: UTF-8
   properties:
@@ -28,6 +28,22 @@ mybatis:
  type-aliases-package: com.example.labSystem.domain
 
 
+xxl:
+ job:
+  # 调度中心的地址，多个地址用逗号分隔
+  admin:
+   addresses: http://127.0.0.1:8888/xxl-job-admin  # 调度中心的 URL
+   accessToken: default_token
+  # 执行器配置
+  executor:
+   appname: xxl-job-executor-sample         # 执行器名称，必须与调度中心中配置的一致
+   address:  # 如果没有地址，可以不配置，默认不注册到调度中心
+   ip: 127.0.0.1                     # 执行器的 IP 地址，默认是本机 IP
+   port: 9999                        # 执行器的端口
+   logpath: /data/applogs/xxl-job/logs            # 执行器的日志文件路径
+   logretentiondays: -1             # 日志保留天数
+
+
 
 
 
@@ -39,3 +55,5 @@ logging:
 
 #  username: 1772775873@qq.com
 #  password: sirebdlcvyoacejc
+#  username: 2434714918@qq.com
+#  password: ysekssfshlswecgi

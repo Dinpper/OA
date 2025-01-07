@@ -11,11 +11,11 @@ import lombok.Data;
 public class CommonRequestQto {
 
 
-    private String platformCode;
+    private String userName;
 
-    private Integer parkingLotType;
+    private String account;
 
-    private Integer incomeType;
+    private String password;
 
     private String queryDate;
 
@@ -24,8 +24,6 @@ public class CommonRequestQto {
     private String startDate;
 
     private String endDate;
-
-    private String city;
 
     private Integer type;
 
@@ -41,8 +39,6 @@ public class CommonRequestQto {
 
     private String lastYear;
 
-    private String companyName;
-
     private Integer page;
 
     private Integer size;
@@ -52,6 +48,4 @@ public class CommonRequestQto {
     private String userNumList;
 
     private String radiantDataList;
-
-    private String account;
 }

@@ -23,8 +23,6 @@ public class RecordServiceImpl implements RecordService {
     @Autowired
     private UsersMapper usersMapper;
 
-
-
     @Override
     public RecordDto queryStatusType(String account) {
         RecordDto dto = new RecordDto();

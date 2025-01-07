@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.ReportMapper">
+
+    <resultMap type="com.example.labSystem.domain.Report" id="ReportMap">
+        <result property="reportId" column="reportId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="reportDate" column="reportDate" jdbcType="TIMESTAMP"/>
+        <result property="workContent" column="workContent" jdbcType="VARCHAR"/>
+        <result property="problems" column="problems" jdbcType="VARCHAR"/>
+        <result property="plan" column="plan" jdbcType="VARCHAR"/>
+        <result property="achievement" column="achievement" jdbcType="VARCHAR"/>
+        <result property="submittedFlag" column="submittedFlag" jdbcType="INTEGER"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryHasDraft" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.ReportDto">
+        SELECT reportId, workContent, problems, plan
+        FROM report
+        WHERE submittedFlag = 0
+          AND account = #{account}
+        ORDER BY reportId DESC
+            LIMIT 1;
+    </select>
+
+    <select id="queryReportByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.ReportDto">
+        SELECT u.`name`, u.groupName, r.reportDate, r.workContent, r.problems, r.plan
+        FROM report r
+        LEFT JOIN users u ON r.account = u.account
+        WHERE u.deleteFlag = 0
+        AND r.submittedFlag = 0
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
+            AND r.reportDate BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.`name` LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="groupName != null and groupName != ''">
+            AND u.groupName = #{groupName}
+        </if>
+        ORDER BY r.reportDate DESC, u.groupName, u.`name` ASC
+        <if test="size != null and size != ''" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
+</mapper>
