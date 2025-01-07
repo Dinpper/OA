@@ -26,6 +26,14 @@
         WHERE account = #{account}
     </select>
 
+    <select id="queryUserMessage" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.UserDto">
+        SELECT inputDate, account, name, sex, phone, grade, email, groupName, stuNumber, className
+        FROM users
+        WHERE account = #{account}
+    </select>
+
+
 
 
 </mapper>

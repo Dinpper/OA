@@ -2,12 +2,12 @@ package com.example.labSystem.mappers;
 
 
 import com.example.labSystem.dto.CommonRequestQto;
+import com.example.labSystem.dto.RecordDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface RecordMapper {
-//    Integer queryStatusType(CommonRequestQto qto);
     Integer queryStatusType(@Param("account") String account);
 
     int insert(Record record);
@@ -19,4 +19,8 @@ public interface RecordMapper {
     Integer querySignDurationByUserAndToDay(CommonRequestQto qto);
 
     Integer querySignDurationByUserAndWeek(CommonRequestQto qto);
+
+    RecordDto queryOverdueSignInRecords();
+
+    Integer updateIsReminded(@Param("recordId") String recordId);
 }

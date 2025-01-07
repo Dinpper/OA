@@ -20,6 +20,6 @@ public class RecordDto implements Serializable {
     private Integer signDuration;
     //状态类型（0未签退1已签退）
     private Integer statusType;
-    //用户Code
-    private String userCode;
+    //用户账号
+    private String account;
 }

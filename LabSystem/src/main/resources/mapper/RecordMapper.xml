@@ -9,7 +9,7 @@
         <result property="reportDate" column="reportDate" jdbcType="TIMESTAMP"/>
         <result property="signDuration" column="signDuration" jdbcType="INTEGER"/>
         <result property="statusType" column="statusType" jdbcType="INTEGER"/>
-        <result property="userCode" column="userCode" jdbcType="VARCHAR"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
     </resultMap>
 
 
@@ -45,13 +45,13 @@
     </select>
 
     <insert id="insert" keyProperty="recordId" useGeneratedKeys="true">
-        insert into record (startDate, endDate, reportDate, signDuration, statusType, userCode)
-        values (#{startDate}, #{endDate} , #{reportDate}, #{signDuration}, #{statusType}, #{userCode})
+        insert into record (startDate, endDate, reportDate, signDuration, statusType, account)
+        values (#{startDate}, #{endDate} , #{reportDate}, #{signDuration}, #{statusType}, #{account})
     </insert>
 
     <insert id="attendanceCheckIn" keyProperty="recordId" useGeneratedKeys="true">
-        insert into record (startDate, reportDate, statusType, userCode)
-        values (now(), DATE(now()), 0, #{userCode})
+        insert into record (startDate, reportDate, statusType, account)
+        values (now(), DATE(now()), 0, #{account})
     </insert>
 
     <update id="attendanceCheckOut">
@@ -59,10 +59,26 @@
         SET endDate = now(),
             signDuration = TIMESTAMPDIFF(MINUTE, startDate, NOW()),
             statusType = 1
-        WHERE userCode = #{userCode}
+        WHERE account = #{account}
           AND statusType = 0
         ORDER BY startDate DESC
         LIMIT 1
+    </update>
+
+    <select id="queryOverdueSignInRecords"
+            resultType="com.example.labSystem.dto.RecordDto">
+        SELECT recordId, account, startDate , ROUND(TIMESTAMPDIFF(SECOND, startDate, NOW()) / 3600, 1) AS signDuration
+        FROM record
+        WHERE reportDate = CURDATE()
+          AND statusType = 0
+          AND isReminded = 0
+          AND TIMESTAMPDIFF(HOUR, startDate, NOW()) >= 7
+    </select>
+
+    <update id="updateIsReminded">
+        UPDATE record
+        SET isReminded = 1
+        WHERE recordId = #{recordId}
     </update>
 
 </mapper>

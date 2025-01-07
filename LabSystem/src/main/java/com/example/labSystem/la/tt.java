@@ -273,93 +273,134 @@ public class tt {
 //        JsonResultDto result = GsonUtil.jsonToObject(params, JsonResultDto.class);
 //        log.info("本次推送占比数据:[{}]", JSONObject.toJSON(result));
 
-        Calendar calendar = Calendar.getInstance();
-//        calendar.setTime(new Date());
-        calendar.set(2024, Calendar.OCTOBER, 29, 0, 30, 0);
-        int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
-        int hour;
-        if(nowHour == 0) {
-            hour = 24;
-            calendar.add(Calendar.DAY_OF_MONTH, -1);
-        }else {
-            hour = nowHour;
-        }
-//        String queryDate = DateUtil.dateFormatStr(calendar.getTime(), "yyyy-MM-dd");
-//        System.out.println(hour);
+//        Calendar calendar = Calendar.getInstance();
+////        calendar.setTime(new Date());
+//        calendar.set(2024, Calendar.OCTOBER, 29, 0, 30, 0);
+//        int nowHour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int hour;
+//        if(nowHour == 0) {
+//            hour = 24;
+//            calendar.add(Calendar.DAY_OF_MONTH, -1);
+//        }else {
+//            hour = nowHour;
+//        }
+////        String queryDate = DateUtil.dateFormatStr(calendar.getTime(), "yyyy-MM-dd");
+////        System.out.println(hour);
+////        System.out.println(queryDate);
+////        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+////        String previousYearMonth = LocalDate.parse("2024-11" + "-01", formatter).minusMonths(1).format(formatter);
+////        System.out.println(previousYearMonth);
+//
+//
+//
+//        // 定义日期格式（支持日）
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//        String lastMonth = LocalDate.parse("2024-01" + "-01", formatter).minusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM"));
+//        System.out.println(lastMonth);
+//
+//
+//
+//        DateTimeFormatter formatterYear = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//        String lastYear = LocalDate.parse("2024" + "-01-01", formatterYear).minusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
+//        System.out.println(lastYear);
+//
+//
+//        String dateStr = "2024-11";
+//
+//        LocalDate date = LocalDate.parse(dateStr + "-01", formatterYear);  // 补充默认的日子部分
+//        String year = String.valueOf(date.getYear());
+//        System.out.println(year);  // 输出 "2024"
+//
+//        String dateStr1 = "2024-03";
+//        String d = dateStr1 + "-01";
+//        System.out.println(d);
+//
+//        int month = LocalDate.parse(d, formatter).getMonthValue();  // 获取月份
+//        System.out.println(month);  // 输出 11
+//        BigDecimal b = getIncrease(0,0);
+//        System.out.println(b);
+//
+//        String queryDate = "2024-11";
+//        queryDate = LocalDate.parse(queryDate + "-01", formatter).format(DateTimeFormatter.ofPattern("yyyy"));
 //        System.out.println(queryDate);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-//        String previousYearMonth = LocalDate.parse("2024-11" + "-01", formatter).minusMonths(1).format(formatter);
-//        System.out.println(previousYearMonth);
+//
+//        Date date2 = new Date();
+//        System.out.println(date2);
+//
+//        System.out.println(formatYearMonth("2024","3"));
+//        System.out.println(formatYearMonth("2024","12"));
+//        Integer y = 2024;
+//        System.out.println(y + "-" + "02");
+//        Map<String, String> userMap = new HashMap<>();
+//        userMap.put("reportAccount", "1");
+//        userMap.put("loginUserCode", "1");
+//        userMap.put("loginUserName", "1");
+//        System.out.println(userMap);
+//
+//        Integer pageSize = 10;
+//        Integer pageNo = 2;
+//        Integer dataCount = 0;
+//        Integer pageCount = (dataCount + pageSize - 1) / pageSize;
+//        System.out.println(pageCount);
+//
+//        System.out.println(String.valueOf(LocalDateTime.now().getMonthValue()));
+//
+//
+//        String y1 = "0";
+//        String y2 = "1";
+//        String y3 = "as";
+//        String y4 = "3";
+//        String y5 = "12";
+//        String y6 = "13";
+//        System.out.println(isValidMonth(y1));
+//        System.out.println(isValidMonth(y2));
+//        System.out.println(isValidMonth(y3));
+//        System.out.println(isValidMonth(y4));
+//        System.out.println(isValidMonth(y5));
+//        System.out.println(isValidMonth(y6));
 
+        // 当前月份，假设是 2024-12
+        String currentMonth = "2024-12";
+        LocalDate lastYearSameMonth = LocalDate.parse(currentMonth + "-01", DateTimeFormatter.ofPattern("yyyy-MM-dd")).minusYears(1);
+        String lastYearMonth = lastYearSameMonth.format(DateTimeFormatter.ofPattern("yyyy-MM"));
+        System.out.println("去年同月: " + lastYearMonth);  // 输出: 2023-12
 
+        System.out.println(isValidYearMonth("2024-11"));  // true
+        System.out.println(isValidYearMonth("2024-13"));  // false
+        System.out.println(isValidYearMonth("2024-1"));   // false
+        System.out.println(isValidYearMonth("24-11"));    // false
+        System.out.println(isValidYearMonth(""));
+        System.out.println(isValidYearMonth(" "));
+        System.out.println(isValidYearMonth(null));
 
-        // 定义日期格式（支持日）
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = sdf.parse("2024-12-30 00:45:00");
 
-        String lastMonth = LocalDate.parse("2024-01" + "-01", formatter).minusMonths(1).format(DateTimeFormatter.ofPattern("yyyy-MM"));
-        System.out.println(lastMonth);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR_OF_DAY, 1);
+        int count = 0;
+        while (count < 12) {
+            count++;
 
-
-
-        DateTimeFormatter formatterYear = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String lastYear = LocalDate.parse("2024" + "-01-01", formatterYear).minusYears(1).format(DateTimeFormatter.ofPattern("yyyy"));
-        System.out.println(lastYear);
-
-
-        String dateStr = "2024-11";
-
-        LocalDate date = LocalDate.parse(dateStr + "-01", formatterYear);  // 补充默认的日子部分
-        String year = String.valueOf(date.getYear());
-        System.out.println(year);  // 输出 "2024"
-
-        String dateStr1 = "2024-03";
-        String d = dateStr1 + "-01";
-        System.out.println(d);
-
-        int month = LocalDate.parse(d, formatter).getMonthValue();  // 获取月份
-        System.out.println(month);  // 输出 11
-        BigDecimal b = getIncrease(0,0);
-        System.out.println(b);
-
-        String queryDate = "2024-11";
-        queryDate = LocalDate.parse(queryDate + "-01", formatter).format(DateTimeFormatter.ofPattern("yyyy"));
-        System.out.println(queryDate);
-
-        Date date2 = new Date();
-        System.out.println(date2);
-
-        System.out.println(formatYearMonth("2024","3"));
-        System.out.println(formatYearMonth("2024","12"));
-        Integer y = 2024;
-        System.out.println(y + "-" + "02");
-        Map<String, String> userMap = new HashMap<>();
-        userMap.put("reportAccount", "1");
-        userMap.put("loginUserCode", "1");
-        userMap.put("loginUserName", "1");
-        System.out.println(userMap);
-
-        Integer pageSize = 10;
-        Integer pageNo = 2;
-        Integer dataCount = 0;
-        Integer pageCount = (dataCount + pageSize - 1) / pageSize;
-        System.out.println(pageCount);
-
-        System.out.println(String.valueOf(LocalDateTime.now().getMonthValue()));
-
-
-        String y1 = "0";
-        String y2 = "1";
-        String y3 = "as";
-        String y4 = "3";
-        String y5 = "12";
-        String y6 = "13";
-        System.out.println(isValidMonth(y1));
-        System.out.println(isValidMonth(y2));
-        System.out.println(isValidMonth(y3));
-        System.out.println(isValidMonth(y4));
-        System.out.println(isValidMonth(y5));
-        System.out.println(isValidMonth(y6));
-
-
+            calendar.add(Calendar.HOUR_OF_DAY, -1);
+            int hour = calendar.get(Calendar.HOUR_OF_DAY);
+            String reportDate;
+            if(hour == 0) {
+                hour = 24;
+                calendar.add(Calendar.HOUR_OF_DAY, -1);
+            }
+            reportDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
+            System.out.println(reportDate +"  "+ hour);
+            if(hour == 24){
+                calendar.add(Calendar.HOUR_OF_DAY, +1);
+            }
+        }
+    }
+    public static boolean isValidYearMonth(String dateString) {
+        // 正则表达式：检查 yyyy-MM 格式
+        String regex = "^\\d{4}-(0[1-9]|1[0-2])$";
+        // 判断字符串是否符合正则表达式
+        return dateString != null && dateString.matches(regex);
     }
 }

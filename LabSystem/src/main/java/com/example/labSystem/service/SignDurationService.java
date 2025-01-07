@@ -6,4 +6,6 @@ import com.example.labSystem.dto.RecordDto;
 public interface SignDurationService {
 
     RecordDto queryTodayByUser(CommonRequestQto qto);
+
+
 }
