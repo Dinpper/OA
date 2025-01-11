@@ -1,13 +1,16 @@
 package com.example.labSystem.dto;
 
-
+import cn.idev.excel.annotation.ExcelIgnore;
+import cn.idev.excel.annotation.ExcelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.io.Serializable;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 @Data
-public class RecordDto implements Serializable {
+public class RecordExcelDto {
     private String name;
 
     private String groupName;
@@ -20,11 +23,10 @@ public class RecordDto implements Serializable {
     //统计日期
     private String reportDate;
     //签到时长
-    private Integer signDuration;
+    private Double signDuration;
     //状态类型（0未签退1已签退）
     private Integer statusType;
     //用户账号
     private String account;
 
-    private List<RecordSonDto> weekList;
 }

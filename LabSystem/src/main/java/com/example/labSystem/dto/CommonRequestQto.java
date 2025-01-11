@@ -19,6 +19,8 @@ public class CommonRequestQto {
 
     private String queryDate;
 
+    private String groupName;
+
     private Integer hour;
 
     private String startDate;

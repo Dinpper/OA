@@ -57,3 +57,6 @@ logging:
 #  password: sirebdlcvyoacejc
 #  username: 2434714918@qq.com
 #  password: ysekssfshlswecgi
+
+file:
+ upload-dir: E:\file

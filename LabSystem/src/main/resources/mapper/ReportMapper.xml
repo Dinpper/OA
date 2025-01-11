@@ -32,7 +32,7 @@
         FROM report r
         LEFT JOIN users u ON r.account = u.account
         WHERE u.deleteFlag = 0
-        AND r.submittedFlag = 0
+        AND r.submittedFlag = 1
         <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
             AND r.reportDate BETWEEN #{startDate} AND #{endDate}
         </if>

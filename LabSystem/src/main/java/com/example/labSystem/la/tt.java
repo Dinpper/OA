@@ -1,5 +1,8 @@
 package com.example.labSystem.la;
 
+import cn.idev.excel.ExcelWriter;
+import cn.idev.excel.FastExcel;
+import com.example.labSystem.dto.RecordExcelDto;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -8,6 +11,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import cn.idev.excel.EasyExcel;
+import cn.idev.excel.write.metadata.WriteSheet;
+import cn.idev.excel.write.metadata.fill.FillConfig;
 
 
 public class tt {
@@ -396,11 +402,47 @@ public class tt {
                 calendar.add(Calendar.HOUR_OF_DAY, +1);
             }
         }
+
+        Double f1 = (double) (1/2);
+        System.out.println(f1);
+        Double f2 = (1/(double)2);
+        System.out.println(f2);
+
+        LocalDate previousMonthDate = LocalDate.now().minusMonths(1);
+        int previousMonth = previousMonthDate.getMonthValue();
+        System.out.println(previousMonth);
+        int currentYear = LocalDate.now().getYear();
+        System.out.println(currentYear);
+
+        excel();
     }
     public static boolean isValidYearMonth(String dateString) {
         // 正则表达式：检查 yyyy-MM 格式
         String regex = "^\\d{4}-(0[1-9]|1[0-2])$";
         // 判断字符串是否符合正则表达式
         return dateString != null && dateString.matches(regex);
+    }
+
+    public static void excel() {
+        List<RecordExcelDto> list = new ArrayList<>();
+//        list.add(new RecordExcelDto("张三丰", new Date(),456));
+//        list.add(new RecordExcelDto("张无忌", new Date(),456));
+//        list.add(new RecordExcelDto("张岁三", new Date(),456));
+//        list.add(new RecordExcelDto("张毅", new Date(),456));
+//        list.add(new RecordExcelDto("张天师", new Date(),456));
+        String template = "src/main/resources/templates/用户签到模板.xlsx";
+        String stuFile = "src/main/resources/templates/用户.xlsx";
+        try (ExcelWriter excelWriter = FastExcel.write(stuFile).withTemplate(template).build();){
+            WriteSheet writeSheet = EasyExcel.writerSheet().build();
+
+            //填充模板第一部分的列表数据
+            FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
+            excelWriter.fill(list, fillConfig, writeSheet);
+
+            //填充列表下面的total
+            Map<String, Object> extraData = new HashMap<>();
+            extraData.put("total", list.size());
+            excelWriter.fill(extraData, writeSheet);
+        }
     }
 }

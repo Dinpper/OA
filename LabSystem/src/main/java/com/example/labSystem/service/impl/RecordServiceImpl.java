@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 /**
  *
  *
- * @author makejava
+ * @author Dinpper
  * @since 2024-09-10 15:36:16
  */
 
@@ -41,17 +41,31 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void attendanceCheckIn(String account) {
+        Integer statusType = recordMapper.queryStatusType(account);
+        if(statusType == null){
+            //是否存在该用户， 刚创建没有签到记录
+            Integer isExist = usersMapper.queryIsUserExist(account);
+            if(isExist == 0){
+                throw new BusinessException(399, "找不到用户");
+            }
+        }
         Integer result = recordMapper.attendanceCheckIn(account);
         if(result == 0){
-            throw new BusinessException(500, "插入失败");
+            throw new BusinessException(500, "签到失败");
         }
     }
 
     @Override
     public void attendanceCheckOut(String account) {
+        Integer statusType = recordMapper.queryStatusType(account);
+        if (statusType == null) {
+            throw new BusinessException(399, "找不到用户");
+        } else if (statusType == 1) {
+            throw new BusinessException(500, "未签到");
+        }
         Integer result = recordMapper.attendanceCheckOut(account);
         if(result == 0){
-            throw new BusinessException(500, "插入失败");
+            throw new BusinessException(500, "签退失败");
         }
     }
 

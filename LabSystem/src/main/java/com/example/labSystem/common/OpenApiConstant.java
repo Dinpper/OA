@@ -4,11 +4,6 @@ package com.example.labSystem.common;
  * 业务常量类
  */
 public class OpenApiConstant {
-
-    public static final String REDIS_DATAV_PARTNERLIST_KEY= "OPENAPI_DATAV_PARTNERLIST_";
-    public static final String REDIS_DATAV_THIRTYDAYSDATAVCOUNT_KEY= "OPENAPI_DATAV_THIRTYDAYSDATAVCOUNT_";
-    public static final String REDIS_DATAV_YESTERDAYDATAVCOUNT_KEY= "OPENAPI_DATAV_YESTERDAYDATAVCOUNT_";
-    public static final String REDIS_DATAV_SEVENDAYSDATAVCOUNT_KEY= "OPENAPI_DATAV_SEVENDAYSDATAVCOUNT_";
     public static final Integer REDIS_DATAV_TIMEOUT= 21600000;
     public static final Integer REDIS_TIMEOUT = 7200;
 
@@ -50,18 +45,6 @@ public class OpenApiConstant {
     public static final String USER_PREFIX= "u_";
     public static final String NOPLATE= "无牌车";
     public static final String THIRDPARTYCOUPON_TITLE= "third_";
-
-
-    public static final String MQ_MANAGER_PARTNER_MODIFIED= "partner_modified";
-    public static final String MQ_MANAGER_XDG_APPROVE_NOTIFY= "xdg_approve_notify";
-    public static final String MQ_MANAGER_MODIFY_FIXEDCAR_NOTIFY= "modify_fixedcar_notify";
-    public static final String PARKING_PASS_IN= "parking_pass_in";
-    public static final String PARKING_PASS_EXIT= "parking_pass_exit";
-
-    public static final String TAG_CUSTOMER_PARKING_PASS_IMAGE= "customer_parking_pass_image";
-    // bill发送订单tag
-    public static final String TAG_PARKING_ORDER_SUCCESS = "parking_order_success";
-    public static final String TAG_PRODUCT_ORDER_SUCCESS = "product_order_success";
 
 
     public static final String GROUPBYMONTH= "MONTH(reportDate),parkingLotCode";

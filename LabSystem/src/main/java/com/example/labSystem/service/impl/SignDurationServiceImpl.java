@@ -1,22 +1,24 @@
 package com.example.labSystem.service.impl;
 
 
+import cn.idev.excel.FastExcel;
+import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.CommonRequestQto;
 import com.example.labSystem.dto.RecordDto;
+import com.example.labSystem.dto.RecordExcelDto;
+import com.example.labSystem.dto.RecordSonDto;
 import com.example.labSystem.mappers.RecordMapper;
-import com.example.labSystem.service.EmailService;
 import com.example.labSystem.service.SignDurationService;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.math.BigDecimal;
-import java.time.YearMonth;
+import java.io.OutputStream;
+import java.net.URLEncoder;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class SignDurationServiceImpl implements SignDurationService {
     @Autowired
     private RecordMapper recordMapper;
@@ -24,33 +26,45 @@ public class SignDurationServiceImpl implements SignDurationService {
     @Override
     public RecordDto queryTodayByUser(CommonRequestQto qto) {
         RecordDto dto = new RecordDto();
-        Integer signDuration = recordMapper.querySignDurationByUserAndToDay(qto);
+        Integer signDuration = recordMapper.querySignDurationToDayByUser(qto);
         signDuration = signDuration == null ? 0 :signDuration;
         dto.setSignDuration(signDuration);
         return dto;
     }
 
-//    SignOutReminderService
-//
-//    @Scheduled(cron = "0 0/30 * * * ?") // 每30分钟执行一次
-//    public void checkForSignOutReminder() {
-//        // 查询未签退且已签到超过7小时的记录
-//        List<SignRecord> overdueRecords = signRecordRepository.findOverdueSignInRecords();
-//        for (SignRecord record : overdueRecords) {
-//            try {
-//                // 获取用户邮箱和姓名（假设存在关联用户信息）
-//                String email = record.getUser().getEmail();
-//                String name = record.getUser().getName();
-//
-//                // 发送提醒邮件
-//                emailService.sendSignOutReminderEmail(email, name);
-//
-//                // 可记录日志或标记已提醒状态
-//                System.out.println("已发送签退提醒邮件给用户：" + email);
-//            } catch (Exception e) {
-//                System.err.println("发送签退提醒失败：" + e.getMessage());
-//            }
-//        }
-//    }
+    @Override
+    public RecordDto queryWeek(CommonRequestQto qto) {
+        RecordDto dto = new RecordDto();
+        List<RecordSonDto> list = recordMapper.querySignDurationWeek(qto);
+        dto.setWeekList(list);
+        return dto;
+    }
+
+    @Override
+    public void download(HttpServletResponse response, CommonRequestQto qto) throws Exception {
+        // 设置文件类型为 Excel 文件
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        // 设置字符编码为 UTF-8，确保文件名和内容中的字符能正确显示
+        response.setCharacterEncoding("utf-8");
+        // 设置文件名并进行 URL 编码
+        String fileName = URLEncoder.encode("签到", "UTF-8").replaceAll("\\+", "%20");
+        // 设置下载文件的响应头，指定文件名和编码格式
+        response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
+        // 获取数据
+        List<RecordExcelDto> list = recordMapper.queryRecordByPage(qto);
+        String template = "src/main/resources/templates/签到时长模板.xlsx";
+
+        // 使用 FastExcel 库生成 Excel 文件并写入到输出流
+        try (OutputStream outputStream = response.getOutputStream()) {
+            FastExcel.write(outputStream)  // 将输出流传入
+                    .withTemplate(template)   // 使用模板
+                    .sheet()                  // 默认一个 sheet
+                    .doFill(list);            // 填充数据
+        } catch (Exception e) {
+            // 处理流操作异常
+            log.info("downLoadByUser, 导出失败，流操作异常：", e);
+            throw new BusinessException(500, "导出失败");
+        }
+    }
 
 }

@@ -22,7 +22,13 @@
             LIMIT 1
     </select>
 
-    <select id="querySignDurationByUserAndToDay" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationToDay" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.RecordSonDto">
+
+
+    </select>
+
+    <select id="querySignDurationToDayByUser" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="java.lang.Integer">
         SELECT
             SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
@@ -33,7 +39,39 @@
           AND reportDate = CURDATE()
     </select>
 
-    <select id="querySignDurationByUserAndWeek" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationWeek" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.RecordSonDto">
+        SELECT
+        a.date AS `day`, IFNULL(b.signDuration, 0) AS signDuration
+        FROM (
+        SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 1 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 2 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 3 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 4 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 5 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 6 - WEEKDAY(CURDATE()) DAY) AS date
+        ) a
+        LEFT JOIN (
+        SELECT
+        SUM(signDuration) AS signDuration,
+        DATE_FORMAT(reportDate, '%Y-%m-%d') AS reportDate
+        FROM record
+        WHERE DATE_FORMAT(reportDate, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+        <if test="account != null and account != ''">
+            AND account = #{account}
+        </if>
+        GROUP BY DATE_FORMAT(reportDate, '%Y-%m-%d')
+        ) b ON a.date = b.reportDate;
+    </select>
+
+    <select id="querySignDurationWeekByUser" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="java.lang.Integer">
         SELECT
             SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
@@ -44,12 +82,44 @@
           AND YEARWEEK(reportDate, 1) = YEARWEEK(CURDATE(), 1)  -- 使用 YEARWEEK 判断本周的数据
     </select>
 
+    <select id="querySignDurationWeekByGroup" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.RecordSonDto">
+        SELECT
+        a.day, IFNULL(b.signDuration, 0) AS signDuration
+        FROM (
+        SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 1 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 2 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 3 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 4 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 5 - WEEKDAY(CURDATE()) DAY) AS date
+        UNION ALL
+        SELECT DATE_ADD(CURDATE(), INTERVAL 6 - WEEKDAY(CURDATE()) DAY) AS date
+        ) a
+        LEFT JOIN (
+        SELECT
+        SUM(signDuration) AS signDuration,
+        DATE_FORMAT(reportDate, '%Y-%m-%d') AS reportDate
+        FROM record
+        WHERE DATE_FORMAT(reportDate, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
+        <if test="account != null and account != ''">
+            AND account = #{account}
+        </if>
+        GROUP BY DATE_FORMAT(reportDate, '%Y-%m-%d')
+        ) b ON a.day = b.reportDate;
+    </select>
+
     <insert id="insert" keyProperty="recordId" useGeneratedKeys="true">
         insert into record (startDate, endDate, reportDate, signDuration, statusType, account)
         values (#{startDate}, #{endDate} , #{reportDate}, #{signDuration}, #{statusType}, #{account})
     </insert>
 
-    <insert id="attendanceCheckIn" keyProperty="recordId" useGeneratedKeys="true">
+    <insert id="attendanceCheckIn">
         insert into record (startDate, reportDate, statusType, account)
         values (now(), DATE(now()), 0, #{account})
     </insert>
@@ -80,5 +150,28 @@
         SET isReminded = 1
         WHERE recordId = #{recordId}
     </update>
+
+    <select id="queryRecordByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.RecordExcelDto">
+        SELECT u.`name`, u.groupName, r.reportDate, ROUND(SUM(r.signDuration) / 60, 1) AS signDuration
+        FROM record r
+        LEFT JOIN users u ON r.account = u.account
+        WHERE u.deleteFlag = 0
+        AND r.statusType = 1
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
+            AND r.reportDate BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.`name` LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="groupName != null and groupName != ''">
+            AND u.groupName = #{groupName}
+        </if>
+        GROUP BY r.reportDate, u.`name`, u.groupName
+        ORDER BY r.reportDate DESC, u.groupName, u.`name` ASC
+        <if test="size != null and size != ''" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
 
 </mapper>

@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * 周报相关
@@ -29,7 +33,7 @@ public class ReportController extends BaseController {
     private ReportService reportService;
 
     /**
-     * 查询签到状态
+     * 是否已提交，草稿 ?
      *
      * @param request
      * @param response
@@ -50,7 +54,7 @@ public class ReportController extends BaseController {
     }
 
     /**
-     * 查询签到状态
+     * 报告报表
      *
      * @param request
      * @param response
@@ -70,6 +74,13 @@ public class ReportController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 
-
+    @RequestMapping(value = "/download", method = RequestMethod.POST)
+    public void download(HttpServletRequest request, HttpServletResponse response,
+                         @RequestBody CommonRequestQto qto) throws Exception {
+        log.info("download,query = {}", GsonUtil.ObjectToJson(qto));
+        reportService.download(response, qto);
+        log.info("download, 导出成功");
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
+    }
 
 }
