@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.MeetingsMapper">
+
+    <resultMap type="com.example.labSystem.domain.Meetings" id="MeetingsMap">
+        <result property="meetingId" column="meetingId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="meetingName" column="meetingName" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="startDate" column="startDate" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="endDate" jdbcType="TIMESTAMP"/>
+        <result property="location" column="location" jdbcType="VARCHAR"/>
+        <result property="organizerAccount" column="organizerAccount" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="insert" keyProperty="meetingId" useGeneratedKeys="true">
+        insert into meetings (inputDate, meetingName, description, startDate, endDate, location, organizerAccount)
+        values (now(), #{meetingName} , #{description}, #{startDate}, #{endDate}, #{location}, #{organizerAccount})
+    </insert>
+
+    <update id="update">
+        UPDATE meetings
+        SET updateDate = now()
+        WHERE meetingId = #{meetingId}
+    </update>
+
+    <select id="queryMeetings" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT meetingId, meetingName, description, startDate, endDate, location, organizerAccount
+        FROM meetings
+    </select>
+
+</mapper>

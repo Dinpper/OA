@@ -11,5 +11,9 @@ import java.util.List;
 public interface ReportMapper {
     ReportDto queryHasDraft(@Param("account") String account);
 
+    int reportSubmit(CommonRequestQto qto);
+
+    Integer queryCountByPage(CommonRequestQto qto);
+
     List<ReportDto> queryReportByPage(CommonRequestQto qto);
 }

@@ -20,11 +20,17 @@ public class RecordDto implements Serializable {
     //统计日期
     private String reportDate;
     //签到时长
-    private Integer signDuration;
+    private Double signDuration;
     //状态类型（0未签退1已签退）
     private Integer statusType;
     //用户账号
     private String account;
+
+    private Double signDurationToday;
+
+    private Double signDurationWeek;
+
+    private Double signDurationMonth;
 
     private List<RecordSonDto> weekList;
 }

@@ -19,9 +19,9 @@ public interface RecordMapper {
 
     Integer attendanceCheckOut(@Param("account") String account);
 
-    List<RecordSonDto> querySignDurationToDay(CommonRequestQto qto);
-
-    Integer querySignDurationToDayByUser(CommonRequestQto qto);
+    Double querySignDurationToDayAll(CommonRequestQto qto);
+    Double querySignDurationWeekAll(CommonRequestQto qto);
+    Double querySignDurationMonthAll(CommonRequestQto qto);
 
     List<RecordSonDto> querySignDurationWeek(CommonRequestQto qto);
 
@@ -32,6 +32,8 @@ public interface RecordMapper {
     RecordDto queryOverdueSignInRecords();
 
     Integer updateIsReminded(@Param("recordId") String recordId);
+
+    Integer queryCountByPage(CommonRequestQto qto);
 
     List<RecordExcelDto> queryRecordByPage(CommonRequestQto qto);
 }

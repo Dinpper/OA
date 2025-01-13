@@ -47,7 +47,9 @@ public class CommonRequestQto {
 
     private Integer offset;
 
-    private String userNumList;
+    private String workContent;
 
-    private String radiantDataList;
+    private String problems;
+
+    private String plan;
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.UserMeetingsMapper">
+
+    <resultMap type="com.example.labSystem.domain.UserMeetings" id="UserMeetingsMap">
+        <result property="userMeetingsId" column="userMeetingsId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="meetingId" column="meetingId" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="reason" column="reason" jdbcType="TIMESTAMP"/>
+        <result property="notifiedFlag" column="notifiedFlag" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+
+</mapper>

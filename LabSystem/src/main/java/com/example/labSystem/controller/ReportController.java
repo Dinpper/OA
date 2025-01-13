@@ -14,10 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
  * 周报相关
@@ -26,7 +22,7 @@ import java.util.List;
  * @since 2024-01-01 00:59:49
  */
 @RestController
-@RequestMapping("/record")
+@RequestMapping("/report")
 @Slf4j
 public class ReportController extends BaseController {
     @Autowired
@@ -54,6 +50,26 @@ public class ReportController extends BaseController {
     }
 
     /**
+     *
+     *
+     * @param request
+     * @param response
+     * @param
+     * @throws Exception
+     */
+    @RequestMapping(value = "/reportSubmit", method = RequestMethod.POST)
+    public void reportSubmit(HttpServletRequest request, HttpServletResponse response,
+                              @RequestBody CommonRequestQto qto) throws Exception {
+        String account = qto.getAccount();
+        log.info("User {} reportSubmit,query = {}", account, GsonUtil.ObjectToJson(qto));
+        if(StringUtils.isEmpty(account)){
+            throw new BusinessException(399, "参数错误");
+        }
+        reportService.reportSubmit(qto);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
+    }
+
+    /**
      * 报告报表
      *
      * @param request
@@ -64,13 +80,9 @@ public class ReportController extends BaseController {
     @RequestMapping(value = "/queryReportByPage", method = RequestMethod.POST)
     public void queryReportByPage(HttpServletRequest request, HttpServletResponse response,
                               @RequestBody CommonRequestQto qto) throws Exception {
-        String account = qto.getAccount();
-        log.info("User {} queryReportByPage,query = {}", account, GsonUtil.ObjectToJson(qto));
-        if(StringUtils.isEmpty(account)){
-            throw new BusinessException(399, "参数错误");
-        }
+        log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
         ReportByPageDto result = reportService.queryReportByPage(qto);
-        log.info("User {} queryReportByPage, result = {}", account, result);
+        log.info("queryReportByPage, result = {}", result);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 

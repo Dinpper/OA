@@ -3,6 +3,7 @@ package com.example.labSystem.controller;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.CommonRequestQto;
+import com.example.labSystem.dto.GroupUserDto;
 import com.example.labSystem.dto.JsonResultDto;
 import com.example.labSystem.dto.UserDto;
 import com.example.labSystem.service.UserService;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 用户相关
@@ -40,6 +43,12 @@ public class UserController extends BaseController {
         }
         UserDto result = userService.queryUserMessage(qto);
         log.info("User {} queryHasDraft, result = {}", account, result);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
+
+    @PostMapping("/queryGroupUserAll")
+    public void queryGroupUserAll(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<GroupUserDto> result = userService.queryGroupUserAll();
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 }

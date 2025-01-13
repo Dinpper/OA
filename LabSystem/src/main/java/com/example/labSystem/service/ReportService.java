@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 public interface ReportService {
     ReportDto queryHasDraft(String account) throws Exception;
 
+    void reportSubmit(CommonRequestQto qto) throws Exception;
+
     ReportByPageDto queryReportByPage(CommonRequestQto qto) throws Exception;
 
     void download(HttpServletResponse response, CommonRequestQto qto) throws Exception;

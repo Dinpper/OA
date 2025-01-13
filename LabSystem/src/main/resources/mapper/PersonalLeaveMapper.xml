@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.PersonalLeaveMapper">
+
+    <resultMap type="com.example.labSystem.domain.PersonalLeave" id="PersonalLeaveMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="reportDate" column="reportDate" jdbcType="TIMESTAMP"/>
+        <result property="startDate" column="startDate" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="endDate" jdbcType="TIMESTAMP"/>
+        <result property="reason" column="reason" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="allowedFlag" column="allowedFlag" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into personalleave (reportDate, startDate, endDate, reason, account)
+        values (DATE(now()), #{startDate} , #{endDate}, #{reason}, #{account})
+    </insert>
+
+</mapper>

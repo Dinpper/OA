@@ -1,12 +1,10 @@
 package com.example.labSystem.dto;
 
-
 import lombok.Data;
-
 import java.util.List;
 
 @Data
-public class ReportByPageDto {
+public class GroupByPageDto {
     private Integer size;
 
     private Integer page;
@@ -15,5 +13,5 @@ public class ReportByPageDto {
 
     private Integer dataCount;
 
-    private List<ReportDto> reportList;
+    List<GroupDto> grouplist;
 }

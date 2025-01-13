@@ -2,10 +2,7 @@ package com.example.labSystem.controller;
 
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.common.BusinessException;
-import com.example.labSystem.dto.CommonRequestQto;
-import com.example.labSystem.dto.JsonResultDto;
-import com.example.labSystem.dto.RecordDto;
-import com.example.labSystem.dto.RecordExcelDto;
+import com.example.labSystem.dto.*;
 import com.example.labSystem.service.RecordService;
 import com.example.labSystem.service.SignDurationService;
 import com.example.labSystem.utils.GsonUtil;
@@ -73,7 +70,25 @@ public class SignDurationController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 
-    @RequestMapping(value = "/downLoadExcel", method = RequestMethod.POST)
+    @RequestMapping(value = "/queryTodayWeekMonth", method = RequestMethod.POST)
+    public void queryTodayWeekMonth(HttpServletRequest request, HttpServletResponse response,
+                          @RequestBody CommonRequestQto qto) throws Exception {
+        log.info("queryTodayWeekMonth,query = " + GsonUtil.ObjectToJson(qto));
+        RecordDto result = signDurationService.queryTodayWeekMonth(qto);
+        log.info("queryTodayWeekMonth,result = " + result);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
+
+    @RequestMapping(value = "/querySignDurationByPage", method = RequestMethod.POST)
+    public void querySignDurationByPage(HttpServletRequest request, HttpServletResponse response,
+                         @RequestBody CommonRequestQto qto) throws Exception {
+        log.info("querySignDurationByPage,query = {}", GsonUtil.ObjectToJson(qto));
+        RecordByPageDto result = signDurationService.querySignDurationByPage(qto);
+        log.info("querySignDurationByPage, result = {}", result);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
+
+    @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void download(HttpServletRequest request, HttpServletResponse response,
                          @RequestBody CommonRequestQto qto) throws Exception {
         log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));

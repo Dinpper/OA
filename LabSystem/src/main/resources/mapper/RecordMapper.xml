@@ -22,21 +22,38 @@
             LIMIT 1
     </select>
 
-    <select id="querySignDurationToDay" parameterType="com.example.labSystem.dto.CommonRequestQto"
-            resultType="com.example.labSystem.dto.RecordSonDto">
-
-
-    </select>
-
-    <select id="querySignDurationToDayByUser" parameterType="com.example.labSystem.dto.CommonRequestQto"
-            resultType="java.lang.Integer">
+    <select id="querySignDurationToDayAll" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Double">
         SELECT
-            SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
+            ROUND(SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
                      ELSE CASE WHEN TIMESTAMPDIFF(MINUTE, startDate, NOW()) > 480 THEN 0 ELSE TIMESTAMPDIFF(MINUTE, startDate, NOW()) END
-                END) AS signDuration
+                END) / 60, 1) AS signDuration
         FROM record
         WHERE account = #{account}
           AND reportDate = CURDATE()
+    </select>
+
+    <select id="querySignDurationWeekAll" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Double">
+        SELECT
+            ROUND(SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
+                     ELSE CASE WHEN TIMESTAMPDIFF(MINUTE, startDate, NOW()) > 480 THEN 0 ELSE TIMESTAMPDIFF(MINUTE, startDate, NOW()) END
+                END) / 60, 1) AS signDuration
+        FROM record
+        WHERE account = #{account}
+          AND YEARWEEK(reportDate, 1) = YEARWEEK(CURDATE(), 1);
+    </select>
+
+    <select id="querySignDurationMonthAll" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Double">
+        SELECT
+            ROUND(SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
+                     ELSE CASE WHEN TIMESTAMPDIFF(MINUTE, startDate, NOW()) > 480 THEN 0 ELSE TIMESTAMPDIFF(MINUTE, startDate, NOW()) END
+                END) / 60, 1) AS signDuration
+        FROM record
+        WHERE account = #{account}
+          AND MONTH(reportDate) = MONTH(CURDATE())
+          AND YEAR(reportDate) = YEAR(CURDATE())
     </select>
 
     <select id="querySignDurationWeek" parameterType="com.example.labSystem.dto.CommonRequestQto"
@@ -150,6 +167,24 @@
         SET isReminded = 1
         WHERE recordId = #{recordId}
     </update>
+
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM record r
+        LEFT JOIN users u ON r.account = u.account
+        WHERE u.deleteFlag = 0
+        AND r.statusType = 1
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
+            AND r.reportDate BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.`name` LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="groupName != null and groupName != ''">
+            AND u.groupName = #{groupName}
+        </if>
+    </select>
 
     <select id="queryRecordByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="com.example.labSystem.dto.RecordExcelDto">
