@@ -179,7 +179,7 @@
             AND r.reportDate BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test="userName != null and userName != ''">
-            AND u.`name` LIKE concat('%', #{userName} ,'%')
+            AND u.userName LIKE concat('%', #{userName} ,'%')
         </if>
         <if test="groupName != null and groupName != ''">
             AND u.groupName = #{groupName}
@@ -188,7 +188,7 @@
 
     <select id="queryRecordByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="com.example.labSystem.dto.RecordExcelDto">
-        SELECT u.`name`, u.groupName, r.reportDate, ROUND(SUM(r.signDuration) / 60, 1) AS signDuration
+        SELECT u.userName, u.groupName, r.reportDate, ROUND(SUM(r.signDuration) / 60, 1) AS signDuration
         FROM record r
         LEFT JOIN users u ON r.account = u.account
         WHERE u.deleteFlag = 0
@@ -197,13 +197,13 @@
             AND r.reportDate BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test="userName != null and userName != ''">
-            AND u.`name` LIKE concat('%', #{userName} ,'%')
+            AND u.userName LIKE concat('%', #{userName} ,'%')
         </if>
         <if test="groupName != null and groupName != ''">
             AND u.groupName = #{groupName}
         </if>
-        GROUP BY r.reportDate, u.`name`, u.groupName
-        ORDER BY r.reportDate DESC, u.groupName, u.`name` ASC
+        GROUP BY r.reportDate, u.userName, u.groupName
+        ORDER BY r.reportDate DESC, u.groupName, u.userName ASC
         <if test="size != null and size != ''" >
             LIMIT #{size} OFFSET #{offset};
         </if>

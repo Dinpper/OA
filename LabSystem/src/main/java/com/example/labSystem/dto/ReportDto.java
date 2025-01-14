@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ReportDto {
-    private String name;
+    private String userName;
 
     private String groupName;
 

@@ -42,7 +42,7 @@
             AND r.reportDate BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test="userName != null and userName != ''">
-            AND u.`name` LIKE concat('%', #{userName} ,'%')
+            AND u.userName LIKE concat('%', #{userName} ,'%')
         </if>
         <if test="groupName != null and groupName != ''">
             AND u.groupName = #{groupName}
@@ -51,7 +51,7 @@
 
     <select id="queryReportByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="com.example.labSystem.dto.ReportDto">
-        SELECT u.`name`, u.groupName, r.reportDate, r.workContent, r.problems, r.plan
+        SELECT u.userName, u.groupName, r.reportDate, r.workContent, r.problems, r.plan
         FROM report r
         LEFT JOIN users u ON r.account = u.account
         WHERE u.deleteFlag = 0
@@ -60,12 +60,12 @@
             AND r.reportDate BETWEEN #{startDate} AND #{endDate}
         </if>
         <if test="userName != null and userName != ''">
-            AND u.`name` LIKE concat('%', #{userName} ,'%')
+            AND u.userName LIKE concat('%', #{userName} ,'%')
         </if>
         <if test="groupName != null and groupName != ''">
             AND u.groupName = #{groupName}
         </if>
-        ORDER BY r.reportDate DESC, u.groupName, u.`name` ASC
+        ORDER BY r.reportDate DESC, u.groupName, u.userName ASC
         <if test="size != null and size != ''" >
             LIMIT #{size} OFFSET #{offset};
         </if>

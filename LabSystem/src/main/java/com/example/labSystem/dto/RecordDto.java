@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 public class RecordDto implements Serializable {
-    private String name;
+    private String userName;
 
     private String groupName;
     //签到记录编号

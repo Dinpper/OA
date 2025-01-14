@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 public class CommonRequestQto {
-
+    private String operator;
 
     private String userName;
 

@@ -13,7 +13,14 @@
     <select id="queryGroups" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="com.example.labSystem.dto.MeetingsDto">
         SELECT groupName, groupLeader, reportFlag, startDate, endDate, location, organizerAccount
-        FROM groups
+        FROM `groups`
+    </select>
+
+    <select id="queryGroupsList" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.String">
+        SELECT groupName
+        FROM `groups`
+        WHERE deleteFlag = 0
     </select>
 
     <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
@@ -26,12 +33,15 @@
     <select id="queryGroupsByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="com.example.labSystem.dto.GroupDto">
         SELECT g.groupName, COUNT(u.userId) AS memberCount, reportFlag,
-                (SELECT u.name FROM users u WHERE u.account = g.groupLeader ) AS leaderName
+                (SELECT u.userName FROM users u WHERE u.account = g.groupLeader ) AS leaderName
         FROM `groups` g
         LEFT JOIN users u
         ON g.groupName = u.groupName
         AND u.deleteFlag = 0
         AND g.deleteFlag = 0
+        <if test="groupName != null and groupName != ''">
+            AND groupName = #{groupName}
+        </if>
         GROUP BY g.groupName, g.groupLeader, g.reportFlag
         <if test="size != null and size != ''" >
             LIMIT #{size} OFFSET #{offset};

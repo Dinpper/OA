@@ -16,6 +16,12 @@ public class GroupServiceImpl implements GroupService {
     private GroupMapper groupMapper;
 
     @Override
+    public List<String> queryGroupsList() {
+        List<String> list = groupMapper.queryGroupsList();
+        return list;
+    }
+
+    @Override
     public GroupByPageDto queryGroupsByPage(CommonRequestQto qto) {
         GroupByPageDto dto = new GroupByPageDto();
         if (qto.getSize() == null) {

@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Data
 public class RecordExcelDto {
-    private String name;
+    private String userName;
 
     private String groupName;
     //签到记录编号
