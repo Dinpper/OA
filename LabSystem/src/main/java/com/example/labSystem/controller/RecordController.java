@@ -1,9 +1,7 @@
 package com.example.labSystem.controller;
 
 import com.example.labSystem.common.BusinessException;
-import com.example.labSystem.dto.CommonRequestQto;
-import com.example.labSystem.dto.JsonResultDto;
-import com.example.labSystem.dto.RecordDto;
+import com.example.labSystem.dto.*;
 import com.example.labSystem.service.RecordService;
 import com.example.labSystem.utils.GsonUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -91,6 +89,24 @@ public class RecordController extends BaseController {
         recordService.attendanceCheckOut(account);
         log.info("User {} checked out at {}", account, LocalDateTime.now());
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "签退成功"));
+    }
+
+    @RequestMapping(value = "/queryRecordByPage", method = RequestMethod.POST)
+    public void queryRecordByPage(HttpServletRequest request, HttpServletResponse response,
+                                        @RequestBody PageRequestQto qto) throws Exception {
+        log.info("queryRecordByPage,query = {}", GsonUtil.ObjectToJson(qto));
+        RecordByPageDto result = recordService.queryRecordByPage(qto);
+        log.info("queryRecordByPage, result = {}", result);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
+
+    @RequestMapping(value = "/download", method = RequestMethod.POST)
+    public void download(HttpServletRequest request, HttpServletResponse response,
+                         @RequestBody PageRequestQto qto) throws Exception {
+        log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
+        recordService.download(response, qto);
+        log.info("queryReportByPage, 导出成功");
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
     }
 
 }

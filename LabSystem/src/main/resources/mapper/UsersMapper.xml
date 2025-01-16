@@ -26,6 +26,24 @@
         WHERE account = #{account}
     </select>
 
+    <select id="queryAccountByUserName" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT account
+        FROM users
+        WHERE userName = #{userName}
+        ORDER BY userId DESC
+            LIMIT 1;
+    </select>
+
+    <select id="queryUserNameByAccount" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT userName
+        FROM users
+        WHERE account = #{account}
+        ORDER BY userId DESC
+            LIMIT 1;
+    </select>
+
     <select id="queryUserMessage" parameterType="java.lang.String"
             resultType="com.example.labSystem.dto.UserDto">
         SELECT inputDate, account, userName, sex, phone, grade, email, groupName, stuNumber, className
@@ -39,11 +57,12 @@
         FROM `groups` g
         JOIN users u ON g.groupName = u.groupName
         WHERE g.reportFlag = 1
+          AND g.deleteFlag = 0
           AND u.deleteFlag = 0
         GROUP BY g.groupName;
     </select>
 
-    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="java.lang.Integer">
         SELECT COUNT(1)
         FROM users
@@ -56,7 +75,7 @@
         </if>
     </select>
 
-    <select id="queryUserByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="queryUserByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.UserExcelDto">
         SELECT account, userName, sex, phone, grade, email, groupName, reportFlag, stuNumber, className
         FROM users

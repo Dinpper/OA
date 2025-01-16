@@ -3,6 +3,7 @@ package com.example.labSystem.service.impl;
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.CommonRequestQto;
+import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.dto.ReportByPageDto;
 import com.example.labSystem.dto.ReportDto;
 import com.example.labSystem.mappers.ReportMapper;
@@ -36,7 +37,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportByPageDto queryReportByPage(CommonRequestQto qto) throws Exception {
+    public ReportByPageDto queryReportByPage(PageRequestQto qto) throws Exception {
         ReportByPageDto dto = new ReportByPageDto();
         if (qto.getSize() == null) {
             qto.setSize(10);
@@ -57,7 +58,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void download(HttpServletResponse response, CommonRequestQto qto) throws Exception {
+    public void download(HttpServletResponse response, PageRequestQto qto) throws Exception {
         // 设置文件类型为 Excel 文件
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         // 设置字符编码为 UTF-8，确保文件名和内容中的字符能正确显示

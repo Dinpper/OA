@@ -10,12 +10,15 @@ import lombok.Data;
  */
 @Data
 public class GroupDto{
+    private String operator;
+
+    private String account;
     //小组id
     private Integer groupId;
     //组名
     private String groupName;
     //组长账号
-    private String groupLeader;
+    private String leaderAccount;
     //组长名字
     private String leaderName;
     //组员人数
@@ -24,4 +27,8 @@ public class GroupDto{
     private Integer deleteFlag;
     //是否上报标识（0不上报1上报）
     private Integer reportFlag;
+
+    private String originalGroupName;
+
+    private String userList;
 }

@@ -56,28 +56,28 @@
           AND YEAR(reportDate) = YEAR(CURDATE())
     </select>
 
-    <select id="querySignDurationWeek" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationWeek" parameterType="java.lang.String"
             resultType="com.example.labSystem.dto.RecordSonDto">
         SELECT
-        a.date AS `day`, IFNULL(b.signDuration, 0) AS signDuration
+        a.reportDate AS reportDate, IFNULL(b.signDuration, 0) AS signDuration
         FROM (
-        SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS date
+        SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS reportDate
         UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 1 - WEEKDAY(CURDATE()) DAY) AS date
+        SELECT DATE_ADD(CURDATE(), INTERVAL 1 - WEEKDAY(CURDATE()) DAY) AS reportDate
         UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 2 - WEEKDAY(CURDATE()) DAY) AS date
+        SELECT DATE_ADD(CURDATE(), INTERVAL 2 - WEEKDAY(CURDATE()) DAY) AS reportDate
         UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 3 - WEEKDAY(CURDATE()) DAY) AS date
+        SELECT DATE_ADD(CURDATE(), INTERVAL 3 - WEEKDAY(CURDATE()) DAY) AS reportDate
         UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 4 - WEEKDAY(CURDATE()) DAY) AS date
+        SELECT DATE_ADD(CURDATE(), INTERVAL 4 - WEEKDAY(CURDATE()) DAY) AS reportDate
         UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 5 - WEEKDAY(CURDATE()) DAY) AS date
+        SELECT DATE_ADD(CURDATE(), INTERVAL 5 - WEEKDAY(CURDATE()) DAY) AS reportDate
         UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 6 - WEEKDAY(CURDATE()) DAY) AS date
+        SELECT DATE_ADD(CURDATE(), INTERVAL 6 - WEEKDAY(CURDATE()) DAY) AS reportDate
         ) a
         LEFT JOIN (
         SELECT
-        SUM(signDuration) AS signDuration,
+        ROUND(SUM(signDuration) / 60, 1) AS signDuration,
         DATE_FORMAT(reportDate, '%Y-%m-%d') AS reportDate
         FROM record
         WHERE DATE_FORMAT(reportDate, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
@@ -85,7 +85,7 @@
             AND account = #{account}
         </if>
         GROUP BY DATE_FORMAT(reportDate, '%Y-%m-%d')
-        ) b ON a.date = b.reportDate;
+        ) b ON a.reportDate = b.reportDate;
     </select>
 
     <select id="querySignDurationWeekByUser" parameterType="com.example.labSystem.dto.CommonRequestQto"
@@ -168,25 +168,29 @@
         WHERE recordId = #{recordId}
     </update>
 
-    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="java.lang.Integer">
-        SELECT COUNT(1)
-        FROM record r
-        LEFT JOIN users u ON r.account = u.account
-        WHERE u.deleteFlag = 0
-        AND r.statusType = 1
-        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
-            AND r.reportDate BETWEEN #{startDate} AND #{endDate}
-        </if>
-        <if test="userName != null and userName != ''">
-            AND u.userName LIKE concat('%', #{userName} ,'%')
-        </if>
-        <if test="groupName != null and groupName != ''">
-            AND u.groupName = #{groupName}
-        </if>
+        SELECT COUNT(*)
+        FROM (
+            SELECT 1
+            FROM record r
+            LEFT JOIN users u ON r.account = u.account
+            WHERE u.deleteFlag = 0
+            AND r.statusType = 1
+            <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
+                AND r.reportDate BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <if test="userName != null and userName != ''">
+                AND u.userName LIKE concat('%', #{userName} ,'%')
+            </if>
+            <if test="groupName != null and groupName != ''">
+                AND u.groupName = #{groupName}
+            </if>
+            GROUP BY r.reportDate, u.userName, u.groupName
+        ) AS subQuery;
     </select>
 
-    <select id="queryRecordByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.RecordExcelDto">
         SELECT u.userName, u.groupName, r.reportDate, ROUND(SUM(r.signDuration) / 60, 1) AS signDuration
         FROM record r
@@ -204,6 +208,45 @@
         </if>
         GROUP BY r.reportDate, u.userName, u.groupName
         ORDER BY r.reportDate DESC, u.groupName, u.userName ASC
+        <if test="size != null and size != ''" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
+    <select id="queryRecordCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM record r
+        LEFT JOIN users u ON r.account = u.account
+        WHERE u.deleteFlag = 0
+        AND r.statusType = 1
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
+            AND r.reportDate BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="groupName != null and groupName != ''">
+            AND u.groupName = #{groupName}
+        </if>
+    </select>
+
+    <select id="queryRecordByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="com.example.labSystem.dto.RecordExcelDto">
+        SELECT u.userName, u.groupName, r.reportDate, r.startDate, r.endDate
+        FROM record r
+        LEFT JOIN users u ON r.account = u.account
+        WHERE u.deleteFlag = 0
+        <if test="startDate != null and startDate != '' and endDate != null and endDate != ''" >
+            AND r.reportDate BETWEEN #{startDate} AND #{endDate}
+        </if>
+        <if test="userName != null and userName != ''">
+            AND u.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="groupName != null and groupName != ''">
+            AND u.groupName = #{groupName}
+        </if>
+        ORDER BY r.recordId DESC
         <if test="size != null and size != ''" >
             LIMIT #{size} OFFSET #{offset};
         </if>

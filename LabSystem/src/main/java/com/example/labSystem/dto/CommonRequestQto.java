@@ -2,10 +2,7 @@ package com.example.labSystem.dto;
 
 import lombok.Data;
 
-/**
- * 能源请求实体类
- */
-
+import java.util.List;
 
 @Data
 public class CommonRequestQto {
@@ -21,11 +18,11 @@ public class CommonRequestQto {
 
     private String groupName;
 
+    private String leaderName;
+
+    private Integer reportFlag;
+
     private Integer hour;
-
-    private String startDate;
-
-    private String endDate;
 
     private Integer type;
 
@@ -33,23 +30,11 @@ public class CommonRequestQto {
 
     private String month;
 
-    private String thisMonth;
-
-    private String lastMonth;
-
-    private String thisYear;
-
-    private String lastYear;
-
-    private Integer page;
-
-    private Integer size;
-
-    private Integer offset;
-
     private String workContent;
 
     private String problems;
 
     private String plan;
+
+    private List<String> list;
 }

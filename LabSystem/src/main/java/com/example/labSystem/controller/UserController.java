@@ -3,6 +3,7 @@ package com.example.labSystem.controller;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.UserService;
 import com.example.labSystem.utils.GsonUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,7 +49,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/queryUserByPage", method = RequestMethod.POST)
     public void queryUserByPage(HttpServletRequest request, HttpServletResponse response,
-                                  @RequestBody CommonRequestQto qto) throws Exception {
+                                  @RequestBody PageRequestQto qto) throws Exception {
         log.info("queryUserByPage,query = {}", GsonUtil.ObjectToJson(qto));
         UserByPageDto result = userService.queryUserByPage(qto);
         log.info("queryUserByPage, result = {}", result);
@@ -57,7 +58,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void download(HttpServletRequest request, HttpServletResponse response,
-                         @RequestBody CommonRequestQto qto) throws Exception {
+                         @RequestBody PageRequestQto qto) throws Exception {
         log.info("download,query = {}", GsonUtil.ObjectToJson(qto));
         userService.download(response, qto);
         log.info("download, 导出成功");

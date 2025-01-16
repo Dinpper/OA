@@ -65,7 +65,7 @@ public class SignDurationController extends BaseController {
     public void queryWeek(HttpServletRequest request, HttpServletResponse response,
                                  @RequestBody CommonRequestQto qto) throws Exception {
         log.info("queryWeek,query = " + GsonUtil.ObjectToJson(qto));
-        RecordDto result = signDurationService.queryWeek(qto);
+        List<RecordDto> result = signDurationService.queryWeek(qto);
         log.info("queryWeek,result = " + result);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
@@ -81,7 +81,7 @@ public class SignDurationController extends BaseController {
 
     @RequestMapping(value = "/querySignDurationByPage", method = RequestMethod.POST)
     public void querySignDurationByPage(HttpServletRequest request, HttpServletResponse response,
-                         @RequestBody CommonRequestQto qto) throws Exception {
+                         @RequestBody PageRequestQto qto) throws Exception {
         log.info("querySignDurationByPage,query = {}", GsonUtil.ObjectToJson(qto));
         RecordByPageDto result = signDurationService.querySignDurationByPage(qto);
         log.info("querySignDurationByPage, result = {}", result);
@@ -90,7 +90,7 @@ public class SignDurationController extends BaseController {
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void download(HttpServletRequest request, HttpServletResponse response,
-                         @RequestBody CommonRequestQto qto) throws Exception {
+                         @RequestBody PageRequestQto qto) throws Exception {
         log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
         signDurationService.download(response, qto);
         log.info("queryReportByPage, 导出成功");

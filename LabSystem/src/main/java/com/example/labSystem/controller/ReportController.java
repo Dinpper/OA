@@ -79,7 +79,7 @@ public class ReportController extends BaseController {
      */
     @RequestMapping(value = "/queryReportByPage", method = RequestMethod.POST)
     public void queryReportByPage(HttpServletRequest request, HttpServletResponse response,
-                              @RequestBody CommonRequestQto qto) throws Exception {
+                              @RequestBody PageRequestQto qto) throws Exception {
         log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
         ReportByPageDto result = reportService.queryReportByPage(qto);
         log.info("queryReportByPage, result = {}", result);
@@ -88,7 +88,7 @@ public class ReportController extends BaseController {
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void download(HttpServletRequest request, HttpServletResponse response,
-                         @RequestBody CommonRequestQto qto) throws Exception {
+                         @RequestBody PageRequestQto qto) throws Exception {
         log.info("download,query = {}", GsonUtil.ObjectToJson(qto));
         reportService.download(response, qto);
         log.info("download, 导出成功");

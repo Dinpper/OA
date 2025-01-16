@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserByPageDto queryUserByPage(CommonRequestQto qto) {
+    public UserByPageDto queryUserByPage(PageRequestQto qto) {
         UserByPageDto dto = new UserByPageDto();
         if (qto.getSize() == null) {
             qto.setSize(10);
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void download(HttpServletResponse response, CommonRequestQto qto) throws Exception {
+    public void download(HttpServletResponse response, PageRequestQto qto) throws Exception {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
         String fileName = URLEncoder.encode("用户统计报表", "UTF-8").replaceAll("\\+", "%20");

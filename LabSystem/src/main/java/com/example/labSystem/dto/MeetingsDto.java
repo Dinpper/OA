@@ -2,6 +2,7 @@ package com.example.labSystem.dto;
 
 import lombok.Data;
 
+import java.time.LocalTime;
 import java.util.Date;
 
 @Data
@@ -14,14 +15,20 @@ public class MeetingsDto {
     private Date updateDate;
     //会议名称
     private String meetingName;
+    //会议日期
+    private String reportDate;
     //会议描述
     private String description;
     //会议开始时间
-    private Date startDate;
+    private String startTime;
     //会议结束时间
-    private Date endDate;
+    private String endTime;
     //会议地点
     private String location;
     //主办方用户账号
     private String organizerAccount;
+
+    private String organizerName;
+
+    private String membersList;
 }

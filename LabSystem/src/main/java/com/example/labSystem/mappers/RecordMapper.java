@@ -1,10 +1,7 @@
 package com.example.labSystem.mappers;
 
 
-import com.example.labSystem.dto.CommonRequestQto;
-import com.example.labSystem.dto.RecordDto;
-import com.example.labSystem.dto.RecordExcelDto;
-import com.example.labSystem.dto.RecordSonDto;
+import com.example.labSystem.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
@@ -23,7 +20,7 @@ public interface RecordMapper {
     Double querySignDurationWeekAll(CommonRequestQto qto);
     Double querySignDurationMonthAll(CommonRequestQto qto);
 
-    List<RecordSonDto> querySignDurationWeek(CommonRequestQto qto);
+    List<RecordSonDto> querySignDurationWeek(@Param("account") String account);
 
     Integer querySignDurationWeekByUser(CommonRequestQto qto);
 
@@ -33,7 +30,11 @@ public interface RecordMapper {
 
     Integer updateIsReminded(@Param("recordId") String recordId);
 
-    Integer queryCountByPage(CommonRequestQto qto);
+    Integer querySignDurationCountByPage(PageRequestQto qto);
 
-    List<RecordExcelDto> queryRecordByPage(CommonRequestQto qto);
+    List<RecordExcelDto> querySignDurationByPage(PageRequestQto qto);
+
+    Integer queryRecordCountByPage(PageRequestQto qto);
+
+    List<RecordExcelDto> queryRecordByPage(PageRequestQto qto);
 }

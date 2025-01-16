@@ -12,5 +12,7 @@ public class RecordSonDto {
 
     private String month;
 
+    private String reportDate;
+
     private BigDecimal signDuration;
 }

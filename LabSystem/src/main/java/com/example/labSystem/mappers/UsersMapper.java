@@ -13,13 +13,17 @@ import java.util.Map;
 public interface UsersMapper {
     Integer queryIsUserExist(@Param("account") String account);
 
+    String queryAccountByUserName(@Param("userName") String userName);
+
+    String queryUserNameByAccount(@Param("account") String account);
+
     UserDto queryUserMessage(@Param("account") String account);
 
     List<Map<String, Object>> queryGroupUserAll();
 
-    Integer queryCountByPage(CommonRequestQto qto);
+    Integer queryCountByPage(PageRequestQto qto);
 
-    List<UserExcelDto> queryUserByPage(CommonRequestQto qto);
+    List<UserExcelDto> queryUserByPage(PageRequestQto qto);
 
     Integer updateUser(UserDto users);
 

@@ -31,7 +31,7 @@
         values (now(), DATE(now()), #{workContent}, #{problems}, #{plan}, #{account}, 1)
     </insert>
 
-    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="java.lang.Integer">
         SELECT COUNT(1)
         FROM report r
@@ -49,7 +49,7 @@
         </if>
     </select>
 
-    <select id="queryReportByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="queryReportByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.ReportDto">
         SELECT u.userName, u.groupName, r.reportDate, r.workContent, r.problems, r.plan
         FROM report r
