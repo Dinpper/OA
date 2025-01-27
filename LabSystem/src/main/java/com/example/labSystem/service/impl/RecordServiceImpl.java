@@ -6,7 +6,7 @@ import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.RecordMapper;
 import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.RecordService;
-import com.example.labSystem.utils.DownloadUtil;
+import com.example.labSystem.utils.ExcelUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -100,7 +100,7 @@ public class RecordServiceImpl implements RecordService {
         String fileName = "小组统计报表";
         String template = Constants.TEMPLATE_PATH + Constants.GROUP_TEMPLATE_EXCEL_XLSX;
         List<RecordExcelDto> list = recordMapper.queryRecordByPage(qto);
-        DownloadUtil.downloadXlsx(response, fileName, template, list);
+        ExcelUtil.downloadXlsx(response, fileName, template, list);
     }
 
 }

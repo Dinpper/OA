@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
-@RestController // 用于 RESTful 服务
-@RequestMapping("/login") // 类级别的请求映射
+@RestController
+@RequestMapping("/login")
 @Slf4j
 public class LoginController extends BaseController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("/loginIn") // POST 请求映射
+    @PostMapping("/loginIn")
     public void loginIn(HttpServletRequest request, HttpServletResponse response,
                               @RequestBody CommonRequestQto qto) throws Exception {
         String account = qto.getAccount();

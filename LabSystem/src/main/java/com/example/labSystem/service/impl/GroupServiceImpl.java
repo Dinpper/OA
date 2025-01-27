@@ -9,7 +9,7 @@ import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.mappers.GroupMapper;
 import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.GroupService;
-import com.example.labSystem.utils.DownloadUtil;
+import com.example.labSystem.utils.ExcelUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +58,7 @@ public class GroupServiceImpl implements GroupService {
         String fileName = "小组统计报表";
         String template = Constants.TEMPLATE_PATH + Constants.GROUP_TEMPLATE_EXCEL_XLSX;
         List<GroupDto> list = groupMapper.queryGroupsByPage(qto);
-        DownloadUtil.downloadXlsx(response, fileName, template, list);
+        ExcelUtil.downloadXlsx(response, fileName, template, list);
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.example.labSystem.common.Constants;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.MeetingsMapper;
 import com.example.labSystem.service.MeetingService;
-import com.example.labSystem.utils.DownloadUtil;
+import com.example.labSystem.utils.ExcelUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,6 +42,6 @@ public class MeetingServiceImpl implements MeetingService {
         String fileName = "小组统计报表";
         String template = Constants.TEMPLATE_PATH + Constants.GROUP_TEMPLATE_EXCEL_XLSX;
         List<MeetingsDto> list = meetingsMapper.queryMeetingByPage(qto);
-        DownloadUtil.downloadXlsx(response, fileName, template, list);
+        ExcelUtil.downloadXlsx(response, fileName, template, list);
     }
 }

@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 @Slf4j
-public class DownloadUtil {
+public class ExcelUtil {
 
 
     /**
