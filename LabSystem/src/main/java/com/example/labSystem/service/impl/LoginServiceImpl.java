@@ -17,7 +17,7 @@ public class LoginServiceImpl implements LoginService {
     public LoginDto loginIn(CommonRequestQto qto) {
         LoginDto dto = new LoginDto();
         String userName = usersMapper.queryUserNameByAccount(qto.getAccount());
-        dto.setUserName(userName);
+        dto.setUsername(userName);
         return dto;
     }
 }
