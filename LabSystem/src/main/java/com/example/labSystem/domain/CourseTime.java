@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Data
 public class CourseTime {
-    private String coursetimeId;
+    private Integer coursetimeId;
     private Date inputDate;
     private Date updateDate;
     private String date;

@@ -19,6 +19,13 @@
     </resultMap>
 
 
+    <select id="queryPassword" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT `password`
+        FROM users
+        WHERE account = #{account}
+    </select>
+
     <select id="queryIsUserExist" parameterType="java.lang.String"
             resultType="java.lang.Integer">
         SELECT count(1)

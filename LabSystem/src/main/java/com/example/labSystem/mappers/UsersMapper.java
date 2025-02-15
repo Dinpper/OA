@@ -11,6 +11,8 @@ import java.util.Map;
 
 @Mapper
 public interface UsersMapper {
+    String queryPassword(@Param("account") String account);
+
     Integer queryIsUserExist(@Param("account") String account);
 
     String queryAccountByUserName(@Param("userName") String userName);

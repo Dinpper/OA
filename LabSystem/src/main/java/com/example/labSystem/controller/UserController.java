@@ -1,6 +1,7 @@
 package com.example.labSystem.controller;
 
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.UsersMapper;
@@ -91,5 +92,30 @@ public class UserController extends BaseController {
         userService.deleteUser(account);
         log.info("operator {} deleteUser {} 成功", operator, account);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "删除成功"));
+    }
+
+
+
+
+
+
+
+
+
+    // 测试登录，浏览器访问： http://localhost:8880/user/doLogin?username=zhang&password=123456
+    @RequestMapping("doLogin")
+    public String doLogin(@RequestParam("username") String username, @RequestParam("password") String password) {
+        // 此处仅作模拟示例，真实项目需要从数据库中查询数据进行比对
+        if("zhang".equals(username) && "123456".equals(password)) {
+            StpUtil.login(10001);
+            return "登录成功";
+        }
+        return "登录失败";
+    }
+
+    // 查询登录状态，浏览器访问： http://localhost:8880/user/isLogin
+    @RequestMapping("isLogin")
+    public String isLogin() {
+        return "当前会话是否登录：" + StpUtil.isLogin();
     }
 }

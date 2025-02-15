@@ -38,4 +38,5 @@ public class UserDto {
     private String stuNumber;
     //班级
     private String className;
+    private String role;
 }

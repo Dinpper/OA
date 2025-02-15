@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class MD5Util {
-    public String md5(String str) {
+    public static String md5(String str) {
         try {
             MessageDigest e = MessageDigest.getInstance("MD5");
             e.update(str.getBytes());
