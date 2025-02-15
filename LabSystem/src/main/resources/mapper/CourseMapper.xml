@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.CourseMapper">
+
+    <resultMap type="com.example.labSystem.domain.Course" id="CourseMap">
+        <result property="courseId" column="courseId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="courseFirst" column="courseFirst" jdbcType="VARCHAR"/>
+        <result property="courseSecond" column="courseSecond" jdbcType="VARCHAR"/>
+        <result property="courseThird" column="courseThird" jdbcType="VARCHAR"/>
+        <result property="courseFourth" column="courseFourth" jdbcType="VARCHAR"/>
+        <result property="courseFifth" column="courseFifth" jdbcType="VARCHAR"/>
+        <result property="courseSixth" column="courseSixth" jdbcType="VARCHAR"/>
+        <result property="courseSeventh" column="courseSeventh" jdbcType="VARCHAR"/>
+        <result property="courseEighth" column="courseEighth" jdbcType="VARCHAR"/>
+        <result property="courseNinth" column="courseNinth" jdbcType="VARCHAR"/>
+        <result property="courseTenth" column="courseTenth" jdbcType="VARCHAR"/>
+        <result property="courseEleventh" column="courseEleventh" jdbcType="VARCHAR"/>
+        <result property="courseTwelfth" column="courseTwelfth" jdbcType="VARCHAR"/>
+        <result property="date" column="date" jdbcType="VARCHAR"/>
+        <result property="week" column="week" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryCourseByUserList" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.CourseDro">
+        SELECT c.*
+        FROM course c
+        JOIN users u ON c.account = u.account
+        WHERE u.userName IN
+        <foreach item="userName" collection="list" open="(" separator="," close=")">
+            #{userName}
+        </foreach>
+        AND c.`date` = #{date}
+    </select>
+
+    <select id="queryHasCourse" parameterType="com.example.labSystem.domain.Course"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM course
+        WHERE account = #{account}
+          AND `date` = #{date}
+          AND week = #{week}
+    </select>
+
+    <insert id="insert" keyProperty="courseId" useGeneratedKeys="true">
+        insert into course (inputDate, account, courseFirst, courseSecond, courseThird, courseFourth,
+                            courseFifth, courseSixth, courseSeventh, courseEighth, courseNinth,
+                            courseTenth, courseEleventh, courseTwelfth, date, week)
+        values (now(), #{account}, #{courseFirst}, #{courseSecond}, #{courseThird}, #{courseFourth},
+                #{courseFifth}, #{courseSixth}, #{courseSeventh}, #{courseEighth}, #{courseNinth},
+                #{courseTenth}, #{courseEleventh}, #{courseTwelfth}, #{date}, #{week})
+    </insert>
+
+    <update id="updateCourse">
+        UPDATE course
+        SET updateDate = now()
+        <if test="courseFirst != null and courseFirst != ''">
+            , courseFirst = #{courseFirst}
+        </if>
+        <if test="courseSecond != null and courseSecond != ''">
+            , courseSecond = #{courseSecond}
+        </if>
+        <if test="courseThird != null and courseThird != ''">
+            , courseThird = #{courseThird}
+        </if>
+        <if test="courseFourth != null and courseFourth != ''">
+            , courseFourth = #{courseFourth}
+        </if>
+        <if test="courseFifth != null and courseFifth != ''">
+            , courseFifth = #{courseFifth}
+        </if>
+        <if test="courseSixth != null and courseSixth != ''">
+            , courseSixth = #{courseSixth}
+        </if>
+        <if test="courseSeventh != null and courseSeventh != ''">
+            , courseSeventh = #{courseSeventh}
+        </if>
+        <if test="courseEighth != null and courseEighth != ''">
+            , courseEighth = #{courseEighth}
+        </if>
+        <if test="courseNinth != null and courseNinth != ''">
+            , courseNinth = #{courseNinth}
+        </if>
+        <if test="courseTenth != null and courseTenth != ''">
+            , courseTenth = #{courseTenth}
+        </if>
+        <if test="courseEleventh != null and courseEleventh != ''">
+            , courseEleventh = #{courseEleventh}
+        </if>
+        <if test="courseTwelfth != null and courseTwelfth != ''">
+            , courseTwelfth = #{courseTwelfth}
+        </if>
+        WHERE account = #{account}
+        AND `date` = #{date}
+        AND week = #{week}
+    </update>
+
+</mapper>

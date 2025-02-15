@@ -1,5 +1,6 @@
 package com.example.labSystem.dto;
 
+import com.example.labSystem.domain.Course;
 import lombok.Data;
 
 import java.util.List;
@@ -37,4 +38,6 @@ public class CommonRequestQto {
     private String plan;
 
     private List<String> list;
+
+    private List<Course> courseList;
 }

@@ -9,6 +9,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import cn.idev.excel.EasyExcel;
@@ -414,7 +415,21 @@ public class tt {
         int currentYear = LocalDate.now().getYear();
         System.out.println(currentYear);
 
-        excel();
+//        excel();
+        System.out.println(getSemester());
+    }
+
+    private static String getSemester() {
+        YearMonth yearMonth = YearMonth.now();
+        int year = yearMonth.getYear();
+        int month = yearMonth.getMonthValue();
+        int semester;
+        if (month >= 2 && month <= 8) {
+            semester = 2;
+        } else {
+            semester = 1;
+        }
+        return year + "-" + semester;
     }
     public static boolean isValidYearMonth(String dateString) {
         // 正则表达式：检查 yyyy-MM 格式
