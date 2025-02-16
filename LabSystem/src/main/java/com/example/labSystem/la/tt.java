@@ -417,6 +417,15 @@ public class tt {
 
 //        excel();
         System.out.println(getSemester());
+
+        List<String> stringList = new ArrayList<>();
+        stringList.add("Hello");
+        stringList.add("World");
+        stringList.add("!");
+
+        // 使用逗号分隔
+        String concatenatedString = String.join(",", stringList);
+        System.out.println(concatenatedString); // 输出: Hello,World,!
     }
 
     private static String getSemester() {

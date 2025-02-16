@@ -54,7 +54,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public PermissionsInfoDto info(String account) {
         PermissionsInfoDto dto = new PermissionsInfoDto();
-        // 2. 查询用户角色
+        //查询用户角色
         Role role = roleService.queryUserRole(account);
 
         UserDto user = new UserDto();
@@ -62,11 +62,11 @@ public class LoginServiceImpl implements LoginService {
         user.setRole(role.getRoleName());
         dto.setUser(user);
 
-        // 3. 查询权限列表
+        //查询权限列表
         List<String> permissions = permissionService.queryPermissionsByRole(role.getRoleId());
         dto.setPermissions(permissions);
 
-        // 4. 查询可访问的菜单
+        //查询可访问的菜单
         List<Menus> menus = menuService.queryMenusByRole(role.getRoleId());
         dto.setMenus(menus);
 

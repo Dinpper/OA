@@ -2,25 +2,31 @@ package com.example.labSystem.service.impl;
 
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.common.BusinessException;
-import com.example.labSystem.dto.CommonRequestQto;
-import com.example.labSystem.dto.PageRequestQto;
-import com.example.labSystem.dto.ReportByPageDto;
-import com.example.labSystem.dto.ReportDto;
+import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.service.ReportService;
+import com.example.labSystem.utils.FileUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
+
+import static com.example.labSystem.utils.FileUtil.filePathByYMD;
 
 @Service
 @Slf4j
 public class ReportServiceImpl implements ReportService {
     @Autowired
     private ReportMapper reportMapper;
+
+    @Value("${file.uploadDir}")
+    private String uploadDir;
 
     @Override
     public ReportDto queryHasDraft(String account) throws Exception {
@@ -29,8 +35,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void reportSubmit(CommonRequestQto qto) throws Exception {
-        Integer number = reportMapper.reportSubmit(qto);
+    public void reportSubmit(ReportDto toDto, List<MultipartFile> files) throws Exception {
+        if (files != null) {
+            String achievement = FileUtil.getFilesName(files);
+            toDto.setAchievement(achievement);
+            FileUtil.uploadBatch(files, filePathByYMD(uploadDir));
+        }
+        Integer number = reportMapper.reportSubmit(toDto);
         if (number != 1) {
             throw new BusinessException(500, "提交失败");
         }

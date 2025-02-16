@@ -13,6 +13,18 @@
         <result property="notifiedFlag" column="notifiedFlag" jdbcType="INTEGER"/>
     </resultMap>
 
+    <insert id="insert" keyProperty="userMeetingsId" useGeneratedKeys="true">
+        insert into usermeetings (inputDate, account, meetingId, status)
+        values (now(), #{account} , #{meetingId}, 0)
+    </insert>
 
+    <select id="queryMembersName" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT u.userName
+        FROM usermeetings m
+        JOIN users u ON m.account = u.account
+        WHERE m.meetingId = #{meetingId}
+          AND m.`status` != 2
+    </select>
 
 </mapper>

@@ -17,9 +17,30 @@
 
 
     <insert id="insert" keyProperty="meetingId" useGeneratedKeys="true">
-        insert into meetings (inputDate, meetingName, description, startDate, endDate, location, organizerAccount)
-        values (now(), #{meetingName} , #{description}, #{startDate}, #{endDate}, #{location}, #{organizerAccount})
+        insert into meetings (inputDate, meetingName, description, reportDate, startTime, location, organizerAccount)
+        values (now(), #{meetingName} , #{description}, #{reportDate}, #{startTime}, #{location}, #{organizerAccount})
     </insert>
+
+    <select id="queryMeetingNew" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT m.meetingId, m.reportDate, m.startTime, m.meetingName, m.description, m.location, m.organizerAccount
+        FROM usermeetings u
+        JOIN meetings m ON u.meetingId = m.meetingId
+        WHERE account = #{account}
+          AND m.reportDate >= DATE(now())
+        ORDER BY m.reportDate ASC, m.startTime ASC
+            LIMIT 1;
+    </select>
+
+    <select id="queryMeetingByDate" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT m.meetingId, m.reportDate, m.startTime, m.meetingName, m.description, m.location, m.organizerAccount
+        FROM usermeetings u
+        JOIN meetings m ON u.meetingId = m.meetingId
+        WHERE account = #{account}
+          AND m.reportDate = #{reportDate}
+        ORDER BY m.reportDate ASC, m.startTime ASC
+    </select>
 
     <update id="update">
         UPDATE meetings
@@ -50,8 +71,8 @@
 
     <select id="queryMeetingByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.MeetingsDto">
-        SELECT m.meetingName, m.reportDate, m.description, m.startTime, m.endTime, m.location,
-               o.userName AS organizerName, GROUP_CONCAT(u.userName SEPARATOR ', ') AS membersList
+        SELECT m.meetingId, m.meetingName, m.reportDate, m.description, m.startTime, m.endTime, m.location,
+               o.userName AS organizerName, GROUP_CONCAT(u.userName SEPARATOR ', ') AS membersName
         FROM meetings m
         JOIN usermeetings um ON m.meetingId = um.meetingId
         JOIN users u ON um.account = u.account

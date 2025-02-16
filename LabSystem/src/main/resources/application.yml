@@ -22,6 +22,10 @@ spring:
        auth: true
        starttls.enable: true
        ssl.enable: true
+  multipart:
+   enabled: true
+   max-file-size: 10MB
+   max-request-size: 10MB
 
 mybatis:
  mapper-locations: classpath:mapper/*.xml
@@ -74,4 +78,4 @@ logging:
 #  password: ysekssfshlswecgi
 
 file:
- upload-dir: E:\file
+ uploadDir: "E:\\file"

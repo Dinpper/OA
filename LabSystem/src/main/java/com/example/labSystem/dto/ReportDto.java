@@ -6,6 +6,8 @@ import lombok.Data;
 public class ReportDto {
     private String userName;
 
+    private String account;
+
     private String groupName;
 
     private String reportDate;
@@ -15,4 +17,6 @@ public class ReportDto {
     private String problems;
 
     private String plan;
+
+    private String achievement;
 }

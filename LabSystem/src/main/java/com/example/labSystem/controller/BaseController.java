@@ -19,8 +19,6 @@ import java.io.PrintWriter;
 public class BaseController {
 
 	private static final Logger log = LoggerFactory.getLogger(BaseController.class);
-/*	@Autowired
-	private IRedisClient redisClient;*/
 	
 	public void BackJsonResult(HttpServletResponse response, JsonResultDto jsonResultDto) throws IOException {
 		String msg = "";

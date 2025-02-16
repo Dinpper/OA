@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class MeetingsDto {
@@ -30,5 +31,7 @@ public class MeetingsDto {
 
     private String organizerName;
 
-    private String membersList;
+    private String membersName;
+
+    private List<String> memberList;
 }

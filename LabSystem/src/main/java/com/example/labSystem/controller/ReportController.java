@@ -1,18 +1,21 @@
 package com.example.labSystem.controller;
 
+import cn.dev33.satoken.stp.StpUtil;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.service.ReportService;
+import com.example.labSystem.utils.FileUtil;
 import com.example.labSystem.utils.GsonUtil;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 
 /**
@@ -59,14 +62,21 @@ public class ReportController extends BaseController {
      */
     @RequestMapping(value = "/reportSubmit", method = RequestMethod.POST)
     public void reportSubmit(HttpServletRequest request, HttpServletResponse response,
-                              @RequestBody CommonRequestQto qto) throws Exception {
-        String account = qto.getAccount();
-        log.info("User {} reportSubmit,query = {}", account, GsonUtil.ObjectToJson(qto));
-        if(StringUtils.isEmpty(account)){
-            throw new BusinessException(399, "参数错误");
-        }
-        reportService.reportSubmit(qto);
+                             @RequestParam(value = "reportJson") String reportJson,
+                             @RequestParam("files") List<MultipartFile> files) throws Exception {
+//        log.info("User {} reportSubmit,query = {}", account, GsonUtil.ObjectToJson(qto));
+        Gson gson = new Gson();
+        ReportDto toDto = gson.fromJson(reportJson,ReportDto.class);
+        reportService.reportSubmit(toDto, files);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
+    }
+
+    @PostMapping("/uploadMultiple")
+    public void uploadMultipleFiles(HttpServletRequest request, HttpServletResponse response,
+                                    @RequestParam("files") List<MultipartFile> files) throws Exception {
+        FileUtil.uploadBatch(files, "E:\\file");
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "上传成功"));
+
     }
 
     /**

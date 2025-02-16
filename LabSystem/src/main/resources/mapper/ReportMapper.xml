@@ -27,8 +27,8 @@
     </select>
 
     <insert id="reportSubmit">
-        insert into report (inputDate, reportDate, workContent, problems, plan, account, submittedFlag)
-        values (now(), DATE(now()), #{workContent}, #{problems}, #{plan}, #{account}, 1)
+        insert into report (inputDate, reportDate, workContent, problems, plan, achievement, account, submittedFlag)
+        values (now(), DATE(now()), #{workContent}, #{problems}, #{plan}, #{achievement}, #{account}, 1)
     </insert>
 
     <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
@@ -51,7 +51,7 @@
 
     <select id="queryReportByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.ReportDto">
-        SELECT u.userName, u.groupName, r.reportDate, r.workContent, r.problems, r.plan
+        SELECT u.userName, u.groupName, r.reportDate, r.workContent, r.problems, r.plan, r.achievement
         FROM report r
         LEFT JOIN users u ON r.account = u.account
         WHERE u.deleteFlag = 0

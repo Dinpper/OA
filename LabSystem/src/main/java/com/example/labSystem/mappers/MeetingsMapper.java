@@ -6,12 +6,17 @@ import com.example.labSystem.dto.MeetingsDto;
 import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.dto.ReportDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
 public interface MeetingsMapper {
-    Integer insert(Meetings meetings);
+    Integer insert(MeetingsDto meetings);
+
+    MeetingsDto queryMeetingNew(@Param("account") String account);
+
+    List<MeetingsDto> queryMeetingByDate(@Param("account") String account, @Param("reportDate") String reportDate);
 
     Integer update();
 
