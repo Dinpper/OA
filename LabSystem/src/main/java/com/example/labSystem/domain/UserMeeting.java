@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class UserMeetings {
+public class UserMeeting {
     //记录ID
     private Integer userMeetingsId;
     //生成时间

@@ -2,7 +2,7 @@ package com.example.labSystem.service.impl;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.Constants;
-import com.example.labSystem.domain.UserMeetings;
+import com.example.labSystem.domain.UserMeeting;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.MeetingsMapper;
 import com.example.labSystem.mappers.UserMeetingsMapper;
@@ -40,7 +40,7 @@ public class MeetingServiceImpl implements MeetingService {
             throw new BusinessException(500, "添加失败");
         }
         Integer meetingId = qto.getMeetingId();
-        UserMeetings userMeetings = new UserMeetings();
+        UserMeeting userMeetings = new UserMeeting();
         userMeetings.setMeetingId(meetingId);
         qto.getMemberList().forEach(l -> {
             String account = usersMapper.queryAccountByUserName(l);

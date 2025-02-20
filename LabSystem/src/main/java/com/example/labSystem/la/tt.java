@@ -3,6 +3,7 @@ package com.example.labSystem.la;
 import cn.idev.excel.ExcelWriter;
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.dto.RecordExcelDto;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+
 import cn.idev.excel.EasyExcel;
 import cn.idev.excel.write.metadata.WriteSheet;
 import cn.idev.excel.write.metadata.fill.FillConfig;
@@ -29,6 +31,7 @@ public class tt {
         calendar.set(Calendar.MILLISECOND, 0);//将毫秒至零
         return calendar.getTime();
     }
+
     public static String getToday(String format) {
 
         SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -36,6 +39,7 @@ public class tt {
         String dateFormat = sdf.format(date);
         return dateFormat;
     }
+
     public static Date getLastIntegralTime(Integer day) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, day); //按天加减
@@ -45,7 +49,8 @@ public class tt {
         cal.set(Calendar.MILLISECOND, 999);
         return cal.getTime();
     }
-    public static Date getLastDateByHour(Integer day,Integer hour) {
+
+    public static Date getLastDateByHour(Integer day, Integer hour) {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_YEAR, day); //按天加减
         cal.set(Calendar.HOUR_OF_DAY, hour);
@@ -71,19 +76,21 @@ public class tt {
 //        }
 //    }
 
-    public static BigDecimal getIncrease(Integer thisValue, Integer lastValue){
+    public static BigDecimal getIncrease(Integer thisValue, Integer lastValue) {
         BigDecimal thisV = BigDecimal.valueOf(thisValue);
         BigDecimal lastV = BigDecimal.valueOf(lastValue);
         BigDecimal increase = BigDecimal.ZERO;
         if (lastV.compareTo(BigDecimal.ZERO) != 0) {
-            increase = thisV.subtract(lastV).divide(lastV,4, RoundingMode.HALF_UP);
+            increase = thisV.subtract(lastV).divide(lastV, 4, RoundingMode.HALF_UP);
         }
         return increase;
     }
+
     public static String formatYearMonth(String year, String month) {
         String formattedMonth = String.format("%02d", Integer.parseInt(month));
         return year + "-" + formattedMonth;
     }
+
     public static boolean isValidYear(String input) {
         String regex = "^(\\d{4})$";
         if (input == null || !input.matches(regex)) {
@@ -92,6 +99,7 @@ public class tt {
         int year = Integer.parseInt(input);
         return year >= 1000 && year <= 9999; // 可根据实际需求调整范围
     }
+
     public static boolean isValidMonth(String input) {
         if (input == null || input.length() > 2 || !input.chars().allMatch(Character::isDigit)) {
             return false;
@@ -393,20 +401,20 @@ public class tt {
             calendar.add(Calendar.HOUR_OF_DAY, -1);
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             String reportDate;
-            if(hour == 0) {
+            if (hour == 0) {
                 hour = 24;
                 calendar.add(Calendar.HOUR_OF_DAY, -1);
             }
             reportDate = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-            System.out.println(reportDate +"  "+ hour);
-            if(hour == 24){
+            System.out.println(reportDate + "  " + hour);
+            if (hour == 24) {
                 calendar.add(Calendar.HOUR_OF_DAY, +1);
             }
         }
 
-        Double f1 = (double) (1/2);
+        Double f1 = (double) (1 / 2);
         System.out.println(f1);
-        Double f2 = (1/(double)2);
+        Double f2 = (1 / (double) 2);
         System.out.println(f2);
 
         LocalDate previousMonthDate = LocalDate.now().minusMonths(1);
@@ -426,6 +434,14 @@ public class tt {
         // 使用逗号分隔
         String concatenatedString = String.join(",", stringList);
         System.out.println(concatenatedString); // 输出: Hello,World,!
+
+        try {
+            Date finishDate =strFormatDate("2024/10/16" + " 00:00:00");
+                    System.out.println(finishDate);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private static String getSemester() {
@@ -440,11 +456,19 @@ public class tt {
         }
         return year + "-" + semester;
     }
+
     public static boolean isValidYearMonth(String dateString) {
         // 正则表达式：检查 yyyy-MM 格式
         String regex = "^\\d{4}-(0[1-9]|1[0-2])$";
         // 判断字符串是否符合正则表达式
         return dateString != null && dateString.matches(regex);
+    }
+
+    public static Date strFormatDate(String date) throws ParseException {
+        if (date == null) {
+            return null;
+        }
+        return (new SimpleDateFormat("yyyy/M/d HH:mm:ss")).parse(date);
     }
 
     public static void excel() {
@@ -456,7 +480,7 @@ public class tt {
 //        list.add(new RecordExcelDto("张天师", new Date(),456));
         String template = "src/main/resources/templates/用户签到模板.xlsx";
         String stuFile = "src/main/resources/templates/用户.xlsx";
-        try (ExcelWriter excelWriter = FastExcel.write(stuFile).withTemplate(template).build();){
+        try (ExcelWriter excelWriter = FastExcel.write(stuFile).withTemplate(template).build();) {
             WriteSheet writeSheet = EasyExcel.writerSheet().build();
 
             //填充模板第一部分的列表数据

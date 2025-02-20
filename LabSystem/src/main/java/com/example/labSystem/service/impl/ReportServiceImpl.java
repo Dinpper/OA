@@ -2,7 +2,9 @@ package com.example.labSystem.service.impl;
 
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.common.BusinessException;
+import com.example.labSystem.domain.Harvest;
 import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.HarvestMapper;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.service.ReportService;
 import com.example.labSystem.utils.FileUtil;
@@ -25,13 +27,15 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private ReportMapper reportMapper;
 
+    @Autowired
+    private HarvestMapper harvestMapper;
+
     @Value("${file.uploadDir}")
     private String uploadDir;
 
     @Override
     public ReportDto queryHasDraft(String account) throws Exception {
-        ReportDto dto = reportMapper.queryHasDraft(account);
-        return dto;
+        return reportMapper.queryHasDraft(account);
     }
 
     @Override
@@ -40,6 +44,13 @@ public class ReportServiceImpl implements ReportService {
             String achievement = FileUtil.getFilesName(files);
             toDto.setAchievement(achievement);
             FileUtil.uploadBatch(files, filePathByYMD(uploadDir));
+            Harvest harvest = new Harvest();
+            harvest.setAccount(toDto.getAccount());
+            harvest.setFilePath(filePathByYMD(uploadDir));
+            for (MultipartFile file : files) {
+                harvest.setFileName(file.getOriginalFilename());
+                harvestMapper.insert(harvest);
+            }
         }
         Integer number = reportMapper.reportSubmit(toDto);
         if (number != 1) {

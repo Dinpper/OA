@@ -45,4 +45,6 @@ public class CommonRequestQto {
     private List<MultipartFile> files;
 
     private String achievement;
+
+    private Integer harvestId;
 }

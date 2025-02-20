@@ -88,5 +88,4 @@
             LIMIT #{size} OFFSET #{offset};
         </if>
     </select>
-
 </mapper>
