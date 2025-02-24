@@ -3,15 +3,14 @@ package com.example.labSystem.utils;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.OpenApiConstant;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 
 /**
@@ -137,45 +136,7 @@ public class DateUtil {
 
     public static void main(String arg[]) {
 
-        /*
-         * long l=163*1000; long day=l/(24*60*60*1000); long
-         * hour=(l/(60*60*1000)-day*24); long
-         * min=((l/(60*1000))-day*24*60-hour*60); long
-         * s=(l/1000-day*24*60*60-hour*60*60-min*60);
-         * System.out.println(""+day+"天"+hour+"小时"+min+"分"+s+"秒");
-         *
-         *
-         * SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss",
-         * Locale.CHINA); // 修改日期和时间模式 DateUtil da = new DateUtil();
-         * System.out.println(new Date()); System.out.println(sdf.format(new
-         * Date("Jul 18, 2016 12:59:58 AM"))); System.out.println(new
-         * Date(sdf.format(new Date("Jul 18, 2016 12:59:58 AM")))); long i[] =
-         * da.getDateBetween(new Date("Jul 18, 2016 12:59:58 AM"), new Date(),
-         * -1); System.out.println("iiiiii----->" + i[0] + "--" +i[1] + "--"
-         * +i[2]);
-         *
-         *
-         * long minute1=125%3600/60; System.out.println(minute1);
-         */
-        // Date(sdf.format(new Date("Jul 18, 2016 12:59:58 AM"))));
-        /*
-         * Date da = new Date("Jul 18, 2016 12:59:58 AM"); long i[]
-         * =getDateBetween(da, new Date(),-1);
-         *
-         * System.out.println("iiiiii----->" + i[0] + "--" +i[1] + "--" +i[2]);
-         * String time = getBetweenTime(i); System.out.println(time);
-         */
-        /*
-         * String day = getDay(new Date(), "00:00:00"); System.out.println(day);
-         */
-        Date date = new Date();
-        // String dateFormatStr2 = dateFormatStr(date,
-        // ManagerConstant.simpleFormat24Year);
-        // Date strToDate = StrToDate(dateFormatStr2,
-        // ManagerConstant.simpleFormat24Year);
-        Date startDate = getStartDateOrEndDateTody(date, "endDate");
-        String dateFormatStr = dateFormatStr(startDate, OpenApiConstant.SIMPLEFORMAT24);
-        System.out.println(dateFormatStr);
+
     }
     /**
      * 生成日期
@@ -546,6 +507,76 @@ public class DateUtil {
         // 把日期往后增加一天.整数往后推,负数往前移动
         calendar.add(Calendar.DAY_OF_YEAR, day);
         return calendar.getTime();
+    }
+
+
+    //----------------------------------------------------------
+
+    private static final long MILLS_8_HOUR = 28800000;
+
+    private static final long MILLS_A_DAY = 86400000;
+
+    private static final long MILLS_A_SECOND = 1000;
+
+    private static final int SECONDS_A_HOUR = 3600;
+
+    private static final int SECONDS_A_MINUTE = 60;
+
+    private static final String  DATE_FORMATTER = "yyyy-MM-dd";
+
+    public static final Map<Integer, String> WEEK_MAP = new HashMap<>();
+
+    static {
+        WEEK_MAP.put(1, "日");
+        WEEK_MAP.put(2, "一");
+        WEEK_MAP.put(3, "二");
+        WEEK_MAP.put(4, "三");
+        WEEK_MAP.put(5, "四");
+        WEEK_MAP.put(6, "五");
+        WEEK_MAP.put(7, "六");
+    }
+
+    /**
+     * 根据day,time计算出时间戳
+     * @param day 距离北京时间 1970-01-01 00:00:00的天数
+     * @param time 距离00:00的秒数
+     * @return
+     */
+    public static long getTimestampByDaySeconds(int day, int time) {
+        return day * MILLS_A_DAY - MILLS_8_HOUR + time * MILLS_A_SECOND;
+    }
+
+    /**
+     * format day int to 'yyyy-MM-dd'
+     * @param day
+     * @return
+     */
+    public static String formatDay(int day){
+        long time = getTimestampByDaySeconds(day, 0);
+        return DateFormatUtils.format(time,DATE_FORMATTER);
+    }
+
+    public static int getCurDayInt() {
+        return (int) ((System.currentTimeMillis() + MILLS_8_HOUR) / MILLS_A_DAY);
+    }
+
+
+    public static String getCurDate(){
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMATTER);
+        String dateNowStr = sdf.format(d);
+        return dateNowStr ;
+    }
+
+    public static String getYesterday() {
+        LocalDateTime tomorrow = LocalDateTime.now().plusDays(-1);
+        String format = tomorrow.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+        return format;
+    }
+    public static String getTomorrow() {
+        LocalDateTime tomorrow = LocalDateTime.now().plusDays(1);
+        String format = tomorrow.format(DateTimeFormatter.ofPattern(DATE_FORMATTER));
+        return format;
     }
 
 }
