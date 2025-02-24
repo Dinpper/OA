@@ -24,7 +24,7 @@ import java.util.List;
 public class FileController extends BaseController {
 
     // 从配置文件获取上传目录的路径
-    @Value("${file.uploadDir}")
+    @Value("${fileStorage.rootDir}")
     private String uploadDir;
 
     /**
@@ -46,7 +46,7 @@ public class FileController extends BaseController {
         try {
             for (MultipartFile file : files) {
                 if (!file.isEmpty()) {
-                    saveFile(file);
+                    saveFile(file, uploadDir);
                 }
             }
             // 3. 返回成功结果
@@ -57,7 +57,7 @@ public class FileController extends BaseController {
     }
 
     // 保存单个文件的方法
-    public void saveFile(MultipartFile file) throws IOException {
+    public void saveFile(MultipartFile file, String uploadDir) throws IOException {
         String fileName = file.getOriginalFilename();
         Path path = Paths.get(uploadDir + File.separator + fileName);
         Files.write(path, file.getBytes());

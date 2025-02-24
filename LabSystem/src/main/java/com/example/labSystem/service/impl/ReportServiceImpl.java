@@ -1,6 +1,7 @@
 package com.example.labSystem.service.impl;
 
 import cn.idev.excel.FastExcel;
+import com.example.labSystem.Enum.FileCategorizationEnum;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.domain.Harvest;
 import com.example.labSystem.dto.*;
@@ -14,12 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.List;
-
-import static com.example.labSystem.utils.FileUtil.filePathByYMD;
 
 @Service
 @Slf4j
@@ -30,7 +28,7 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private HarvestMapper harvestMapper;
 
-    @Value("${file.uploadDir}")
+    @Value("${fileStorage.rootDir}")
     private String uploadDir;
 
     @Override
@@ -43,10 +41,11 @@ public class ReportServiceImpl implements ReportService {
         if (files != null) {
             String achievement = FileUtil.getFilesName(files);
             toDto.setAchievement(achievement);
-            FileUtil.uploadBatch(files, filePathByYMD(uploadDir));
+            String filePath = uploadDir + FileUtil.generateFilePath(FileCategorizationEnum.getDesc(1), "");
+            FileUtil.uploadBatch(files, filePath);
             Harvest harvest = new Harvest();
             harvest.setAccount(toDto.getAccount());
-            harvest.setFilePath(filePathByYMD(uploadDir));
+            harvest.setFilePath(filePath);
             for (MultipartFile file : files) {
                 harvest.setFileName(file.getOriginalFilename());
                 harvestMapper.insert(harvest);

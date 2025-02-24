@@ -1,0 +1,84 @@
+server:
+ port: 8880
+
+spring:
+ application:
+  name: LabSystem
+ datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/labsystem
+  username: root
+  password: dinpper
+ mail:
+  host: smtp.qq.com
+  port: 465
+  username: 1772775873@qq.com
+  password: sirebdlcvyoacejc
+  protocol: smtp
+  default-encoding: UTF-8
+  properties:
+    mail:
+      smtp:
+       auth: true
+       starttls.enable: true
+       ssl.enable: true
+  multipart:
+   enabled: true
+   max-file-size: 10MB
+   max-request-size: 10MB
+
+mybatis:
+ mapper-locations: classpath:mapper/*.xml
+ type-aliases-package: com.example.labSystem.domain
+
+
+xxl:
+ job:
+  # 调度中心的地址，多个地址用逗号分隔
+  admin:
+   addresses: http://127.0.0.1:8889/xxl-job-admin  # 调度中心的 URL
+   accessToken: default_token
+  # 执行器配置
+  executor:
+   appname: xxl-job-executor-sample         # 执行器名称，必须与调度中心中配置的一致
+   address:  # 如果没有地址，可以不配置，默认不注册到调度中心
+   ip: 127.0.0.1                     # 执行器的 IP 地址，默认是本机 IP
+   port: 9999                        # 执行器的端口
+   logpath: /data/applogs/xxl-job/logs            # 执行器的日志文件路径
+   logretentiondays: -1             # 日志保留天数
+
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+ # token 名称（同时也是 cookie 名称）
+ token-name: satoken
+ # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+ timeout: 2592000
+ # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+ active-timeout: -1
+ # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+ is-concurrent: true
+ # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+ is-share: true
+ # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+ token-style: uuid
+ # 是否输出操作日志
+ is-log: true
+
+
+
+logging:
+ level:
+  root: INFO
+  org.mybatis: DEBUG
+  com.example.labSystem: DEBUG
+
+#  username: 1772775873@qq.com
+#  password: sirebdlcvyoacejc
+#  username: 2434714918@qq.com
+#  password: ysekssfshlswecgi
+
+fileStorage:
+ rootDir: "E:\\file"
+ reportsDir: "E:\\file\\reports"
+ meetingsDir: "E:\\file\\meetings"
+ projectsDir: "E:\\file\\projects"
