@@ -15,16 +15,32 @@ public class UserMeetingServiceImpl implements UserMeetingService {
 
     @Override
     public void acceptMeeting(UserMeetingDto dto) {
-        Integer result= userMeetingsMapper.acceptMeeting(dto);
-        if(result == 0){
+        Integer result = userMeetingsMapper.acceptMeeting(dto);
+        if (result == 0) {
             throw new BusinessException(500, "服务器错误");
         }
     }
 
     @Override
     public void refuseMeeting(UserMeetingDto dto) {
-        Integer result= userMeetingsMapper.refuseMeeting(dto);
-        if(result == 0){
+        Integer result = userMeetingsMapper.refuseMeeting(dto);
+        if (result == 0) {
+            throw new BusinessException(500, "服务器错误");
+        }
+    }
+
+    @Override
+    public void checkInMeeting(UserMeetingDto dto) {
+        Integer result = userMeetingsMapper.checkInMeeting(dto.getMeetingId(), dto.getAccount());
+        if (result == 0) {
+            throw new BusinessException(500, "服务器错误");
+        }
+    }
+
+    @Override
+    public void checkOutMeeting(UserMeetingDto dto) {
+        Integer result = userMeetingsMapper.checkOutMeeting(dto.getMeetingId(), dto.getAccount());
+        if (result == 0) {
             throw new BusinessException(500, "服务器错误");
         }
     }

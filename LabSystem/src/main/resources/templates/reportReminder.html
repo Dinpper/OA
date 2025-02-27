@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>睡觉提醒</title>
+    <title>报告提交提醒</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -61,18 +61,18 @@
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>睡觉提醒</h1>
+            <h1>报告提交提醒</h1>
         </div>
         <div class="content-left">
             <p th:text="'尊敬的' + ${name} + '，'">尊敬的用户，</p>
-            <p>您已待机17.5小时，请及时睡觉。</p>
-            <p>点击下方按钮立即睡觉：</p>
+            <p>距离报告提交截至只剩3小时</p>
+            <p>点击下方按钮立即提交：</p>
         </div>
         <div class="button-container">
-            <a th:href="${signOutLink}" class="button">立即睡觉</a>
+            <a th:href="${signOutLink}" class="button">提交</a>
         </div>
         <div class="content-left">
-            <p>如果您已经再睡了，请忽略此邮件。</p>
+            <p>如果您已经提交了，请忽略此邮件。</p>
         </div>
         <div class="content-right">
             <p>感谢您的配合！</p>

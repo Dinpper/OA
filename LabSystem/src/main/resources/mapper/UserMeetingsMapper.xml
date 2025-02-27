@@ -42,5 +42,21 @@
           AND meetingId = #{meetingId}
     </update>
 
+    <update id="checkInMeeting">
+        UPDATE usermeetings
+        SET updateDate = now(),
+            checkInTime = DATE_FORMAT(NOW(), '%H:%i:%s')
+        WHERE account = #{account}
+          AND meetingId = #{meetingId}
+    </update>
+
+    <update id="checkOutMeeting">
+        UPDATE usermeetings
+        SET updateDate = now(),
+            checkOutTime = DATE_FORMAT(NOW(), '%H:%i:%s')
+        WHERE account = #{account}
+          AND meetingId = #{meetingId}
+    </update>
+
 
 </mapper>

@@ -11,7 +11,7 @@ public interface UserService {
 
     List<GroupUserDto> queryGroupUserAll();
 
-    List<GroupUserDto> queryAccountListByGroup();
+    List<GroupUserDto> queryAccountListByReportGroup();
 
     UserByPageDto queryUserByPage(PageRequestQto qto);
 

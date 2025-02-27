@@ -8,6 +8,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -507,6 +508,12 @@ public class DateUtil {
         // 把日期往后增加一天.整数往后推,负数往前移动
         calendar.add(Calendar.DAY_OF_YEAR, day);
         return calendar.getTime();
+    }
+
+    public static String getTodayByMMDD() {
+        LocalDate today = LocalDate.now();  // 获取今天的日期
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMdd");  // 定义日期格式
+        return today.format(formatter);
     }
 
 

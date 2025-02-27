@@ -87,4 +87,32 @@
           AND YEARWEEK(reportDate, 1) = YEARWEEK(CURDATE(), 1);
     </select>
 
+    <select id="queryNoReportSubmittedToday" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.UserDto">
+        SELECT u.email, u.userName
+        FROM users u
+         JOIN `groups` g ON u.groupName = g.groupName
+         LEFT JOIN report r ON u.account = r.account AND r.reportDate = CURDATE()
+        WHERE (r.reportId IS NULL)
+          AND u.deleteFlag = 0
+          AND u.reportFlag = 1
+          AND g.deleteFlag = 0
+          AND g.reportFlag = 1
+    </select>
+
+    <select id="queryNoReportSubmittedThisWeek" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.UserDto">
+        SELECT u.email, u.userName
+        FROM users u
+         JOIN `groups` g ON u.groupName = g.groupName
+         LEFT JOIN report r ON u.account = r.account
+            AND YEARWEEK(r.reportDate, 1) = YEARWEEK(CURDATE(), 1)
+        WHERE r.reportId IS NULL
+          AND u.deleteFlag = 0
+          AND u.reportFlag = 1
+          AND g.deleteFlag = 0
+          AND g.reportFlag = 1
+
+    </select>
+
 </mapper>

@@ -23,6 +23,14 @@
         WHERE deleteFlag = 0
     </select>
 
+    <select id="queryReportGroupsList" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.String">
+        SELECT groupName
+        FROM `groups`
+        WHERE deleteFlag = 0
+        AND reportFlag = 1
+    </select>
+
     <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
             resultType="java.lang.Integer">
         SELECT COUNT(1)

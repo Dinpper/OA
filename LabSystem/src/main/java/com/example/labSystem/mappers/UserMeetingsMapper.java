@@ -16,4 +16,8 @@ public interface UserMeetingsMapper {
     Integer acceptMeeting(UserMeetingDto dto);
 
     Integer refuseMeeting(UserMeetingDto dto);
+
+    Integer checkInMeeting(@Param("meetingId") Integer meetingId, @Param("account") String account);
+
+    Integer checkOutMeeting(@Param("meetingId") Integer meetingId, @Param("account") String account);
 }

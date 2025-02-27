@@ -12,4 +12,6 @@ public interface EmailService {
     void sendReportReminderEmail(String to, String name) throws MessagingException;
 
     void sendDailyReportEmail(String to, List<ReportTaskDto> dailyReports) throws MessagingException;
+
+    void sendWeeklyReportEmail(String to, List<ReportTaskDto> dailyReports) throws MessagingException;
 }

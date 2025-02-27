@@ -8,24 +8,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * user: li
- * date: 2018/7/23.
- * @author pc
- */
+
 @SuppressWarnings({ "unused" })
 public class DateTimeUtils {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
     public static final String SECOND_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String YMDHM_FORMAT = "yyyy-MM-dd HH:mm";
-
-//    public static long NginxDateToTimestamp(String nginxDate) throws Exception{
-//        nginxDate = nginxDate.replace("[","").replace("]","");
-//        SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy:hh:mm:ss Z", Locale.ENGLISH);
-//        Date date = formatter.parse(nginxDate);
-//        return date.getTime();
-//    }
 
     /**
      * 字符串日期转换成时间戳
@@ -39,18 +28,6 @@ public class DateTimeUtils {
         Date date = formatter.parse(dateStr);
         return date.getTime();
     }
-
-//    /**
-//     * 获取给定日期几天后的时间戳
-//     */
-//    public static long getTheFutureFewDayTimeStamp(String dateStr,int num, String format) throws ParseException {
-//        Calendar now = Calendar.getInstance();
-//        SimpleDateFormat formatter = new SimpleDateFormat(format);
-//        Date date = formatter.parse(dateStr);
-//        now.setTime(date);
-//        now.set(Calendar.DATE, now.get(Calendar.DATE) + num);
-//        return now.getTimeInMillis();
-//    }
 
     /**
      * 获取给定日期几天前的日期
@@ -245,15 +222,5 @@ public class DateTimeUtils {
         }while(tempStr.compareTo(endTime)<=0);
         return times;
     }
-
-    @SuppressWarnings("deprecation")
-	public static void main(String[] args) throws Exception{
-        List<String> times = getTimePeriod("2018-12-01 00:00:00", "2018-12-01 00:30:00", 60);
-        System.out.println(times.stream().reduce((x,y)->x+","+y));
-       // System.out.println(getLastDayOfMonth(getFirstDayOfHistoryMonth(-2, "yyyy-MM-dd"),"yyyy-MM-dd"));
-
-    }
-    
-
 
 }

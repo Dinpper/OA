@@ -3,6 +3,7 @@ package com.example.labSystem.mappers;
 import com.example.labSystem.dto.CommonRequestQto;
 import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.dto.ReportDto;
+import com.example.labSystem.dto.UserDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -21,4 +22,8 @@ public interface ReportMapper {
     List<ReportDto> queryReportDailyByAccount(@Param("account") String account);
 
     List<ReportDto> queryReportWeeklyByAccount(@Param("account") String account);
+
+    List<UserDto> queryNoReportSubmittedToday();
+
+    List<UserDto> queryNoReportSubmittedThisWeek();
 }

@@ -13,6 +13,8 @@ public interface GroupMapper {
 
     List<String> queryGroupsList();
 
+    List<String> queryReportGroupsList();
+
     Integer queryCountByPage(PageRequestQto qto);
 
     List<GroupDto> queryGroupsByPage(PageRequestQto qto);

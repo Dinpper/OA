@@ -5,6 +5,7 @@ import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.Constants;
 import com.example.labSystem.dto.ReportTaskDto;
 import com.example.labSystem.service.EmailService;
+import com.example.labSystem.utils.DateUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +62,6 @@ public class EmailServiceImpl implements EmailService {
 
         // 渲染 HTML 模板
         String emailContent = templateEngine.process("signOutReminder", context);
-        System.out.println("Rendered Email Content: " + emailContent);
         // 设置邮件内容
         helper.setText(emailContent, true);
 
@@ -85,16 +85,16 @@ public class EmailServiceImpl implements EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(username);
         helper.setTo(to);
-        helper.setSubject("睡觉提醒");
+        helper.setSubject("报告提交提醒");
+
 
         // 设置模板上下文
         Context context = new Context();
         context.setVariable("name", name);
-        context.setVariable("signOutLink", "https://www.bilibili.com/video/BV1TZ42177mL/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click&vd_source=41ce25b988f4e9328c275e5407014227");
+        context.setVariable("signOutLink", Constants.laboratoryURL);
 
         // 渲染 HTML 模板
         String emailContent = templateEngine.process("reportReminder", context);
-        System.out.println("Rendered Email Content: " + emailContent);
         // 设置邮件内容
         helper.setText(emailContent, true);
 
@@ -110,7 +110,7 @@ public class EmailServiceImpl implements EmailService {
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(username);
         helper.setTo(to);
-        helper.setSubject("日报");
+        helper.setSubject(DateUtil.getTodayByMMDD() + "日报");
 
         // 设置模板上下文
         Context context = new Context();
@@ -118,7 +118,29 @@ public class EmailServiceImpl implements EmailService {
 
         // 渲染 HTML 模板
         String emailContent = templateEngine.process("dailyReport", context);
-        System.out.println("Rendered Email Content: " + emailContent);
+        // 设置邮件内容
+        helper.setText(emailContent, true);
+
+        // 发送邮件
+        javaMailSender.send(message);
+    }
+
+    @Override
+    public void sendWeeklyReportEmail(String to, List<ReportTaskDto> WeeklyReports) throws MessagingException {
+
+        // 构造邮件内容
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setFrom(username);
+        helper.setTo(to);
+        helper.setSubject("周报");
+
+        // 设置模板上下文
+        Context context = new Context();
+        context.setVariable("WeeklyReports", WeeklyReports);
+
+        // 渲染 HTML 模板
+        String emailContent = templateEngine.process("weeklyReport", context);
         // 设置邮件内容
         helper.setText(emailContent, true);
 
