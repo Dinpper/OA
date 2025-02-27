@@ -16,9 +16,9 @@ public interface RecordMapper {
 
     Integer attendanceCheckOut(@Param("account") String account);
 
-    Double querySignDurationToDayAll(CommonRequestQto qto);
-    Double querySignDurationWeekAll(CommonRequestQto qto);
-    Double querySignDurationMonthAll(CommonRequestQto qto);
+    Double querySignDurationToDayAll(@Param("account") String account);
+    Double querySignDurationWeekAll(@Param("account") String account);
+    Double querySignDurationMonthAll(@Param("account") String account);
 
     List<RecordSonDto> querySignDurationWeek(@Param("account") String account);
 

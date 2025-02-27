@@ -28,7 +28,7 @@ public class SignDurationServiceImpl implements SignDurationService {
     @Override
     public RecordDto queryTodayByUser(CommonRequestQto qto) {
         RecordDto dto = new RecordDto();
-        Double signDuration = recordMapper.querySignDurationToDayAll(qto);
+        Double signDuration = recordMapper.querySignDurationToDayAll(qto.getAccount());
         signDuration = signDuration == null ? 0 :signDuration;
         dto.setSignDuration(signDuration);
         return dto;
@@ -52,9 +52,9 @@ public class SignDurationServiceImpl implements SignDurationService {
     @Override
     public RecordDto queryTodayWeekMonth(CommonRequestQto qto) {
         RecordDto dto = new RecordDto();
-        Double signDurationToday = recordMapper.querySignDurationToDayAll(qto);
-        Double signDurationWeek = recordMapper.querySignDurationWeekAll(qto);
-        Double signDurationMonth = recordMapper.querySignDurationMonthAll(qto);
+        Double signDurationToday = recordMapper.querySignDurationToDayAll(qto.getAccount());
+        Double signDurationWeek = recordMapper.querySignDurationWeekAll(qto.getAccount());
+        Double signDurationMonth = recordMapper.querySignDurationMonthAll(qto.getAccount());
         dto.setSignDurationToday(signDurationToday == null ? 0 : signDurationToday);
         dto.setSignDurationWeek(signDurationWeek == null ? 0 : signDurationWeek);
         dto.setSignDurationMonth(signDurationMonth == null ? 0 : signDurationMonth);

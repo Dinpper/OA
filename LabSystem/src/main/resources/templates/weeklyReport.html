@@ -2,9 +2,113 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验室周报</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background-color: #007bff;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+        }
+        .group {
+            margin: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+        .group-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            border-left: 4px solid #007bff;
+            padding-left: 10px;
+        }
+        .member {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .member-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .section {
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-weight: bold;
+            color: #555;
+        }
+        .section-content {
+            margin-top: 5px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .footer {
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <div class="header">实验室周报汇总</div>
 
+    <!-- 动态渲染每个组 -->
+    <div th:each="group : ${dailyReports}">
+        <div class="group">
+            <div class="group-title" th:text="${group.groupName}">组名</div>
+
+            <!-- 动态渲染组成员 -->
+            <div class="member" th:each="member : ${group.members}">
+                <div class="member-name" th:text="${member.name}">成员姓名</div>
+                <div class="section">
+                    <div class="section-title">签到时长：</div>
+                    <div class="section-content" th:text="${member.signDuration}">签到时长</div>
+                </div>
+                <div class="section">
+                    <div class="section-title">工作内容：</div>
+                    <div class="section-content" th:text="${member.work}">工作内容</div>
+                </div>
+                <div class="section">
+                    <div class="section-title">遇到问题：</div>
+                    <div class="section-content" th:text="${member.issues}">遇到问题</div>
+                </div>
+                <div class="section">
+                    <div class="section-title">计划：</div>
+                    <div class="section-content" th:text="${member.plan}">计划</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">© 2025 实验室管理系统 - 自动生成周报</div>
+</div>
 </body>
 </html>

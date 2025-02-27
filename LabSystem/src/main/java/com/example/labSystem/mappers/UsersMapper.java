@@ -30,4 +30,6 @@ public interface UsersMapper {
     Integer updateUser(UserDto users);
 
     Integer deleteUser(@Param("account") String account);
+
+    List<String> queryAccountByGroup(@Param("groupName") String groupName);
 }

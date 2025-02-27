@@ -3,6 +3,7 @@ package com.example.labSystem.service.impl;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.Constants;
+import com.example.labSystem.dto.ReportTaskDto;
 import com.example.labSystem.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -102,18 +103,18 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendDailyReportEmail(String to, List<Map<String, Object>> dailyReports) throws MessagingException {
+    public void sendDailyReportEmail(String to, List<ReportTaskDto> dailyReports) throws MessagingException {
 
         // 构造邮件内容
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(username);
         helper.setTo(to);
-        helper.setSubject("睡觉提醒");
+        helper.setSubject("日报");
 
         // 设置模板上下文
         Context context = new Context();
-        context.setVariable("signOutLink", "https://www.bilibili.com/video/BV1TZ42177mL/?spm_id_from=333.1007.top_right_bar_window_custom_collection.content.click&vd_source=41ce25b988f4e9328c275e5407014227");
+        context.setVariable("dailyReports", dailyReports);
 
         // 渲染 HTML 模板
         String emailContent = templateEngine.process("dailyReport", context);

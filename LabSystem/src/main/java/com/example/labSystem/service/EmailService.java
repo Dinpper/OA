@@ -1,5 +1,6 @@
 package com.example.labSystem.service;
 
+import com.example.labSystem.dto.ReportTaskDto;
 import jakarta.mail.MessagingException;
 
 import java.util.List;
@@ -10,5 +11,5 @@ public interface EmailService {
 
     void sendReportReminderEmail(String to, String name) throws MessagingException;
 
-    void sendDailyReportEmail(String to, List<Map<String, Object>> dailyReports) throws MessagingException;
+    void sendDailyReportEmail(String to, List<ReportTaskDto> dailyReports) throws MessagingException;
 }

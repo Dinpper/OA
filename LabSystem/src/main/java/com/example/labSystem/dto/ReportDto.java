@@ -10,6 +10,8 @@ public class ReportDto {
 
     private String groupName;
 
+    private Double signDuration;
+
     private String reportDate;
 
     private String workContent;

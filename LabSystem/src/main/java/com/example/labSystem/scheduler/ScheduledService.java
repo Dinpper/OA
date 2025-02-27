@@ -1,6 +1,6 @@
 package com.example.labSystem.scheduler;
 
-import com.example.labSystem.model.HolidayDate;
+import com.example.labSystem.domain.HolidayDate;
 import com.example.labSystem.service.HolidayDateService;
 import com.example.labSystem.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;

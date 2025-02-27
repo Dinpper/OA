@@ -69,6 +69,14 @@
         GROUP BY g.groupName;
     </select>
 
+    <select id="queryAccountByGroup"  parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT account
+        FROM users
+        WHERE deleteFlag = 0
+        AND groupName = #{groupName}
+    </select>
+
     <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="java.lang.Integer">
         SELECT COUNT(1)

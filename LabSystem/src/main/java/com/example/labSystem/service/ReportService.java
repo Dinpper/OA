@@ -1,10 +1,6 @@
 package com.example.labSystem.service;
 
-import com.example.labSystem.dto.CommonRequestQto;
-import com.example.labSystem.dto.PageRequestQto;
-import com.example.labSystem.dto.ReportByPageDto;
-import com.example.labSystem.dto.ReportDto;
-import jakarta.servlet.http.HttpServletRequest;
+import com.example.labSystem.dto.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 

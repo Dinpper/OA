@@ -24,6 +24,7 @@ public class HolidayUtil {
         query = year+"年"+month+"月";
         long timeMillis = System.currentTimeMillis();
         String apiUrl = "https://sp1.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?tn=wisetpl&format=json&query="+query+"&co=&resource_id=39043&t="+ timeMillis +"&cb=op_aladdin_callback"+timeMillis;
+        log.info("API: " + apiUrl);
         CloseableHttpClient httpclient = null;
         CloseableHttpResponse hResponse = null;
         try {

@@ -3,12 +3,15 @@ package com.example.labSystem.service.impl;
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.GroupMapper;
 import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -21,6 +24,9 @@ import java.util.Map;
 public class UserServiceImpl implements UserService {
     @Autowired
     private UsersMapper usersMapper;
+
+    @Autowired
+    private GroupMapper groupMapper;
 
 
     @Override
@@ -45,6 +51,20 @@ public class UserServiceImpl implements UserService {
             list.add(dto);
         }
         return list;
+    }
+
+    @Override
+    public List<GroupUserDto> queryAccountListByGroup() {
+        List<GroupUserDto> resList = new ArrayList<>();
+        List<String> groupList = groupMapper.queryGroupsList();
+        for (String groupName : groupList) {
+            GroupUserDto dto = new GroupUserDto();
+            dto.setGroupName(groupName);
+            List<String> accountList = usersMapper.queryAccountByGroup(groupName);
+            dto.setAccountList(accountList);
+            resList.add(dto);
+        }
+        return resList;
     }
 
     @Override
@@ -94,15 +114,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(UserDto qto) {
         Integer result = usersMapper.updateUser(qto);
-        if (result != 1 ) {
+        if (result != 1) {
             throw new BusinessException(500, "修改失败");
         }
     }
 
     @Override
-    public void deleteUser(String account) throws Exception{
+    public void deleteUser(String account) throws Exception {
         Integer result = usersMapper.deleteUser(account);
-        if (result != 1 ) {
+        if (result != 1) {
             throw new BusinessException(500, "删除失败");
         }
     }

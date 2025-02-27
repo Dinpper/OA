@@ -22,7 +22,7 @@
             LIMIT 1
     </select>
 
-    <select id="querySignDurationToDayAll" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationToDayAll" parameterType="java.lang.String"
             resultType="java.lang.Double">
         SELECT
             ROUND(SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
@@ -33,7 +33,7 @@
           AND reportDate = CURDATE()
     </select>
 
-    <select id="querySignDurationWeekAll" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationWeekAll" parameterType="java.lang.String"
             resultType="java.lang.Double">
         SELECT
             ROUND(SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
@@ -44,7 +44,7 @@
           AND YEARWEEK(reportDate, 1) = YEARWEEK(CURDATE(), 1);
     </select>
 
-    <select id="querySignDurationMonthAll" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="querySignDurationMonthAll" parameterType="java.lang.String"
             resultType="java.lang.Double">
         SELECT
             ROUND(SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END

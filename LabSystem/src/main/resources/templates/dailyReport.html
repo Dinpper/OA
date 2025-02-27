@@ -87,18 +87,22 @@
 
             <!-- 动态渲染组成员 -->
             <div class="member" th:each="member : ${group.members}">
-                <div class="member-name" th:text="${member.name}">成员姓名</div>
+                <div class="member-name" th:text="${member.userName}">成员姓名</div>
+                <div class="section">
+                    <div class="section-title">签到时长：</div>
+                    <div class="section-content" th:text="${member.signDuration}">未签到</div>
+                </div>
                 <div class="section">
                     <div class="section-title">工作内容：</div>
-                    <div class="section-content" th:text="${member.work}">工作内容</div>
+                    <div class="section-content" th:text="${member.workContent}">未提交</div>
                 </div>
                 <div class="section">
                     <div class="section-title">遇到问题：</div>
-                    <div class="section-content" th:text="${member.issues}">遇到问题</div>
+                    <div class="section-content" th:text="${member.problems}"></div>
                 </div>
                 <div class="section">
                     <div class="section-title">计划：</div>
-                    <div class="section-content" th:text="${member.plan}">计划</div>
+                    <div class="section-content" th:text="${member.plan}">未提交</div>
                 </div>
             </div>
         </div>

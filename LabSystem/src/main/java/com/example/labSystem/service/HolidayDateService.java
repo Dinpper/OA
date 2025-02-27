@@ -1,11 +1,12 @@
 package com.example.labSystem.service;
 
-import com.example.labSystem.model.HolidayDate;
+import com.example.labSystem.domain.HolidayDate;
 
 import java.util.List;
 
 /**
  * holiday date service
+ *
  * @author pc
  */
 public interface HolidayDateService {
@@ -24,7 +25,7 @@ public interface HolidayDateService {
     /**
      * init baseworkday
      */
-     void initBaseWorkDay(int year);
+    void initBaseWorkDay(int year);
 
     /**
      * init holiday
@@ -34,4 +35,9 @@ public interface HolidayDateService {
     HolidayDate getHoliday(Integer day);
 
     List<HolidayDate> getHolidays(String date);
+
+
+    boolean isLegalHoliday(String date);
+
+
 }

@@ -17,4 +17,8 @@ public interface ReportMapper {
     Integer queryCountByPage(PageRequestQto qto);
 
     List<ReportDto> queryReportByPage(PageRequestQto qto);
+
+    List<ReportDto> queryReportDailyByAccount(@Param("account") String account);
+
+    List<ReportDto> queryReportWeeklyByAccount(@Param("account") String account);
 }

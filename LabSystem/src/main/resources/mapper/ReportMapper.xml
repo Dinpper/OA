@@ -71,4 +71,20 @@
         </if>
     </select>
 
+    <select id="queryReportDailyByAccount" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.ReportDto">
+        SELECT workContent, problems, plan
+        FROM report
+        WHERE account = #{account}
+          AND reportDate = CURDATE()
+    </select>
+
+    <select id="queryReportWeeklyByAccount" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.ReportDto">
+        SELECT workContent, problems, plan
+        FROM report
+        WHERE account = #{account}
+          AND YEARWEEK(reportDate, 1) = YEARWEEK(CURDATE(), 1);
+    </select>
+
 </mapper>

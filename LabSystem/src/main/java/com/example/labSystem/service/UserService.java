@@ -11,6 +11,8 @@ public interface UserService {
 
     List<GroupUserDto> queryGroupUserAll();
 
+    List<GroupUserDto> queryAccountListByGroup();
+
     UserByPageDto queryUserByPage(PageRequestQto qto);
 
     void download(HttpServletResponse response, PageRequestQto qto) throws Exception;

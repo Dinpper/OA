@@ -9,4 +9,6 @@ public class GroupUserDto {
     private String groupName;
 
     List<String> userList;
+
+    List<String> accountList;
 }

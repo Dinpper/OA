@@ -1,6 +1,6 @@
 package com.example.labSystem.mappers;
 
-import com.example.labSystem.model.HolidayDate;
+import com.example.labSystem.domain.HolidayDate;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
