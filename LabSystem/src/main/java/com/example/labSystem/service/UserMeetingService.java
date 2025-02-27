@@ -1,6 +1,9 @@
 package com.example.labSystem.service;
 
+import com.example.labSystem.dto.CommonRequestQto;
 import com.example.labSystem.dto.UserMeetingDto;
+
+import java.util.List;
 
 public interface UserMeetingService {
     void acceptMeeting(UserMeetingDto dto);
@@ -10,4 +13,6 @@ public interface UserMeetingService {
     void checkInMeeting(UserMeetingDto dto);
 
     void checkOutMeeting(UserMeetingDto dto);
+
+    List<String> queryMeetingDateByMonth(CommonRequestQto qto);
 }

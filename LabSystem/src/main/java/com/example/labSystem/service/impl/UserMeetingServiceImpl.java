@@ -1,11 +1,14 @@
 package com.example.labSystem.service.impl;
 
 import com.example.labSystem.common.BusinessException;
+import com.example.labSystem.dto.CommonRequestQto;
 import com.example.labSystem.dto.UserMeetingDto;
 import com.example.labSystem.mappers.UserMeetingsMapper;
 import com.example.labSystem.service.UserMeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class UserMeetingServiceImpl implements UserMeetingService {
@@ -43,5 +46,10 @@ public class UserMeetingServiceImpl implements UserMeetingService {
         if (result == 0) {
             throw new BusinessException(500, "服务器错误");
         }
+    }
+
+    @Override
+    public List<String> queryMeetingDateByMonth(CommonRequestQto qto) {
+        return userMeetingsMapper.queryMeetingDateByMonth(qto);
     }
 }

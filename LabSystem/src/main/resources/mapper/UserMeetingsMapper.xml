@@ -58,5 +58,17 @@
           AND meetingId = #{meetingId}
     </update>
 
+    <select id="queryMeetingDateByMonth" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.String">
+        SELECT DISTINCT m.reportDate
+        FROM meetings m
+        JOIN usermeetings um ON m.meetingId = um.meetingId
+        WHERE YEAR(m.reportDate) = #{year}
+          AND MONTH(m.reportDate) = #{month}
+          AND um.status IS NOT NULL
+          AND um.account = #{account}
+
+    </select>
+
 
 </mapper>
