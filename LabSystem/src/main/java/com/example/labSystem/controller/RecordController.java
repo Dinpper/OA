@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.lang3.StringUtils;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 签到相关
@@ -107,6 +108,14 @@ public class RecordController extends BaseController {
         recordService.download(response, qto);
         log.info("queryReportByPage, 导出成功");
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
+    }
+
+    @RequestMapping(value = "/querySignDurationWeek", method = RequestMethod.POST)
+    public void querySignDurationWeek(HttpServletRequest request, HttpServletResponse response,
+                                   @RequestBody CommonRequestQto qto) throws Exception {
+
+        List<RecordSonDto> resList = recordService.querySignDurationWeek(qto.getAccount());
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, resList));
     }
 
 }

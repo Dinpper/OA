@@ -8,12 +8,14 @@ import com.example.labSystem.dto.CommonRequestQto;
 import com.example.labSystem.dto.LoginDto;
 import com.example.labSystem.dto.PermissionsInfoDto;
 import com.example.labSystem.dto.UserDto;
+import com.example.labSystem.mappers.RoleMapper;
 import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.LoginService;
 import com.example.labSystem.service.MenuService;
 import com.example.labSystem.service.PermissionService;
 import com.example.labSystem.service.RoleService;
 import com.example.labSystem.utils.MD5Util;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -34,11 +36,17 @@ public class LoginServiceImpl implements LoginService {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private RoleMapper roleMapper;
+
     @Override
     public LoginDto loginIn(CommonRequestQto qto) {
         LoginDto dto = new LoginDto();
         String userName = usersMapper.queryUserNameByAccount(qto.getAccount());
         dto.setUserName(userName);
+
+        Role role = roleMapper.queryUserRole(qto.getAccount());
+        dto.setRole(role.getRoleName());
         return dto;
     }
 

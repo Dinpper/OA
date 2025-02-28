@@ -1,7 +1,7 @@
 package com.example.labSystem.service.impl;
 
 import cn.idev.excel.FastExcel;
-import com.example.labSystem.Enum.FileCategorizationEnum;
+import com.example.labSystem.Enum.FileTypeEnum;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.domain.Harvest;
 import com.example.labSystem.dto.*;
@@ -41,7 +41,7 @@ public class ReportServiceImpl implements ReportService {
         if (files != null) {
             String achievement = FileUtil.getFilesName(files);
             toDto.setAchievement(achievement);
-            String filePath = uploadDir + FileUtil.generateFilePath(FileCategorizationEnum.getDesc(1), "");
+            String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(1), "");
             FileUtil.uploadBatch(files, filePath);
             Harvest harvest = new Harvest();
             harvest.setAccount(toDto.getAccount());

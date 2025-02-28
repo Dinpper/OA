@@ -15,70 +15,48 @@
         <result property="relatedId" column="relatedId" jdbcType="INTEGER"/>
     </resultMap>
 
-    <select id="queryGroups" parameterType="com.example.labSystem.dto.CommonRequestQto"
-            resultType="com.example.labSystem.dto.MeetingsDto">
-        SELECT groupName, leaderAccount, reportFlag, startDate, endDate, location, organizerAccount
-        FROM `groups`
-    </select>
-
-    <select id="queryGroupsList" parameterType="com.example.labSystem.dto.CommonRequestQto"
-            resultType="java.lang.String">
-        SELECT groupName
-        FROM `groups`
-        WHERE deleteFlag = 0
-    </select>
-
-    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="java.lang.Integer">
         SELECT COUNT(1)
-        FROM `groups`
-        WHERE deleteFlag = 0
+        FROM files f
+        JOIN users u ON f.uploaded_by = u.account
+        <if test="userName != null and userName != ''">
+            AND u.userName LIKE concat('%', #{userName}, '%')
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND DATE(f.uploaded_at) = #{reportDate}
+        </if>
+        <if test="type != null">
+            AND f.source_type = #{type}
+        </if>
+        <if test="fileName != null and fileName != ''">
+            AND f.file_name = #{fileName}
+        </if>
     </select>
 
-    <select id="queryGroupsByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
-            resultType="com.example.labSystem.dto.GroupDto">
-        SELECT g.groupName, COUNT(u.userId) AS memberCount, g.reportFlag,
-        (SELECT u.userName FROM users u WHERE u.account = g.leaderAccount ) AS leaderName,
-        GROUP_CONCAT(u.userName ORDER BY u.userName) AS userList
-        FROM `groups` g
-        LEFT JOIN users u
-        ON g.groupName = u.groupName
-        AND u.deleteFlag = 0
-        WHERE g.deleteFlag = 0
-        GROUP BY g.groupName, g.leaderAccount, g.reportFlag
+    <select id="queryFileByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="com.example.labSystem.dto.FileDto">
+        SELECT f.id,f.file_name,f.file_path, f.file_size, f.uploaded_by,
+               f.uploaded_at,f.file_type,f.source_type, u.userName
+        FROM files f
+        JOIN users u ON f.uploaded_by = u.account
+        <if test="userName != null and userName != ''">
+            AND u.userName LIKE concat('%', #{userName}, '%')
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND DATE(f.uploaded_at) = #{reportDate}
+        </if>
+        <if test="type != null">
+            AND f.source_type = #{type}
+        </if>
+        <if test="fileName != null and fileName != ''">
+            AND f.file_name = #{fileName}
+        </if>
+        ORDER BY f.uploaded_at DESC
         <if test="size != null and size != ''" >
             LIMIT #{size} OFFSET #{offset};
         </if>
     </select>
 
-    <update id="updateGroup">
-        UPDATE `groups`
-        SET updateDate = now()
-        <if test="groupName != null and groupName != ''">
-            , groupName = #{groupName}
-        </if>
-        <if test="leaderAccount != null and leaderAccount != ''">
-            , leaderAccount = #{leaderAccount}
-        </if>
-        <if test="deleteFlag != null">
-            , deleteFlag = #{deleteFlag}
-        </if>
-        <if test="reportFlag != null">
-            , reportFlag = #{reportFlag}
-        </if>
-        WHERE groupName = #{originalGroupName}
-    </update>
-
-    <update id="deleteGroup">
-        UPDATE `groups`
-        SET deleteFlag = 1,
-            updateDate = now()
-        WHERE groupName = #{groupName}
-    </update>
-
-    <insert id="insert" keyProperty="groupId" useGeneratedKeys="true">
-        insert into `groups` (inputDate, updateDate, groupName, leaderAccount, deleteFlag, reportFlag)
-        values (now(), now(), #{groupName}, #{leaderAccount}, #{deleteFlag}, #{reportFlag})
-    </insert>
 
 </mapper>

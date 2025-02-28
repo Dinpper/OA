@@ -52,6 +52,9 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public MeetingsDto queryMeetingNew(CommonRequestQto qto) throws Exception {
         MeetingsDto dto = meetingsMapper.queryMeetingNew(qto.getAccount());
+        if (dto == null) {
+            return null;
+        }
         dto.setOrganizerName(usersMapper.queryUserNameByAccount(dto.getOrganizerAccount()));
         List<String> memberList = userMeetingsMapper.queryMembersName(dto.getMeetingId());
         String membersName = String.join(",", memberList);
@@ -62,7 +65,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public List<MeetingsDto> queryMeetingByDate(CommonRequestQto qto) throws Exception {
         List<MeetingsDto> resList = meetingsMapper.queryMeetingByDate(qto.getAccount(), qto.getQueryDate());
-        resList.forEach(l->{
+        resList.forEach(l -> {
             l.setOrganizerName(usersMapper.queryUserNameByAccount(l.getOrganizerAccount()));
             List<String> memberList = userMeetingsMapper.queryMembersName(l.getMeetingId());
             String membersName = String.join(",", memberList);

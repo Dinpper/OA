@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- *
- *
  * @author Dinpper
  * @since 2024-09-10 15:36:16
  */
@@ -32,10 +30,10 @@ public class RecordServiceImpl implements RecordService {
     public RecordDto queryStatusType(String account) {
         RecordDto dto = new RecordDto();
         Integer statusType = recordMapper.queryStatusType(account);
-        if(statusType == null){
+        if (statusType == null) {
             //是否存在该用户， 刚创建没有签到记录
             Integer isExist = usersMapper.queryIsUserExist(account);
-            if(isExist == 0){
+            if (isExist == 0) {
                 throw new BusinessException(399, "找不到用户");
             }
             statusType = 1;
@@ -47,15 +45,15 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public void attendanceCheckIn(String account) {
         Integer statusType = recordMapper.queryStatusType(account);
-        if(statusType == null){
+        if (statusType == null) {
             //是否存在该用户， 刚创建没有签到记录
             Integer isExist = usersMapper.queryIsUserExist(account);
-            if(isExist == 0){
+            if (isExist == 0) {
                 throw new BusinessException(399, "找不到用户");
             }
         }
         Integer result = recordMapper.attendanceCheckIn(account);
-        if(result == 0){
+        if (result == 0) {
             throw new BusinessException(500, "签到失败");
         }
     }
@@ -69,7 +67,7 @@ public class RecordServiceImpl implements RecordService {
             throw new BusinessException(500, "未签到");
         }
         Integer result = recordMapper.attendanceCheckOut(account);
-        if(result == 0){
+        if (result == 0) {
             throw new BusinessException(500, "签退失败");
         }
     }
@@ -101,6 +99,11 @@ public class RecordServiceImpl implements RecordService {
         String template = Constants.TEMPLATE_PATH + Constants.GROUP_TEMPLATE_EXCEL_XLSX;
         List<RecordExcelDto> list = recordMapper.queryRecordByPage(qto);
         DownloadUtil.downloadXlsx(response, fileName, template, list);
+    }
+
+    @Override
+    public List<RecordSonDto> querySignDurationWeek(String account) {
+        return recordMapper.querySignDurationWeek(account);
     }
 
 }

@@ -18,6 +18,12 @@ public class PageRequestQto {
 
     private String groupName;
 
+    private String fileName;
+
+    private String fileType;
+
+    private Integer type;
+
     private String reportDate;
 
     private String startDate;

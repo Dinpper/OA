@@ -3,8 +3,14 @@ package com.example.labSystem.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.labSystem.common.BusinessException;
+import com.example.labSystem.domain.Role;
 import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.RoleMapper;
+import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.LoginService;
+import com.example.labSystem.service.MenuService;
+import com.example.labSystem.service.PermissionService;
+import com.example.labSystem.service.RoleService;
 import com.example.labSystem.utils.GsonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +30,22 @@ public class LoginController extends BaseController {
     @Autowired
     private LoginService loginService;
 
-    @PostMapping("/loginIn") // POST 请求映射
+    @Autowired
+    private UsersMapper usersMapper;
+
+    @Autowired
+    private RoleService roleService;
+
+    @Autowired
+    private PermissionService permissionService;
+
+    @Autowired
+    private MenuService menuService;
+
+    @Autowired
+    private RoleMapper roleMapper;
+
+    @PostMapping("/loginIn")
     public void loginIn(HttpServletRequest request, HttpServletResponse response,
                         @RequestBody CommonRequestQto qto) throws Exception {
         String account = qto.getAccount();
@@ -32,8 +53,21 @@ public class LoginController extends BaseController {
         if (StringUtils.isEmpty(account)) {
             throw new BusinessException(399, "参数错误");
         }
-        LoginDto result = loginService.loginIn(qto);
-        log.info("User {} queryHasDraft, result = {}", account, result);
+
+        // 调用登录服务进行身份验证
+//        LoginDto result = loginService.loginIn(qto);
+//        log.info("User {} login result = {}", account, result);
+
+        // 登录成功，生成 token
+//        StpUtil.login(account); // 使用账号生成 token
+
+        Map<String, Object> result = new HashMap<>();
+//        result.put("token", StpUtil.getTokenValue());
+        result.put("userName", usersMapper.queryUserNameByAccount(qto.getAccount()));
+        result.put("role", roleMapper.queryUserRole(qto.getAccount()).getRoleName());
+
+
+        // 调用统一的返回方法
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 

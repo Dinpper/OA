@@ -10,5 +10,5 @@ public interface SystemConfigMapper {
 
     String queryValueByKey(@Param("config_key") String config_key);
 
-    String updateValue(@Param("config_key") String config_key, @Param("config_value") String config_value);
+    Integer updateValue(@Param("config_key") String config_key, @Param("config_value") String config_value);
 }
