@@ -18,6 +18,8 @@ public class PageRequestQto {
 
     private String groupName;
 
+    private String meetingName;
+
     private String fileName;
 
     private String fileType;
@@ -29,6 +31,8 @@ public class PageRequestQto {
     private String startDate;
 
     private String endDate;
+
+    private Integer state;
 
     private Integer page;
 

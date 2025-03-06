@@ -118,4 +118,11 @@ public class RecordController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, resList));
     }
 
+    @RequestMapping(value = "/queryGroupSignDuration", method = RequestMethod.POST)
+    public void queryGroupSignDuration(HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        List<RecordSonDto> resList = recordService.queryGroupSignDuration();
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, resList));
+    }
+
 }

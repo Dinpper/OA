@@ -1,5 +1,6 @@
 package com.example.labSystem.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -9,11 +10,12 @@ public class LeaveDto {
     //id
     private Integer id;
     //上报时间
-    private Date reportDate;
+    private String reportDate;
     //请假开始时间
-    private Date startDate;
+    private String startDate;
+    private String userName;
     //请假结束时间
-    private Date endDate;
+    private String endDate;
     //请假原因
     private String reason;
     //拒绝原因
@@ -23,4 +25,5 @@ public class LeaveDto {
     //请假人账号
     private String account;
     private String handlers;
+    private String handlerName;
 }

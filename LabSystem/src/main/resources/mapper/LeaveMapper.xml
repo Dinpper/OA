@@ -34,4 +34,57 @@
         WHERE id = #{id}
     </update>
 
+    <select id="queryLeaveCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT l.id)
+        FROM `leave` l
+        LEFT JOIN `users` u1 ON l.account = u1.account   -- 关联请假人
+        LEFT JOIN `users` u2 ON l.handlers = u2.account  -- 关联审批人（处理人）
+        WHERE 1 = 1
+        <if test="userName != null and userName != ''">
+            AND u1.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="state != null">
+            AND l.allowedFlag = #{state}
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND l.reportDate = #{reportDate}
+        </if>
+        ORDER BY l.created_at DESC
+    </select>
+
+    <select id="queryLeaveByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="com.example.labSystem.dto.LeaveDto">
+        SELECT
+            l.id,
+            l.created_at,
+            l.reportDate,
+            l.account AS leave_account,
+            u1.userName AS userName,
+            l.startDate,
+            l.endDate,
+            l.reason,
+            l.allowedFlag,
+            l.handlers,
+            u2.userName AS handlerName,
+            l.remarks
+        FROM `leave` l
+        LEFT JOIN `users` u1 ON l.account = u1.account   -- 关联请假人
+        LEFT JOIN `users` u2 ON l.handlers = u2.account  -- 关联审批人（处理人）
+        WHERE 1 = 1
+        <if test="userName != null and userName != ''">
+            AND u1.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="state != null">
+            AND l.allowedFlag = #{state}
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND l.reportDate = #{reportDate}
+        </if>
+        ORDER BY l.created_at DESC
+        <if test="size != null" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
 </mapper>

@@ -99,36 +99,19 @@
           AND YEARWEEK(reportDate, 1) = YEARWEEK(CURDATE(), 1)  -- 使用 YEARWEEK 判断本周的数据
     </select>
 
-    <select id="querySignDurationWeekByGroup" parameterType="com.example.labSystem.dto.CommonRequestQto"
+    <select id="queryGroupSignDuration"
             resultType="com.example.labSystem.dto.RecordSonDto">
         SELECT
-        a.day, IFNULL(b.signDuration, 0) AS signDuration
-        FROM (
-        SELECT DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY) AS date
-        UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 1 - WEEKDAY(CURDATE()) DAY) AS date
-        UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 2 - WEEKDAY(CURDATE()) DAY) AS date
-        UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 3 - WEEKDAY(CURDATE()) DAY) AS date
-        UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 4 - WEEKDAY(CURDATE()) DAY) AS date
-        UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 5 - WEEKDAY(CURDATE()) DAY) AS date
-        UNION ALL
-        SELECT DATE_ADD(CURDATE(), INTERVAL 6 - WEEKDAY(CURDATE()) DAY) AS date
-        ) a
-        LEFT JOIN (
-        SELECT
-        SUM(signDuration) AS signDuration,
-        DATE_FORMAT(reportDate, '%Y-%m-%d') AS reportDate
-        FROM record
-        WHERE DATE_FORMAT(reportDate, '%Y%m') = DATE_FORMAT(CURDATE(), '%Y%m')
-        <if test="account != null and account != ''">
-            AND account = #{account}
-        </if>
-        GROUP BY DATE_FORMAT(reportDate, '%Y-%m-%d')
-        ) b ON a.day = b.reportDate;
+            g.groupName,
+            COUNT(DISTINCT u.userId) AS groupMemberCount,
+            IFNULL(SUM(r.signDuration), 0) AS signDuration
+        FROM `groups` g
+                 LEFT JOIN `users` u ON g.groupName = u.groupName
+                 LEFT JOIN `record` r ON u.account = r.account
+            AND YEARWEEK(r.reportDate, 1) = YEARWEEK(CURDATE(), 1)
+            AND g.reportFlag = 1
+        GROUP BY g.groupName
+        ORDER BY signDuration DESC;
     </select>
 
     <insert id="insert" keyProperty="recordId" useGeneratedKeys="true">

@@ -23,4 +23,6 @@ public interface RecordService {
 
     List<RecordSonDto> querySignDurationWeek(String account);
 
+    List<RecordSonDto> queryGroupSignDuration();
+
 }

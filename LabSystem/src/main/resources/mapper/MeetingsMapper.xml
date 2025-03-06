@@ -64,6 +64,9 @@
         <if test="userName != null and userName != ''">
             AND o.userName LIKE concat('%', #{userName}, '%')
         </if>
+        <if test="meetingName != null and meetingName != ''">
+            AND m.meetingName LIKE concat('%', #{meetingName} ,'%')
+        </if>
         <if test="reportDate != null and reportDate != ''">
             AND m.reportDate = #{reportDate}
         </if>
@@ -77,13 +80,17 @@
         JOIN usermeetings um ON m.meetingId = um.meetingId
         JOIN users u ON um.account = u.account
         JOIN users o ON m.organizerAccount = o.account
-        GROUP BY m.meetingId, o.userName
+        WHERE 1 = 1
         <if test="userName != null and userName != ''">
             AND o.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="meetingName != null and meetingName != ''">
+            AND m.meetingName LIKE concat('%', #{meetingName} ,'%')
         </if>
         <if test="reportDate != null and reportDate != ''">
             AND m.reportDate = #{reportDate}
         </if>
+        GROUP BY m.meetingId, o.userName
         <if test="size != null and size != ''" >
             LIMIT #{size} OFFSET #{offset};
         </if>

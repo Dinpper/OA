@@ -24,7 +24,7 @@ public interface RecordMapper {
 
     Integer querySignDurationWeekByUser(CommonRequestQto qto);
 
-    List<RecordSonDto> querySignDurationWeekByGroup(CommonRequestQto qto);
+    List<RecordSonDto> queryGroupSignDuration();
 
     RecordDto queryOverdueSignInRecords();
 

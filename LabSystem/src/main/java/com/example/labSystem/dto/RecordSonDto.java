@@ -14,5 +14,9 @@ public class RecordSonDto {
 
     private String reportDate;
 
+    private String groupName;
+
+    private Integer groupMemberCount;
+
     private BigDecimal signDuration;
 }

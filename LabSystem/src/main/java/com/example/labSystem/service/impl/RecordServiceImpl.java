@@ -106,4 +106,9 @@ public class RecordServiceImpl implements RecordService {
         return recordMapper.querySignDurationWeek(account);
     }
 
+    @Override
+    public List<RecordSonDto> queryGroupSignDuration() {
+        return recordMapper.queryGroupSignDuration();
+    }
+
 }

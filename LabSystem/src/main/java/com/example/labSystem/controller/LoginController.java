@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-@RestController // 用于 RESTful 服务
-@RequestMapping("/login") // 类级别的请求映射
+@RestController
+@RequestMapping("/login")
 @Slf4j
 public class LoginController extends BaseController {
     @Autowired
@@ -55,16 +55,16 @@ public class LoginController extends BaseController {
         }
 
         // 调用登录服务进行身份验证
-//        LoginDto result = loginService.loginIn(qto);
-//        log.info("User {} login result = {}", account, result);
+        LoginDto result = loginService.loginIn(qto);
+        log.info("User {} login result = {}", account, result);
 
         // 登录成功，生成 token
 //        StpUtil.login(account); // 使用账号生成 token
 
-        Map<String, Object> result = new HashMap<>();
-//        result.put("token", StpUtil.getTokenValue());
-        result.put("userName", usersMapper.queryUserNameByAccount(qto.getAccount()));
-        result.put("role", roleMapper.queryUserRole(qto.getAccount()).getRoleName());
+//        Map<String, Object> result = new HashMap<>();
+////        result.put("token", StpUtil.getTokenValue());
+//        result.put("userName", usersMapper.queryUserNameByAccount(qto.getAccount()));
+//        result.put("role", roleMapper.queryUserRole(qto.getAccount()).getRoleName());
 
 
         // 调用统一的返回方法
