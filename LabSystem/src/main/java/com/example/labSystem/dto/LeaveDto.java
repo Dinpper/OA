@@ -1,11 +1,11 @@
-package com.example.labSystem.domain;
+package com.example.labSystem.dto;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class PersonalLeave {
+public class LeaveDto {
     //id
     private Integer id;
     //上报时间
@@ -22,4 +22,5 @@ public class PersonalLeave {
     private Integer allowedFlag;
     //请假人账号
     private String account;
+    private String handlers;
 }
