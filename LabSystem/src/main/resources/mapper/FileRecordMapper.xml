@@ -29,7 +29,7 @@
     <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="java.lang.Integer">
         SELECT COUNT(1)
-        FROM files f
+        FROM file_record f
         JOIN users u ON f.uploaded_by = u.account
         <if test="userName != null and userName != ''">
             AND u.userName LIKE concat('%', #{userName}, '%')
@@ -37,8 +37,8 @@
         <if test="reportDate != null and reportDate != ''">
             AND DATE(f.uploaded_at) = #{reportDate}
         </if>
-        <if test="type != null">
-            AND f.source_type = #{type}
+        <if test="sourceType != null">
+            AND f.source_type = #{sourceType}
         </if>
         <if test="fileName != null and fileName != ''">
             AND f.file_name = #{fileName}
@@ -47,9 +47,10 @@
 
     <select id="queryFileByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.FileDto">
-        SELECT f.id,f.file_name,f.file_path, f.file_size, f.uploaded_by,
-               f.uploaded_at,f.file_type,f.source_type, u.userName
-        FROM files f
+        SELECT f.id,f.file_name AS fileName, f.file_path AS filePath,
+               f.file_size AS fileSize, f.uploaded_by AS uploadedBy,
+               f.uploaded_at AS uploadedAt,f.file_type AS fileType,f.source_type AS sourceType, u.userName
+        FROM file_record f
         JOIN users u ON f.uploaded_by = u.account
         <if test="userName != null and userName != ''">
             AND u.userName LIKE concat('%', #{userName}, '%')
@@ -57,8 +58,8 @@
         <if test="reportDate != null and reportDate != ''">
             AND DATE(f.uploaded_at) = #{reportDate}
         </if>
-        <if test="type != null">
-            AND f.source_type = #{type}
+        <if test="sourceType != null">
+            AND f.source_type = #{sourceType}
         </if>
         <if test="fileName != null and fileName != ''">
             AND f.file_name = #{fileName}
