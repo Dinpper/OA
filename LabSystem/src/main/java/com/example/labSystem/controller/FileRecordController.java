@@ -3,7 +3,6 @@ package com.example.labSystem.controller;
 import com.example.labSystem.Enum.FileTypeEnum;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.FileByPageDto;
-import com.example.labSystem.dto.HarvestByPageDto;
 import com.example.labSystem.dto.JsonResultDto;
 import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.service.FileService;
@@ -13,8 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,9 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/fileRecord")
 @Slf4j
-public class FileController extends BaseController {
+public class FileRecordController extends BaseController {
 
     @Autowired
     private FileService fileService;
@@ -84,7 +81,7 @@ public class FileController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, list));
     }
 
-    @RequestMapping(value = "/queryFileByPage", method = RequestMethod.POST)
+    @RequestMapping(value = "/queryFileRecordByPage", method = RequestMethod.POST)
     public void queryFileByPage(HttpServletRequest request, HttpServletResponse response,
                                    @RequestBody PageRequestQto qto) throws Exception {
         log.info("queryFileByPage,query = {}", GsonUtil.ObjectToJson(qto));

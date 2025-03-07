@@ -25,4 +25,6 @@ public interface MeetingsMapper {
     Integer queryCountByPage(PageRequestQto qto);
 
     List<MeetingsDto> queryMeetingByPage(PageRequestQto qto);
+
+    Integer updateSummary(@Param("meetingId") Integer meetingId, @Param("summary") String summary);
 }

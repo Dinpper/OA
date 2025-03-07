@@ -4,10 +4,8 @@ import cn.idev.excel.FastExcel;
 import com.example.labSystem.Enum.FileTypeEnum;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.domain.FileRecord;
-import com.example.labSystem.domain.Harvest;
 import com.example.labSystem.dto.*;
-import com.example.labSystem.mappers.FileMapper;
-import com.example.labSystem.mappers.HarvestMapper;
+import com.example.labSystem.mappers.FileRecordMapper;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.service.ReportService;
 import com.example.labSystem.utils.FileUtil;
@@ -28,7 +26,7 @@ public class ReportServiceImpl implements ReportService {
     private ReportMapper reportMapper;
 
     @Autowired
-    private FileMapper fileMapper;
+    private FileRecordMapper fileRecordMapper;
 
     @Value("${fileStorage.rootDir}")
     private String uploadDir;
@@ -40,13 +38,9 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public void reportSubmit(ReportDto dto, List<MultipartFile> files) throws Exception {
-        Integer number = reportMapper.reportSubmit(dto);
-        if (number != 1) {
-            throw new BusinessException(500, "提交失败");
-        }
         if (files != null) {
-            String achievement = FileUtil.getFilesName(files);
-            dto.setAchievement(achievement);
+//            String achievement = FileUtil.getFilesName(files);
+//            dto.setAchievement(achievement);
             String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(1), "");
             FileUtil.uploadBatch(files, filePath);
 
@@ -60,8 +54,14 @@ public class ReportServiceImpl implements ReportService {
                 String fileName = file.getOriginalFilename();
                 fileRecord.setFileName(fileName);
                 fileRecord.setFileType(FileUtil.getFileType(fileName));
-                fileMapper.fileSubmit(fileRecord);
+                fileRecordMapper.fileSubmit(fileRecord);
+//                FileUtil.getFormattedFileSize();
+
             }
+        }
+        Integer number = reportMapper.reportSubmit(dto);
+        if (number != 1) {
+            throw new BusinessException(500, "提交失败");
         }
     }
 

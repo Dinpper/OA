@@ -24,8 +24,8 @@ spring:
        ssl.enable: true
   multipart:
    enabled: true
-   max-file-size: 10MB
-   max-request-size: 10MB
+   max-file-size: 1000MB
+   max-request-size: 1000MB
 
 mybatis:
  mapper-locations: classpath:mapper/*.xml

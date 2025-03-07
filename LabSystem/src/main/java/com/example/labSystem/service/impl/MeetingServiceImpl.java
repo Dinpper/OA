@@ -1,17 +1,23 @@
 package com.example.labSystem.service.impl;
 
+import com.example.labSystem.Enum.FileTypeEnum;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.Constants;
+import com.example.labSystem.domain.FileRecord;
 import com.example.labSystem.domain.UserMeeting;
 import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.FileRecordMapper;
 import com.example.labSystem.mappers.MeetingsMapper;
 import com.example.labSystem.mappers.UserMeetingsMapper;
 import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.MeetingService;
 import com.example.labSystem.utils.DownloadUtil;
+import com.example.labSystem.utils.FileUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,6 +31,12 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     private UsersMapper usersMapper;
+
+    @Autowired
+    private FileRecordMapper fileRecordMapper;
+
+    @Value("${fileStorage.rootDir}")
+    private String uploadDir;
 
     @Override
     public void addMeeting(MeetingsDto qto) {
@@ -102,5 +114,34 @@ public class MeetingServiceImpl implements MeetingService {
         String template = Constants.TEMPLATE_PATH + Constants.GROUP_TEMPLATE_EXCEL_XLSX;
         List<MeetingsDto> list = meetingsMapper.queryMeetingByPage(qto);
         DownloadUtil.downloadXlsx(response, fileName, template, list);
+    }
+
+    @Override
+    public void uploadMultiple(FileRecord fileRecord, List<MultipartFile> files) throws Exception {
+        if (files == null) {
+            return;
+        }
+        String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(2), "");
+        FileUtil.uploadBatch(files, filePath);
+
+        fileRecord.setFilePath(filePath);
+        fileRecord.setVisibility(1);
+        fileRecord.setSourceType(2);
+        for (MultipartFile file : files) {
+            String fileName = file.getOriginalFilename();
+            fileRecord.setFileName(fileName);
+            fileRecord.setFileType(FileUtil.getFileType(fileName));
+            fileRecordMapper.fileSubmit(fileRecord);
+//                FileUtil.getFormattedFileSize();
+
+        }
+    }
+
+    @Override
+    public void updateSummary(MeetingsDto qto) throws Exception {
+        Integer result = meetingsMapper.updateSummary(qto.getMeetingId(), qto.getSummary());
+        if (result != 1) {
+            throw new BusinessException(500, "添加失败");
+        }
     }
 }

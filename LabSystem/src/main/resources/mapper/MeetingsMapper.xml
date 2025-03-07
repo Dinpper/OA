@@ -23,7 +23,7 @@
 
     <select id="queryMeetingNew" parameterType="java.lang.String"
             resultType="com.example.labSystem.dto.MeetingsDto">
-        SELECT m.meetingId, m.reportDate, m.startTime, m.meetingName, m.description, m.location, m.organizerAccount
+        SELECT m.meetingId, m.reportDate, m.startTime, m.meetingName, m.description, m.location, m.organizerAccount, u.status, u.reason, u.checkInTime
         FROM usermeetings u
         JOIN meetings m ON u.meetingId = m.meetingId
         WHERE account = #{account}
@@ -95,4 +95,10 @@
             LIMIT #{size} OFFSET #{offset};
         </if>
     </select>
+
+    <update id="updateSummary">
+        UPDATE meetings
+        SET summary = #{summary}
+        WHERE meetingId = #{meetingId}
+    </update>
 </mapper>

@@ -29,9 +29,18 @@ public class MeetingsDto {
     //主办方用户账号
     private String organizerAccount;
 
+    private String summary;
+
     private String organizerName;
 
     private String membersName;
+
+    private Integer status;
+
+    //拒绝原因
+    private String reason;
+
+    private String checkInTime;
 
     private List<String> memberList;
 }

@@ -65,9 +65,9 @@ public class FileUtil {
         String day = String.format("%02d", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
 
         return switch (fileType) {
-            case "report" -> "reports/" + year + "/" + month + "/" + day;
-            case "meeting" -> "meetings/" + year + "/" + identifier;
-            case "project" -> "projects/" + year + "/" + identifier;
+            case "reports" -> "reports\\" + year + "\\" + month + "\\" + day;
+            case "meetings" -> "meetings\\" + year + "\\" + identifier;
+            case "projects" -> "projects\\" + year + "\\" + identifier;
             default -> throw new IllegalArgumentException("Unknown file type");
         };
     }

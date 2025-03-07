@@ -3,9 +3,8 @@ package com.example.labSystem.service.impl;
 import com.example.labSystem.Enum.FileTypeEnum;
 import com.example.labSystem.dto.FileByPageDto;
 import com.example.labSystem.dto.FileDto;
-import com.example.labSystem.dto.HarvestDto;
 import com.example.labSystem.dto.PageRequestQto;
-import com.example.labSystem.mappers.FileMapper;
+import com.example.labSystem.mappers.FileRecordMapper;
 import com.example.labSystem.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import java.util.List;
 public class FileServiceImpl implements FileService {
 
     @Autowired
-    private FileMapper fileMapper;
+    private FileRecordMapper fileRecordMapper;
 
 
     @Override
@@ -32,13 +31,13 @@ public class FileServiceImpl implements FileService {
         dto.setSize(qto.getSize());
         dto.setPage(qto.getPage());
 
-        if(qto.getFileType() != null) {
-            qto.setType(FileTypeEnum.getCodeByTypeName(qto.getFileType()));
-        }
+//        if(qto.getSourceType() != null) {
+//            qto.setType(FileTypeEnum.getCodeByTypeName(qto.getSourceType()));
+//        }
 
-        List<FileDto> list = fileMapper.queryFileByPage(qto);
+        List<FileDto> list = fileRecordMapper.queryFileByPage(qto);
         dto.setFileList(list);
-        Integer dataCount = fileMapper.queryCountByPage(qto);
+        Integer dataCount = fileRecordMapper.queryCountByPage(qto);
         dto.setDataCount(dataCount);
         Integer pageCount = (dataCount + qto.getSize() - 1) / qto.getSize();
         dto.setPageCount(pageCount);

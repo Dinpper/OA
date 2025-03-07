@@ -1,17 +1,17 @@
 package com.example.labSystem.controller;
 
+import com.example.labSystem.domain.FileRecord;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.service.MeetingService;
 import com.example.labSystem.utils.GsonUtil;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.AccessType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -71,5 +71,38 @@ public class MeetingController extends BaseController {
         meetingService.download(response, qto);
         log.info("meeting download, 导出成功");
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
+    }
+
+    /**
+     *
+     *
+     * @param request
+     * @param response
+     * @param
+     * @throws Exception
+     */
+    @RequestMapping(value = "/uploadMultiple", method = RequestMethod.POST)
+    public void uploadMultiple(HttpServletRequest request, HttpServletResponse response,
+                               @RequestParam(value = "reportJson") String reportJson,
+                               @RequestParam("files") List<MultipartFile> files) throws Exception {
+        Gson gson = new Gson();
+        FileRecord fileRecord = gson.fromJson(reportJson, FileRecord.class);
+        meetingService.uploadMultiple(fileRecord, files);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
+    }
+
+    /**
+     *
+     *
+     * @param request
+     * @param response
+     * @param
+     * @throws Exception
+     */
+    @RequestMapping(value = "/updateSummary", method = RequestMethod.POST)
+    public void updateSummary(HttpServletRequest request, HttpServletResponse response,
+                           @RequestBody MeetingsDto qto) throws Exception {
+        meetingService.updateSummary(qto);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
     }
 }

@@ -44,8 +44,8 @@
 
     <update id="checkInMeeting">
         UPDATE usermeetings
-        SET updateDate = now(),
-            checkInTime = DATE_FORMAT(NOW(), '%H:%i:%s')
+        SET updateDate = NOW(),
+            checkInTime = CONCAT(CURRENT_DATE, ' ', DATE_FORMAT(NOW(), '%H:%i:%s'))
         WHERE account = #{account}
           AND meetingId = #{meetingId}
     </update>

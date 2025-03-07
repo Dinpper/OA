@@ -22,7 +22,7 @@ public class PageRequestQto {
 
     private String fileName;
 
-    private String fileType;
+    private Integer sourceType;
 
     private Integer type;
 

@@ -14,11 +14,11 @@ public class FileDto {
 
     private Long fileSize;
 
-    private Integer uploadedBy;
+    private String uploadedBy;
 
     private String userName;
 
-    private Date uploadedAt;
+    private String uploadedAt;
 
     private String fileType;
 
