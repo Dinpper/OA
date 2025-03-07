@@ -8,7 +8,7 @@ spring:
   driver-class-name: com.mysql.cj.jdbc.Driver
   url: jdbc:mysql://localhost:3306/labsystem
   username: root
-  password: dinpper
+  password: 123456
  mail:
   host: smtp.qq.com
   port: 465
@@ -65,7 +65,7 @@ logging:
 #  password: ysekssfshlswecgi
 
 fileStorage:
- rootDir: "E:\\file"
- reportsDir: "E:\\file\\reports"
- meetingsDir: "E:\\file\\meetings"
- projectsDir: "E:\\file\\projects"
+ rootDir: "D:\\newLabsystem\\file"
+ reportsDir: "D:\\newLabsystem\\file\\reports"
+ meetingsDir: "D:\\newLabsystem\\file\\meetings"
+ projectsDir: "D:\\newLabsystem\\file\\projects"

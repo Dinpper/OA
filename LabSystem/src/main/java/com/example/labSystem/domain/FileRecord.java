@@ -2,7 +2,6 @@ package com.example.labSystem.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "files")
@@ -10,7 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class File {
+public class FileRecord {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +26,10 @@ public class File {
     private Long fileSize;
 
     @Column(name = "uploaded_by", nullable = false)
-    private Integer uploadedBy;
+    private String uploadedBy;
 
     @Column(name = "uploaded_at", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private Date uploadedAt;
+    private String uploadedAt;
 
     @Column(name = "file_type", length = 50)
     private String fileType;

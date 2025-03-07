@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.labSystem.mappers.FileMapper">
 
-    <resultMap type="com.example.labSystem.domain.File" id="FileMap">
+    <resultMap type="com.example.labSystem.domain.FileRecord" id="FileMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="fileName" column="fileName" jdbcType="VARCHAR"/>
         <result property="filePath" column="filePath" jdbcType="VARCHAR"/>
@@ -14,6 +14,11 @@
         <result property="sourceType" column="sourceType" jdbcType="INTEGER"/>
         <result property="relatedId" column="relatedId" jdbcType="INTEGER"/>
     </resultMap>
+
+    <insert id="fileSubmit">
+        insert into files (file_name, file_path, file_size, uploaded_by, uploaded_at, file_type, visibility, source_type, related_id)
+        values (#{fileName}, #{filePath}, #{fileSize}, #{uploadedBy}, now(), #{fileType}, #{visibility}, #{sourceType}, #{relatedId})
+    </insert>
 
     <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="java.lang.Integer">

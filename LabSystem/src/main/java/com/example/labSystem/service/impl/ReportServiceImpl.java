@@ -3,8 +3,10 @@ package com.example.labSystem.service.impl;
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.Enum.FileTypeEnum;
 import com.example.labSystem.common.BusinessException;
+import com.example.labSystem.domain.FileRecord;
 import com.example.labSystem.domain.Harvest;
 import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.FileMapper;
 import com.example.labSystem.mappers.HarvestMapper;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.service.ReportService;
@@ -26,7 +28,7 @@ public class ReportServiceImpl implements ReportService {
     private ReportMapper reportMapper;
 
     @Autowired
-    private HarvestMapper harvestMapper;
+    private FileMapper fileMapper;
 
     @Value("${fileStorage.rootDir}")
     private String uploadDir;
@@ -37,23 +39,29 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void reportSubmit(ReportDto toDto, List<MultipartFile> files) throws Exception {
-        if (files != null) {
-            String achievement = FileUtil.getFilesName(files);
-            toDto.setAchievement(achievement);
-            String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(1), "");
-            FileUtil.uploadBatch(files, filePath);
-            Harvest harvest = new Harvest();
-            harvest.setAccount(toDto.getAccount());
-            harvest.setFilePath(filePath);
-            for (MultipartFile file : files) {
-                harvest.setFileName(file.getOriginalFilename());
-                harvestMapper.insert(harvest);
-            }
-        }
-        Integer number = reportMapper.reportSubmit(toDto);
+    public void reportSubmit(ReportDto dto, List<MultipartFile> files) throws Exception {
+        Integer number = reportMapper.reportSubmit(dto);
         if (number != 1) {
             throw new BusinessException(500, "提交失败");
+        }
+        if (files != null) {
+            String achievement = FileUtil.getFilesName(files);
+            dto.setAchievement(achievement);
+            String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(1), "");
+            FileUtil.uploadBatch(files, filePath);
+
+            FileRecord fileRecord = new FileRecord();
+            fileRecord.setUploadedBy(dto.getAccount());
+            fileRecord.setFilePath(filePath);
+            fileRecord.setVisibility(1);
+            fileRecord.setSourceType(1);
+            fileRecord.setRelatedId(dto.getReportId());
+            for (MultipartFile file : files) {
+                String fileName = file.getOriginalFilename();
+                fileRecord.setFileName(fileName);
+                fileRecord.setFileType(FileUtil.getFileType(fileName));
+                fileMapper.fileSubmit(fileRecord);
+            }
         }
     }
 

@@ -13,7 +13,7 @@ import java.util.List;
 public interface ReportMapper {
     ReportDto queryHasDraft(@Param("account") String account);
 
-    int reportSubmit(ReportDto qto);
+    Integer reportSubmit(ReportDto qto);
 
     Integer queryCountByPage(PageRequestQto qto);
 

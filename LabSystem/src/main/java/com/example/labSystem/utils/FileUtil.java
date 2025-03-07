@@ -1,8 +1,10 @@
 package com.example.labSystem.utils;
 
 import com.example.labSystem.common.BusinessException;
+import com.example.labSystem.domain.FileRecord;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.jni.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
@@ -196,6 +198,14 @@ public class FileUtil {
             return String.format("%.2f GB", bytes / 1073741824.0);  // 千兆字节（GB）
         }
     }
+
+//    private static FileRecord getFileAttribute(MultipartFile file){
+//        String fileName = file.getOriginalFilename();
+//        FileRecord fileRecord = new FileRecord();
+//        fileRecord.setFileName(fileName);
+//        fileRecord.setFileType(getFileType(fileName));
+//        return fileRecord;
+//    }
 
     public static String getFastUUID(){
         return UUID.randomUUID().toString().replaceAll("-","");

@@ -104,12 +104,12 @@
         SELECT
             g.groupName,
             COUNT(DISTINCT u.userId) AS groupMemberCount,
-            IFNULL(SUM(r.signDuration), 0) AS signDuration
+            IFNULL(ROUND(SUM(signDuration) / 60, 1), 0) AS signDuration
         FROM `groups` g
-                 LEFT JOIN `users` u ON g.groupName = u.groupName
-                 LEFT JOIN `record` r ON u.account = r.account
+         LEFT JOIN `users` u ON g.groupName = u.groupName
+         LEFT JOIN `record` r ON u.account = r.account
             AND YEARWEEK(r.reportDate, 1) = YEARWEEK(CURDATE(), 1)
-            AND g.reportFlag = 1
+        WHERE g.reportFlag = 1
         GROUP BY g.groupName
         ORDER BY signDuration DESC;
     </select>

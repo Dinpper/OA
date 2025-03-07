@@ -26,7 +26,7 @@
             LIMIT 1;
     </select>
 
-    <insert id="reportSubmit">
+    <insert id="reportSubmit" useGeneratedKeys="true" keyProperty="reportId">
         insert into report (inputDate, reportDate, workContent, problems, plan, achievement, account, submittedFlag)
         values (now(), DATE(now()), #{workContent}, #{problems}, #{plan}, #{achievement}, #{account}, 1)
     </insert>
