@@ -1,6 +1,7 @@
 package com.example.labSystem.mappers;
 
 
+import com.example.labSystem.domain.Record;
 import com.example.labSystem.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -37,4 +38,8 @@ public interface RecordMapper {
     Integer queryRecordCountByPage(PageRequestQto qto);
 
     List<RecordExcelDto> queryRecordByPage(PageRequestQto qto);
+
+    List<Record> queryNotSignOutToday();
+
+    Integer automaticSignOut(@Param("recordId") Integer recordId);
 }

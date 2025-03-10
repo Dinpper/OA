@@ -9,6 +9,7 @@
         <result property="reportDate" column="reportDate" jdbcType="TIMESTAMP"/>
         <result property="signDuration" column="signDuration" jdbcType="INTEGER"/>
         <result property="statusType" column="statusType" jdbcType="INTEGER"/>
+        <result property="isReminded" column="isReminded" jdbcType="INTEGER"/>
         <result property="account" column="account" jdbcType="VARCHAR"/>
     </resultMap>
 
@@ -234,5 +235,21 @@
             LIMIT #{size} OFFSET #{offset};
         </if>
     </select>
+
+    <select id="queryNotSignOutToday"
+            resultType="com.example.labSystem.domain.Record">
+        SELECT *
+        FROM record r
+        WHERE reportDate = CURDATE()
+          AND statusType = 0
+    </select>
+
+    <update id="automaticSignOut">
+        UPDATE record
+        SET endDate = CONCAT(CURRENT_DATE, ' 23:59:59'),
+            signDuration = TIMESTAMPDIFF(MINUTE, startDate, CONCAT(CURRENT_DATE, ' 23:59:59')),
+            statusType = 1
+        WHERE recordId = #{recordId}
+    </update>
 
 </mapper>
