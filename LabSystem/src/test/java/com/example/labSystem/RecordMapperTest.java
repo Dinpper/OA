@@ -1,4 +1,4 @@
-package com.example.labSystem;
+    package com.example.labSystem;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.GroupUserDto;
@@ -56,13 +56,6 @@ public class RecordMapperTest {
     @Autowired
     private UsersMapper usersMapper;
 
-//    @Test
-//    public void testQueryStatusType() {
-//        CommonRequestQto qto = new CommonRequestQto();
-//        qto.setUserCode("testUser");
-//        Integer statusType = recordMapper.queryStatusType(qto);
-//        System.out.println("Status Type: " + statusType);
-//    }
 
 
 
@@ -74,28 +67,6 @@ public class RecordMapperTest {
 
 
 
-    @Test
-    void testSendSignOutReminderEmail(){
-        try {
-//            String to = "1772775873@qq.com";
-            String to = "3236570050@qq.com";
-            String name = "黎瑞";
-            emailService.sendSignOutReminderEmail(to, name);
-        }catch (BusinessException | MessagingException e){
-            log.info(String.valueOf(e));
-        }
-    }
-    @Test
-    void testReportOutReminderEmail(){
-        try {
-//            String to = "2434714918@qq.com";
-            String to = "3236570050@qq.com";
-            String name = "黎瑞";
-            emailService.sendReportReminderEmail(to, name);
-        }catch (BusinessException | MessagingException e){
-            log.info(String.valueOf(e));
-        }
-    }
 
 
     @Test

@@ -65,7 +65,7 @@ logging:
 #  password: ysekssfshlswecgi
 
 fileStorage:
- rootDir: "D:\\newLabsystem\\file"
- reportsDir: "D:\\newLabsystem\\file\\reports"
- meetingsDir: "D:\\newLabsystem\\file\\meetings"
- projectsDir: "D:\\newLabsystem\\file\\projects"
+ rootDir: "/home/username/newLabsystem/file"
+ reportsDir: "/home/username/newLabsystem/file/reports"
+ meetingsDir: "/home/username/newLabsystem/file/meetings"
+ projectsDir: "/home/username/newLabsystem/file/projects"

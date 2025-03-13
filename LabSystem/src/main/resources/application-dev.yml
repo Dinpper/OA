@@ -1,5 +1,6 @@
 server:
  port: 8880
+ address: 0.0.0.0
 
 spring:
  application:
@@ -64,7 +65,7 @@ logging:
 #  password: ysekssfshlswecgi
 
 fileStorage:
- rootDir: "E:\\file"
- reportsDir: "E:\\file\\reports"
- meetingsDir: "E:\\file\\meetings"
- projectsDir: "E:\\file\\projects"
+ rootDir: "/www/wwwroot/file"
+ reportsDir: "/www/wwwroot/file/reports"
+ meetingsDir: "/www/wwwroot/file/meetings"
+ projectsDir: "/www/wwwroot/file/projects"
