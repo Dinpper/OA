@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.GroupMapper">
+
+    <resultMap type="com.example.labSystem.domain.Group" id="GroupMap">
+        <result property="groupId" column="groupId" jdbcType="INTEGER"/>
+        <result property="groupName" column="groupName" jdbcType="VARCHAR"/>
+        <result property="leaderAccount" column="leaderAccount" jdbcType="VARCHAR"/>
+        <result property="deleteFlag" column="deleteFlag" jdbcType="INTEGER"/>
+        <result property="reportFlag" column="reportFlag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryGroups" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT groupName, leaderAccount, reportFlag, startDate, endDate, location, organizerAccount
+        FROM `groups`
+    </select>
+
+    <select id="queryGroupsList" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.String">
+        SELECT groupName
+        FROM `groups`
+        WHERE deleteFlag = 0
+    </select>
+
+    <select id="queryReportGroupsList" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.String">
+        SELECT groupName
+        FROM `groups`
+        WHERE deleteFlag = 0
+        AND reportFlag = 1
+    </select>
+
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM `groups`
+        WHERE deleteFlag = 0
+    </select>
+
+    <select id="queryGroupsByPage" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.GroupDto">
+        SELECT g.groupName, COUNT(u.userId) AS memberCount, g.reportFlag,
+                (SELECT u.userName FROM users u WHERE u.account = g.leaderAccount ) AS leaderName,
+                GROUP_CONCAT(u.userName ORDER BY u.userName) AS userList
+        FROM `groups` g
+        LEFT JOIN users u
+        ON g.groupName = u.groupName
+        AND u.deleteFlag = 0
+        WHERE g.deleteFlag = 0
+        GROUP BY g.groupName, g.leaderAccount, g.reportFlag
+        <if test="size != null and size != ''" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
+     <update id="updateGroup">
+        UPDATE `groups`
+        SET updateDate = now()
+        <if test="groupName != null and groupName != ''">
+            , groupName = #{groupName}
+        </if>
+        <if test="leaderAccount != null and leaderAccount != ''">
+            , leaderAccount = #{leaderAccount}
+        </if>
+        <if test="deleteFlag != null">
+            , deleteFlag = #{deleteFlag}
+        </if>
+        <if test="reportFlag != null">
+            , reportFlag = #{reportFlag}
+        </if>
+        WHERE groupName = #{originalGroupName}
+    </update>
+
+    <update id="deleteGroup">
+        UPDATE `groups`
+        SET deleteFlag = 1,
+            updateDate = now()
+        WHERE groupName = #{groupName}
+    </update>
+
+    <insert id="insert" keyProperty="groupId" useGeneratedKeys="true">
+        insert into `groups` (inputDate, updateDate, groupName, leaderAccount, deleteFlag, reportFlag)
+        values (now(), now(), #{groupName}, #{leaderAccount}, #{deleteFlag}, #{reportFlag})
+    </insert>
+
+</mapper>

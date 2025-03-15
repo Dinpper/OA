@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.RoleMapper">
+
+    <resultMap type="com.example.labSystem.domain.Role" id="RolesMap">
+        <result property="roleId" column="roleId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="roleName" column="roleName" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryUserRole" parameterType="java.lang.String"
+            resultType="com.example.labSystem.domain.Role">
+        SELECT r.* FROM roles r
+        JOIN userroles ur ON r.roleId = ur.roleId
+        WHERE ur.account = #{account}
+    </select>
+
+
+</mapper>

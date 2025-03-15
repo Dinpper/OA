@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.MeetingsMapper">
+
+    <resultMap type="com.example.labSystem.domain.Meetings" id="MeetingsMap">
+        <result property="meetingId" column="meetingId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="meetingName" column="meetingName" jdbcType="VARCHAR"/>
+        <result property="reportDate" column="reportDate" jdbcType="TIMESTAMP"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="startTime" column="startTime" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="endTime" jdbcType="TIMESTAMP"/>
+        <result property="location" column="location" jdbcType="VARCHAR"/>
+        <result property="organizerAccount" column="organizerAccount" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <insert id="insert" keyProperty="meetingId" useGeneratedKeys="true">
+        insert into meetings (inputDate, meetingName, description, reportDate, startTime, location, organizerAccount)
+        values (now(), #{meetingName} , #{description}, #{reportDate}, #{startTime}, #{location}, #{organizerAccount})
+    </insert>
+
+    <select id="queryMeetingNew" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT m.meetingId, m.reportDate, m.startTime, m.meetingName, m.description, m.location, m.organizerAccount, u.status, u.reason, u.checkInTime
+        FROM usermeetings u
+        JOIN meetings m ON u.meetingId = m.meetingId
+        WHERE account = #{account}
+          AND m.reportDate >= DATE(now())
+        ORDER BY m.reportDate ASC, m.startTime ASC
+            LIMIT 1;
+    </select>
+
+    <select id="queryMeetingByDate" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT m.meetingId, m.reportDate, m.startTime, m.meetingName, m.description, m.location, m.organizerAccount
+        FROM usermeetings u
+        JOIN meetings m ON u.meetingId = m.meetingId
+        WHERE account = #{account}
+          AND m.reportDate = #{reportDate}
+        ORDER BY m.reportDate ASC, m.startTime ASC
+    </select>
+
+    <update id="update">
+        UPDATE meetings
+        SET updateDate = now()
+        WHERE meetingId = #{meetingId}
+    </update>
+
+    <select id="queryMeetings" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT meetingId, meetingName, description, startDate, endDate, location, organizerAccount
+        FROM meetings
+    </select>
+
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT m.meetingId)
+        FROM meetings m
+        JOIN usermeetings um ON m.meetingId = um.meetingId
+        JOIN users u ON um.account = u.account
+        JOIN users o ON m.organizerAccount = o.account
+        <if test="userName != null and userName != ''">
+            AND o.userName LIKE concat('%', #{userName}, '%')
+        </if>
+        <if test="meetingName != null and meetingName != ''">
+            AND m.meetingName LIKE concat('%', #{meetingName} ,'%')
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND m.reportDate = #{reportDate}
+        </if>
+    </select>
+
+    <select id="queryMeetingByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT m.meetingId, m.meetingName, m.reportDate, m.description, m.startTime, m.endTime, m.location,
+               o.userName AS organizerName, GROUP_CONCAT(u.userName SEPARATOR ', ') AS membersName
+        FROM meetings m
+        JOIN usermeetings um ON m.meetingId = um.meetingId
+        JOIN users u ON um.account = u.account
+        JOIN users o ON m.organizerAccount = o.account
+        WHERE 1 = 1
+        <if test="userName != null and userName != ''">
+            AND o.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="meetingName != null and meetingName != ''">
+            AND m.meetingName LIKE concat('%', #{meetingName} ,'%')
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND m.reportDate = #{reportDate}
+        </if>
+        GROUP BY m.meetingId, o.userName
+        <if test="size != null and size != ''" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
+    <update id="updateSummary">
+        UPDATE meetings
+        SET summary = #{summary}
+        WHERE meetingId = #{meetingId}
+    </update>
+</mapper>

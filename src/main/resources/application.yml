@@ -1,0 +1,10 @@
+spring:
+ profiles:
+  active: dev
+
+
+
+
+#mvn clean install -Pdev   # 使用test devfile
+#mvn clean install -Ptest   # 使用test profile
+#mvn clean install -Pproduct   # 使用product profile

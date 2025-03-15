@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.UsersMapper">
+
+    <resultMap type="com.example.labSystem.domain.Users" id="UsersMap">
+        <result property="userId" column="userId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="userName" column="userName" jdbcType="VARCHAR"/>
+        <result property="sex" column="sex" jdbcType="INTEGER"/>
+        <result property="phone" column="phone" jdbcType="VARCHAR"/>
+        <result property="grade" column="grade" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="groupName" column="groupName" jdbcType="VARCHAR"/>
+        <result property="deleteFlag" column="deleteFlag" jdbcType="INTEGER"/>
+        <result property="stuNumber" column="stuNumber" jdbcType="VARCHAR"/>
+        <result property="className" column="className" jdbcType="VARCHAR"/>
+    </resultMap>
+
+
+    <select id="queryPassword" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT `password`
+        FROM users
+        WHERE account = #{account}
+    </select>
+
+    <select id="queryIsUserExist" parameterType="java.lang.String"
+            resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM users
+        WHERE account = #{account}
+    </select>
+
+    <select id="queryAccountByUserName" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT account
+        FROM users
+        WHERE userName = #{userName}
+        ORDER BY userId DESC
+            LIMIT 1;
+    </select>
+
+    <select id="queryUserNameByAccount" parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT userName
+        FROM users
+        WHERE account = #{account}
+        ORDER BY userId DESC
+            LIMIT 1;
+    </select>
+
+    <select id="queryUserMessage" parameterType="java.lang.String"
+            resultType="com.example.labSystem.dto.UserDto">
+        SELECT inputDate, account, userName, sex, phone, grade, email, groupName, stuNumber, className
+        FROM users
+        WHERE account = #{account}
+    </select>
+
+
+    <select id="queryGroupUserAll"  resultType="java.util.Map">
+        SELECT g.groupName, GROUP_CONCAT(u.userName ORDER BY u.userName) AS userList
+        FROM `groups` g
+        JOIN users u ON g.groupName = u.groupName
+        WHERE g.reportFlag = 1
+          AND g.deleteFlag = 0
+          AND u.deleteFlag = 0
+        GROUP BY g.groupName;
+    </select>
+
+    <select id="queryAccountByGroup"  parameterType="java.lang.String"
+            resultType="java.lang.String">
+        SELECT account
+        FROM users
+        WHERE deleteFlag = 0
+        AND groupName = #{groupName}
+    </select>
+
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM users
+        WHERE deleteFlag = 0
+        <if test="userName != null and userName != ''">
+            AND `userName` LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="groupName != null and groupName != ''">
+            AND groupName = #{groupName}
+        </if>
+    </select>
+
+    <select id="queryUserByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="com.example.labSystem.dto.UserExcelDto">
+        SELECT account, userName, sex, phone, grade, email, groupName, reportFlag, stuNumber, className
+        FROM users
+        WHERE deleteFlag = 0
+        <if test="userName != null and userName != ''">
+            AND userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="groupName != null and groupName != ''">
+            AND groupName = #{groupName}
+        </if>
+        ORDER BY groupName, grade, userName ASC
+        <if test="size != null and size != ''" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
+    <update id="updateUser">
+        UPDATE users
+        SET updateDate = now()
+        <if test="userName != null and userName != ''">
+            , userName = #{userName}
+        </if>
+        <if test="sex != null">
+            , sex = #{sex}
+        </if>
+        <if test="phone != null and phone != ''">
+            , phone = #{phone}
+        </if>
+        <if test="grade != null and grade != ''">
+            , grade = #{grade}
+        </if>
+        <if test="email != null and email != ''">
+            , email = #{email}
+        </if>
+        <if test="groupName != null and groupName != ''">
+            , groupName = #{groupName}
+        </if>
+        <if test="deleteFlag != null">
+            , deleteFlag = #{deleteFlag}
+        </if>
+        <if test="reportFlag != null">
+            , reportFlag = #{reportFlag}
+        </if>
+        <if test="stuNumber != null and stuNumber != ''">
+            , stuNumber = #{stuNumber}
+        </if>
+        <if test="className != null and className != ''">
+            , className = #{className}
+        </if>
+        WHERE account = #{account}
+    </update>
+
+    <update id="deleteUser">
+        UPDATE users
+        SET deleteFlag = 1
+        WHERE account = #{account}
+    </update>
+
+</mapper>

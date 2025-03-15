@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>签退提醒</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        .header {
+            text-align: center;
+            background-color: #007BFF;
+            color: white;
+            padding: 15px;
+            border-radius: 8px 8px 0 0;
+        }
+        .content-left {
+            padding: 20px;
+            text-align: left;
+        }
+        .content-right {
+            padding: 20px;
+            text-align: right;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #e0e0e0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>签退提醒</h1>
+        </div>
+        <div class="content-left">
+            <p th:text="'尊敬的' + ${name} + '，'">尊敬的用户，</p>
+            <p>您已签到7小时，请及时完成签退。</p>
+            <p>点击下方按钮立即签退：</p>
+        </div>
+        <div class="button-container">
+            <a th:href="${signOutLink}" class="button">立即签退</a>
+        </div>
+        <div class="content-left">
+            <p>如果您已完成签退，请忽略此邮件。</p>
+        </div>
+        <div class="content-right">
+            <p>感谢您的配合！</p>
+            <p>祝工作愉快！</p>
+        </div>
+        <div class="footer">
+            <p>此邮件由系统自动生成，请勿直接回复。</p>
+            <p>© 2024 网络安全实验室. 保留所有权利。</p>
+        </div>
+    </div>
+</body>
+</html>

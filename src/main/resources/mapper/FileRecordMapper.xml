@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.FileRecordMapper">
+
+    <resultMap type="com.example.labSystem.domain.FileRecord" id="FileMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="fileName" column="fileName" jdbcType="VARCHAR"/>
+        <result property="filePath" column="filePath" jdbcType="VARCHAR"/>
+        <result property="fileSize" column="fileSize" jdbcType="INTEGER"/>
+        <result property="uploadedBy" column="uploadedBy" jdbcType="VARCHAR"/>
+        <result property="uploadedAt" column="uploadedAt" jdbcType="TIMESTAMP"/>
+        <result property="fileType" column="fileType" jdbcType="VARCHAR"/>
+        <result property="visibility" column="visibility" jdbcType="INTEGER"/>
+        <result property="sourceType" column="sourceType" jdbcType="INTEGER"/>
+        <result property="relatedId" column="relatedId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="fileSubmit">
+        insert into file_record (file_name, file_path, uploaded_by, uploaded_at, file_type, visibility, source_type, related_id)
+        values (#{fileName}, #{filePath}, #{uploadedBy}, now(), #{fileType}, #{visibility}, #{sourceType}, #{relatedId})
+    </insert>
+
+    <update id="updateFileSize">
+        UPDATE file_record
+        SET fileSize = #{fileSize}
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(1)
+        FROM file_record f
+        JOIN users u ON f.uploaded_by = u.account
+        <if test="userName != null and userName != ''">
+            AND u.userName LIKE concat('%', #{userName}, '%')
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND DATE(f.uploaded_at) = #{reportDate}
+        </if>
+        <if test="sourceType != null">
+            AND f.source_type = #{sourceType}
+        </if>
+        <if test="fileName != null and fileName != ''">
+            AND f.file_name = #{fileName}
+        </if>
+    </select>
+
+    <select id="queryFileByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="com.example.labSystem.dto.FileDto">
+        SELECT f.id,f.file_name AS fileName, f.file_path AS filePath,
+               f.file_size AS fileSize, f.uploaded_by AS uploadedBy,
+               f.uploaded_at AS uploadedAt,f.file_type AS fileType,f.source_type AS sourceType, u.userName
+        FROM file_record f
+        JOIN users u ON f.uploaded_by = u.account
+        <if test="userName != null and userName != ''">
+            AND u.userName LIKE concat('%', #{userName}, '%')
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND DATE(f.uploaded_at) = #{reportDate}
+        </if>
+        <if test="sourceType != null">
+            AND f.source_type = #{sourceType}
+        </if>
+        <if test="fileName != null and fileName != ''">
+            AND f.file_name = #{fileName}
+        </if>
+        ORDER BY f.uploaded_at DESC
+        <if test="size != null and size != ''" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
+
+</mapper>

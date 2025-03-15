@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.UserMeetingsMapper">
+
+    <resultMap type="com.example.labSystem.domain.UserMeeting" id="UserMeetingsMap">
+        <result property="userMeetingsId" column="userMeetingsId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="meetingId" column="meetingId" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="reason" column="reason" jdbcType="TIMESTAMP"/>
+        <result property="notifiedFlag" column="notifiedFlag" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insert" keyProperty="userMeetingsId" useGeneratedKeys="true">
+        insert into usermeetings (inputDate, account, meetingId, status)
+        values (now(), #{account} , #{meetingId}, 0)
+    </insert>
+
+    <select id="queryMembersName" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT u.userName
+        FROM usermeetings m
+        JOIN users u ON m.account = u.account
+        WHERE m.meetingId = #{meetingId}
+          AND m.`status` != 2
+    </select>
+
+    <update id="acceptMeeting">
+        UPDATE usermeetings
+        SET status = 1
+        WHERE account = #{account}
+        AND meetingId = #{meetingId}
+    </update>
+
+    <update id="refuseMeeting">
+        UPDATE usermeetings
+        SET status = 2,
+            reason = #{reason}
+        WHERE account = #{account}
+          AND meetingId = #{meetingId}
+    </update>
+
+    <update id="checkInMeeting">
+        UPDATE usermeetings
+        SET updateDate = NOW(),
+            checkInTime = CONCAT(CURRENT_DATE, ' ', DATE_FORMAT(NOW(), '%H:%i:%s'))
+        WHERE account = #{account}
+          AND meetingId = #{meetingId}
+    </update>
+
+    <update id="checkOutMeeting">
+        UPDATE usermeetings
+        SET updateDate = now(),
+            checkOutTime = DATE_FORMAT(NOW(), '%H:%i:%s')
+        WHERE account = #{account}
+          AND meetingId = #{meetingId}
+    </update>
+
+    <select id="queryMeetingDateByMonth" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="java.lang.String">
+        SELECT DISTINCT m.reportDate
+        FROM meetings m
+        JOIN usermeetings um ON m.meetingId = um.meetingId
+        WHERE YEAR(m.reportDate) = #{year}
+          AND MONTH(m.reportDate) = #{month}
+          AND um.status IS NOT NULL
+          AND um.account = #{account}
+
+    </select>
+
+
+</mapper>

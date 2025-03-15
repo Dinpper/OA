@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.MenusMapper">
+
+    <resultMap type="com.example.labSystem.domain.Menus" id="MenusMap">
+        <result property="menuId" column="menuId" jdbcType="INTEGER"/>
+        <result property="menuName" column="menuName" jdbcType="VARCHAR"/>
+        <result property="path" column="path" jdbcType="VARCHAR"/>
+        <result property="icon" column="icon" jdbcType="VARCHAR"/>
+        <result property="parentId" column="parentId" jdbcType="INTEGER"/>
+        <result property="permissionKey" column="permissionKey" jdbcType="VARCHAR"/>
+        <result property="orderNum" column="orderNum" jdbcType="INTEGER"/>
+        <result property="isVisible" column="isVisible" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <select id="queryMenusByRole" parameterType="java.lang.Integer"
+            resultType="com.example.labSystem.domain.Menus">
+        SELECT m.* FROM menus m
+        JOIN rolemenus rm ON m.menuId = rm.menuId
+        WHERE rm.roleId = #{roleId}
+        ORDER BY m.orderNum;
+    </select>
+
+
+</mapper>

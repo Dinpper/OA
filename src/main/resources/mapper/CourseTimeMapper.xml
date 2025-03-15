@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.CourseTimeMapper">
+
+    <resultMap type="com.example.labSystem.domain.CourseTime" id="CourseTimeMap">
+        <result property="coursetimeId" column="coursetimeId" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="date" column="date" jdbcType="VARCHAR"/>
+        <result property="firstStart" column="firstStart" jdbcType="TIME"/>
+        <result property="secondStart" column="secondStart" jdbcType="TIME"/>
+        <result property="thirdStart" column="thirdStart" jdbcType="TIME"/>
+        <result property="fourthStart" column="fourthStart" jdbcType="TIME"/>
+        <result property="fifthStart" column="fifthStart" jdbcType="TIME"/>
+        <result property="sixthStart" column="sixthStart" jdbcType="TIME"/>
+        <result property="seventhStart" column="seventhStart" jdbcType="TIME"/>
+        <result property="eighthStart" column="eighthStart" jdbcType="TIME"/>
+        <result property="ninthStart" column="ninthStart" jdbcType="TIME"/>
+        <result property="tenthStart" column="tenthStart" jdbcType="TIME"/>
+        <result property="eleventhStart" column="eleventhStart" jdbcType="TIME"/>
+        <result property="twelfthStart" column="twelfthStart" jdbcType="TIME"/>
+        <result property="duration" column="duration" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="queryCourseByUserList" parameterType="com.example.labSystem.dto.CommonRequestQto"
+            resultType="com.example.labSystem.dto.CourseDro">
+        SELECT *
+        FROM course
+        WHERE account IN
+        <foreach item="account" collection="list" open="(" separator="," close=")">
+            #{account}
+        </foreach>
+        AND date = #{date}
+    </select>
+
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.RefuseMeetingsMapper">
+
+    <resultMap type="com.example.labSystem.domain.MeetingRejection" id="MeetingRejectionMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="createdAt" column="createdAt" jdbcType="TIMESTAMP"/>
+        <result property="updatedAt" column="updatedAt" jdbcType="TIMESTAMP"/>
+        <result property="userMeetingId" column="userMeetingId" jdbcType="INTEGER"/>
+        <result property="rejectionReason" column="rejectionReason" jdbcType="VARCHAR"/>
+        <result property="rejectionStatus" column="rejectionStatus" jdbcType="INTEGER"/>
+        <result property="overruleReason" column="overruleReason" jdbcType="VARCHAR"/>
+        <result property="handledBy" column="handledBy" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="addRejectionReason" keyProperty="id" useGeneratedKeys="true">
+        insert into refusemeetings (created_at, user_meeting_id, rejection_reason, rejection_status)
+        values (now(), #{userMeetingId} , #{rejectionReason}, 0)
+    </insert>
+
+    <update id="acceptMeetingRejection">
+        UPDATE refusemeetings
+        SET updated_at = now(),
+            rejection_status = 1
+        WHERE handled_by = #{handledBy}
+          AND user_meeting_id = #{userMeetingId}
+    </update>
+
+    <update id="rejectMeetingRejection">
+        UPDATE refusemeetings
+        SET updated_at = now(),
+            rejection_status = 2,
+            overrule_reason = #{overruleReason}
+        WHERE handled_by = #{handledBy}
+          AND user_meeting_id = #{meetingId}
+    </update>
+
+    <select id="queryMembersName" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT u.userName
+        FROM usermeetings m
+        JOIN users u ON m.account = u.account
+        WHERE m.meetingId = #{meetingId}
+          AND m.`status` != 2
+    </select>
+
+
+</mapper>

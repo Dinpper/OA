@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.LeaveMapper">
+
+    <resultMap type="com.example.labSystem.domain.Leave" id="PersonalLeaveMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="reportDate" column="reportDate" jdbcType="TIMESTAMP"/>
+        <result property="startDate" column="startDate" jdbcType="TIMESTAMP"/>
+        <result property="endDate" column="endDate" jdbcType="TIMESTAMP"/>
+        <result property="reason" column="reason" jdbcType="VARCHAR"/>
+        <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+        <result property="allowedFlag" column="allowedFlag" jdbcType="INTEGER"/>
+    </resultMap>
+
+
+    <insert id="addLeave" keyProperty="id" useGeneratedKeys="true">
+        insert into `leave` (created_at, reportDate, startDate, endDate, reason, account)
+        values (now(), DATE(now()), #{startDate} , #{endDate}, #{reason}, #{account})
+    </insert>
+
+    <update id="approveLeave">
+        UPDATE `leave`
+        SET allowedFlag = 1,
+            handlers = #{handlers}
+        WHERE id = #{id}
+    </update>
+
+    <update id="notApprovedLeave">
+        UPDATE `leave`
+        SET allowedFlag = 2,
+            handlers = #{handlers},
+            remarks = #{remarks}
+        WHERE id = #{id}
+    </update>
+
+    <select id="queryLeaveCountByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT l.id)
+        FROM `leave` l
+        LEFT JOIN `users` u1 ON l.account = u1.account   -- 关联请假人
+        LEFT JOIN `users` u2 ON l.handlers = u2.account  -- 关联审批人（处理人）
+        WHERE 1 = 1
+        <if test="userName != null and userName != ''">
+            AND u1.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="state != null">
+            AND l.allowedFlag = #{state}
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND l.reportDate = #{reportDate}
+        </if>
+        ORDER BY l.created_at DESC
+    </select>
+
+    <select id="queryLeaveByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
+            resultType="com.example.labSystem.dto.LeaveDto">
+        SELECT
+            l.id,
+            l.created_at,
+            l.reportDate,
+            l.account AS leave_account,
+            u1.userName AS userName,
+            l.startDate,
+            l.endDate,
+            l.reason,
+            l.allowedFlag,
+            l.handlers,
+            u2.userName AS handlerName,
+            l.remarks
+        FROM `leave` l
+        LEFT JOIN `users` u1 ON l.account = u1.account   -- 关联请假人
+        LEFT JOIN `users` u2 ON l.handlers = u2.account  -- 关联审批人（处理人）
+        WHERE 1 = 1
+        <if test="userName != null and userName != ''">
+            AND u1.userName LIKE concat('%', #{userName} ,'%')
+        </if>
+        <if test="state != null">
+            AND l.allowedFlag = #{state}
+        </if>
+        <if test="reportDate != null and reportDate != ''">
+            AND l.reportDate = #{reportDate}
+        </if>
+        ORDER BY l.created_at DESC
+        <if test="size != null" >
+            LIMIT #{size} OFFSET #{offset};
+        </if>
+    </select>
+
+</mapper>
