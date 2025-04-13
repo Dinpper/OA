@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "files")
+@Table(name = "file_record")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -42,4 +42,19 @@ public class FileRecord {
 
     @Column(name = "related_id")
     private Integer relatedId;
+
+    @Column(name = "stored_file_name", nullable = false, length = 255)
+    private String storedFileName;  // 实际存储的UUID命名文件名
+
+    @Column(name = "file_md5", length = 32)
+    private String fileMd5;  // 文件内容的MD5值
+
+    @Column(name = "download_count", nullable = false, columnDefinition = "INT DEFAULT 0")
+    private Integer downloadCount;  // 文件下载次数
+
+    @Column(name = "description", columnDefinition = "TEXT")
+    private String description;  // 文件描述
+
+    @Column(name = "deleted", nullable = false, columnDefinition = "TINYINT(1) DEFAULT 0")
+    private Boolean deleted;  // 是否已删除（0：否，1：是）
 }

@@ -4,8 +4,11 @@ import cn.idev.excel.ExcelWriter;
 import cn.idev.excel.FastExcel;
 import com.example.labSystem.dto.RecordExcelDto;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -108,7 +111,7 @@ public class tt {
         return month >= 1 && month <= 12;
     }
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, UnsupportedEncodingException {
 
 //        Date nowDate = new Date();
 //        Calendar calendar = Calendar.getInstance();
@@ -441,6 +444,12 @@ public class tt {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+
+
+        String fileName = "中文名称.txt";
+        byte[] bytes = fileName.getBytes("UTF-8");
+        Path path = Paths.get(Arrays.toString(bytes));
+        System.out.println(path);
 
     }
 

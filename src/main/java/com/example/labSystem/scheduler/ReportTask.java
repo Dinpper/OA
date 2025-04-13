@@ -54,7 +54,7 @@ public class ReportTask {
      */
 
 //    @Scheduled(cron = "0 20 2 * * ?")
-    @Scheduled(cron = "0 0 23 * * ?") // 每天晚上 23:00 触发
+    @Scheduled(cron = "0 0 23 * * ?", zone = "Asia/Shanghai") // 每天晚上 23:00 触发
     public void executeReportTask() throws Exception {
 
         //判断是的跳过节假日

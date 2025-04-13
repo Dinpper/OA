@@ -121,7 +121,7 @@ public class MeetingServiceImpl implements MeetingService {
         if (files == null) {
             return;
         }
-        String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(2), "");
+        String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(2));
         FileUtil.uploadBatch(files, filePath);
 
         fileRecord.setFilePath(filePath);

@@ -1,6 +1,8 @@
 server:
  port: 8880
  address: 0.0.0.0
+ tomcat:
+  max-swallow-size: -1  # 解除 Tomcat 对上传的限制
 
 spring:
  application:
@@ -18,15 +20,17 @@ spring:
   protocol: smtp
   default-encoding: UTF-8
   properties:
-    mail:
-      smtp:
-       auth: true
-       starttls.enable: true
-       ssl.enable: true
+   mail:
+    smtp:
+     auth: true
+     starttls.enable: true
+     ssl.enable: true
+ servlet:
   multipart:
    enabled: true
    max-file-size: 1000MB
    max-request-size: 1000MB
+ timezone: Asia/Shanghai
 
 mybatis:
  mapper-locations: classpath:mapper/*.xml
@@ -66,8 +70,8 @@ logging:
 #  password: ysekssfshlswecgi
 
 fileStorage:
- rootDir: "/home/username/newLabsystem/file"
- reportsDir: "/home/username/newLabsystem/file/reports"
- meetingsDir: "/home/username/newLabsystem/file/meetings"
- projectsDir: "/home/username/newLabsystem/file/projects"
+ rootDir: "/www/wwwroot/file"
+ reportsDir: "/www/wwwroot/file/reports"
+ meetingsDir: "/www/wwwroot/file/meetings"
+ projectsDir: "/www/wwwroot/file/projects"
  imageDir: "/home/username/newLabsystem/file"

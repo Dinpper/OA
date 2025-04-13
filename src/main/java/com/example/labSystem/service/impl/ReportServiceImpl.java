@@ -38,30 +38,42 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public void reportSubmit(ReportDto dto, List<MultipartFile> files) throws Exception {
+        Integer number = reportMapper.reportSubmit(dto);
+        if (number != 1) {
+            throw new BusinessException(500, "提交失败");
+        }
         if (files != null) {
-//            String achievement = FileUtil.getFilesName(files);
-//            dto.setAchievement(achievement);
-            String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(1), "");
-            FileUtil.uploadBatch(files, filePath);
+            //通用路径
+            String catalog = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(1));
+            FileUtil.createCatalog(catalog);
 
             FileRecord fileRecord = new FileRecord();
             fileRecord.setUploadedBy(dto.getAccount());
-            fileRecord.setFilePath(filePath);
             fileRecord.setVisibility(1);
             fileRecord.setSourceType(1);
             fileRecord.setRelatedId(dto.getReportId());
             for (MultipartFile file : files) {
                 String fileName = file.getOriginalFilename();
                 fileRecord.setFileName(fileName);
+
+                String uuid = FileUtil.generateFileNameWithSuffix(fileName);
+                fileRecord.setStoredFileName(uuid);
+
+                String filePath = catalog + "/" + uuid;
+                fileRecord.setFilePath(filePath);
+
+                fileRecord.setFileMd5(FileUtil.calculateFileMd5(file));
+
                 fileRecord.setFileType(FileUtil.getFileType(fileName));
+
+                //todo 描述
+                fileRecord.setDescription("");
+
+                FileUtil.saveFile(file, filePath);
+
                 fileRecordMapper.fileSubmit(fileRecord);
-//                FileUtil.getFormattedFileSize();
 
             }
-        }
-        Integer number = reportMapper.reportSubmit(dto);
-        if (number != 1) {
-            throw new BusinessException(500, "提交失败");
         }
     }
 

@@ -41,10 +41,10 @@ public class ReportController extends BaseController {
      */
     @RequestMapping(value = "/queryHasDraft", method = RequestMethod.POST)
     public void queryHasDraft(HttpServletRequest request, HttpServletResponse response,
-                                @RequestBody CommonRequestQto qto) throws Exception {
+                              @RequestBody CommonRequestQto qto) throws Exception {
         String account = qto.getAccount();
         log.info("User {} queryHasDraft,query = {}", account, GsonUtil.ObjectToJson(qto));
-        if(StringUtils.isEmpty(account)){
+        if (StringUtils.isEmpty(account)) {
             throw new BusinessException(399, "参数错误");
         }
         ReportDto result = reportService.queryHasDraft(account);
@@ -53,8 +53,6 @@ public class ReportController extends BaseController {
     }
 
     /**
-     *
-     *
      * @param request
      * @param response
      * @param
@@ -63,10 +61,11 @@ public class ReportController extends BaseController {
     @RequestMapping(value = "/reportSubmit", method = RequestMethod.POST)
     public void reportSubmit(HttpServletRequest request, HttpServletResponse response,
                              @RequestParam(value = "reportJson") String reportJson,
-                             @RequestParam("files") List<MultipartFile> files) throws Exception {
+                             @RequestParam(value = "files", required = false) List<MultipartFile> files
+                            ) throws Exception {
 //        log.info("User {} reportSubmit,query = {}", account, GsonUtil.ObjectToJson(qto));
         Gson gson = new Gson();
-        ReportDto toDto = gson.fromJson(reportJson,ReportDto.class);
+        ReportDto toDto = gson.fromJson(reportJson, ReportDto.class);
         reportService.reportSubmit(toDto, files);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
     }
@@ -89,7 +88,7 @@ public class ReportController extends BaseController {
      */
     @RequestMapping(value = "/queryReportByPage", method = RequestMethod.POST)
     public void queryReportByPage(HttpServletRequest request, HttpServletResponse response,
-                              @RequestBody PageRequestQto qto) throws Exception {
+                                  @RequestBody PageRequestQto qto) throws Exception {
         log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
         ReportByPageDto result = reportService.queryReportByPage(qto);
         log.info("queryReportByPage, result = {}", result);

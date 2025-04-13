@@ -16,8 +16,10 @@
     </resultMap>
 
     <insert id="fileSubmit">
-        insert into file_record (file_name, file_path, uploaded_by, uploaded_at, file_type, visibility, source_type, related_id)
-        values (#{fileName}, #{filePath}, #{uploadedBy}, now(), #{fileType}, #{visibility}, #{sourceType}, #{relatedId})
+        insert into file_record (file_name, file_path, uploaded_by, uploaded_at, file_type, visibility,
+                                 source_type, related_id, stored_file_name, file_md5, description)
+        values (#{fileName}, #{filePath}, #{uploadedBy}, now(), #{fileType}, #{visibility}, #{sourceType},
+                #{relatedId}, #{storedFileName}, #{fileMd5}, #{description})
     </insert>
 
     <update id="updateFileSize">

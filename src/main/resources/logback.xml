@@ -2,11 +2,12 @@
 <configuration debug="false" scan="true" scanPeriod="1 seconds">
 
     <contextName>logback</contextName>
-    <property name="log.path" value="/data/applogs/xxl-job/xxl-job-admin.log"/>
+    <property name="log.path" value="/www/wwwroot/log/xxl-job-admin.log"/>
 
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 确保控制台支持中文 -->
         </encoder>
     </appender>
 
@@ -16,8 +17,8 @@
             <fileNamePattern>${log.path}.%d{yyyy-MM-dd}.zip</fileNamePattern>
         </rollingPolicy>
         <encoder>
-            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n
-            </pattern>
+            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n</pattern>
+            <charset>UTF-8</charset> <!-- 确保日志文件支持中文 -->
         </encoder>
     </appender>
 
@@ -27,3 +28,32 @@
     </root>
 
 </configuration>
+        <!--<?xml version="1.0" encoding="UTF-8"?>-->
+        <!--<configuration debug="false" scan="true" scanPeriod="1 seconds">-->
+
+        <!--    <contextName>logback</contextName>-->
+        <!--    <property name="log.path" value="/data/applogs/xxl-job/xxl-job-admin.log"/>-->
+
+        <!--    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">-->
+        <!--        <encoder>-->
+        <!--            <pattern>%d{HH:mm:ss.SSS} %contextName [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        <!--        </encoder>-->
+        <!--    </appender>-->
+
+        <!--    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--        <file>${log.path}</file>-->
+        <!--        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+        <!--            <fileNamePattern>${log.path}.%d{yyyy-MM-dd}.zip</fileNamePattern>-->
+        <!--        </rollingPolicy>-->
+        <!--        <encoder>-->
+        <!--            <pattern>%date %level [%thread] %logger{36} [%file : %line] %msg%n-->
+        <!--            </pattern>-->
+        <!--        </encoder>-->
+        <!--    </appender>-->
+
+        <!--    <root level="info">-->
+        <!--        <appender-ref ref="console"/>-->
+        <!--        <appender-ref ref="file"/>-->
+        <!--    </root>-->
+
+        <!--</configuration>-->
