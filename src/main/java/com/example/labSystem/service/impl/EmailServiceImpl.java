@@ -3,6 +3,7 @@ package com.example.labSystem.service.impl;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.Constants;
+import com.example.labSystem.dto.RecordDto;
 import com.example.labSystem.dto.ReportTaskDto;
 import com.example.labSystem.service.EmailService;
 import com.example.labSystem.utils.DateUtil;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Map;
 
@@ -41,10 +44,10 @@ public class EmailServiceImpl implements EmailService {
      * 发送签退提醒邮件
      */
     @Override
-    public void sendSignOutReminderEmail(String to, String name) throws MessagingException {
+    public void sendSignOutReminderEmail(RecordDto dto) throws MessagingException {
 
-        if (StringUtils.isAnyBlank(to, name)) {
-            log.info("sendSignOutReminderEmail, query = {}", to + "  " + name);
+        if (StringUtils.isAnyBlank(dto.getEmail(), dto.getUserName())) {
+            log.info("sendSignOutReminderEmail, query = {}", dto.getEmail() + "  " + dto.getUserName());
             throw new BusinessException(502, "to,name不能为空");
         }
 
@@ -52,12 +55,14 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
         helper.setFrom(username);
-        helper.setTo(to);
+        helper.setTo(dto.getEmail());
         helper.setSubject("签退提醒");
 
         // 设置模板上下文
         Context context = new Context();
-        context.setVariable("name", name);
+        context.setVariable("name", dto.getUserName());
+        context.setVariable("startDate", dto.getStartDate().substring(11));
+        context.setVariable("signDuration", dto.getSignDuration().divide(new BigDecimal(60), 1, RoundingMode.HALF_UP));
         context.setVariable("signOutLink", Constants.laboratoryURL);
 
         // 渲染 HTML 模板
@@ -70,7 +75,7 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
-     * 发送签退提醒邮件
+     * 发送报告提交提醒邮件
      */
     @Override
     public void sendReportReminderEmail(String to, String name) throws MessagingException {

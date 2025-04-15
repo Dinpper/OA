@@ -13,10 +13,9 @@ import com.example.labSystem.service.HolidayDateService;
 import com.example.labSystem.service.UserService;
 import com.example.labSystem.utils.DateUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -24,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Service
+@Component
 @Slf4j
 public class ReportTask {
 
@@ -199,7 +198,7 @@ public class ReportTask {
     /**
      * 每天晚上 9 点执行，对未提交 日报/周报 的邮件提醒
      */
-    @Scheduled(cron = "0 0 20 * * ?") // 每天晚上 20:00 触发
+    @Scheduled(cron = "0 0 20 * * ?", zone = "Asia/Shanghai") // 每天晚上 20:00 触发
     public void executeReportReminderTask() throws Exception {
 
         //判断是的跳过节假日

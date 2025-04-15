@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +31,7 @@ public class SignDurationServiceImpl implements SignDurationService {
         RecordDto dto = new RecordDto();
         Double signDuration = recordMapper.querySignDurationToDayAll(qto.getAccount());
         signDuration = signDuration == null ? 0 :signDuration;
-        dto.setSignDuration(signDuration);
+        dto.setSignDuration(BigDecimal.valueOf(signDuration));
         return dto;
     }
 

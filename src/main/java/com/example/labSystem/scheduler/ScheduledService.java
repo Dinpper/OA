@@ -26,7 +26,7 @@ public class ScheduledService implements ApplicationRunner {
     /**
      * 每月25日获取节日信息
      */
-    @Scheduled(cron = "0 0 1 25 * ?")
+    @Scheduled(cron = "0 0 1 25 * ?", zone = "Asia/Shanghai")
     public void getWorkDay() {
         Calendar calendar = Calendar.getInstance();
         HolidayDate today = holidayDateService.getHoliday(DateUtil.getCurDayInt());

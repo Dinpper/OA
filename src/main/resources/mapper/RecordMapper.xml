@@ -272,4 +272,17 @@
         WHERE recordId = #{recordId}
     </update>
 
+    <select id="SignOutReminderUserList"
+            resultType="com.example.labSystem.dto.RecordDto">
+        SELECT u.userName, u.email, r.startDate, r.recordId,
+               TIMESTAMPDIFF(MINUTE, r.startDate, NOW()) AS signDuration
+        FROM record r
+        JOIN users u ON r.account = u.account
+        WHERE
+            r.statusType = 0
+          AND r.isReminded = 0
+          AND TIMESTAMPDIFF(MINUTE, r.startDate, NOW()) >= 7 * 60
+          AND u.deleteFlag = 0
+    </select>
+
 </mapper>

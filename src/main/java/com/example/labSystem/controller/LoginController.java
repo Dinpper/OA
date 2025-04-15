@@ -2,6 +2,7 @@ package com.example.labSystem.controller;
 
 
 import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.util.SaResult;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.domain.Role;
 import com.example.labSystem.dto.*;
@@ -12,13 +13,16 @@ import com.example.labSystem.service.MenuService;
 import com.example.labSystem.service.PermissionService;
 import com.example.labSystem.service.RoleService;
 import com.example.labSystem.utils.GsonUtil;
+import com.example.labSystem.utils.MD5Util;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -88,6 +92,17 @@ public class LoginController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 
+//    @PostMapping("/login")
+//    public SaResult login(@RequestParam String username,
+//                          @RequestParam String password) {
+//        String md5Password = usersMapper.queryPassword(username);
+//        if (!Objects.equals(MD5Util.md5(password), md5Password)) {
+//            throw new BusinessException(399, "账号或命密码错误");
+//        }
+//        StpUtil.login(10001L);  // 绑定用户ID到Token
+//        return SaResult.data(StpUtil.getTokenInfo());
+//    }
+
     @RequestMapping("isLogin")
     public void isLogin(HttpServletRequest request, HttpServletResponse response) throws Exception {
         String result;
@@ -105,5 +120,32 @@ public class LoginController extends BaseController {
         PermissionsInfoDto result = loginService.info(account);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
+
+//    // 钉钉卡片消息构建
+//    public DingMsgCard buildMeetingCard(Meeting meeting) {
+//        return new DingMsgCard.Builder()
+//                .title(meeting.getTopic())
+//                .text("地点：" + meeting.getRoom().getName() + "\n" +
+//                        "时间：" + DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(meeting.getStartTime()))
+//                .addActionButton("accept", "确认参加", "primary", "/callback/accept")
+//                .addActionButton("reject", "拒绝", "danger", "/callback/reject")
+//                .addActionButton("suggest", "建议调整", "default", "/callback/suggest")
+//                .build();
+//    }
+//
+//    // 回调处理（需配置加签验证）
+//    @PostMapping("/callback/{action}")
+//    public ResponseEntity<?> handleDingCallback(@RequestBody DingCallbackReq request,
+//                                                @PathVariable String action) {
+//        switch(action) {
+//            case "accept" -> meetingService.confirmAttendance(request.getMeetingId(),
+//                    request.getUserId());
+//            case "reject" -> meetingService.rejectWithReason(request.getMeetingId(),
+//                    request.getUserId(),
+//                    request.getReason());
+//            // 其他处理逻辑...
+//        }
+//        return ResponseEntity.ok(ImmutableMap.of("code", 0));
+//    }
 
 }

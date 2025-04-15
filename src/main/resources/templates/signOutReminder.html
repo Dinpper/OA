@@ -65,7 +65,8 @@
         </div>
         <div class="content-left">
             <p th:text="'尊敬的' + ${name} + '，'">尊敬的用户，</p>
-            <p>您已签到7小时，请及时完成签退。</p>
+            <p th:text="'您的签到时间为' + ${startDate} + '，'">您今日已签到</p>
+            <p th:text="'您已签到' + ${signDuration} + '小时，请及时完成签退，'">您已签到7小时，请及时完成签退。</p>
             <p>点击下方按钮立即签退：</p>
         </div>
         <div class="button-container">

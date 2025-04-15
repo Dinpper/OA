@@ -36,7 +36,7 @@ public interface RecordMapper {
 
     RecordDto queryOverdueSignInRecords();
 
-    Integer updateIsReminded(@Param("recordId") String recordId);
+    Integer updateIsReminded(@Param("recordId") Integer recordId);
 
     Integer querySignDurationCountByPage(PageRequestQto qto);
 
@@ -49,4 +49,6 @@ public interface RecordMapper {
     List<Record> queryNotSignOutToday();
 
     Integer automaticSignOut(@Param("recordId") Integer recordId);
+
+    List<RecordDto> SignOutReminderUserList();
 }
