@@ -22,6 +22,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -40,6 +41,10 @@ public class UserController extends BaseController {
 
     @Autowired
     private ReportMapper reportMapper;
+
+    @Autowired
+    private ImageCombinerUtil imageCombinerUtil;
+
 
     @PostMapping("/timeline")
     public void getTimeLine(@RequestBody CommonRequestQto qto,HttpServletResponse response) throws IOException {
@@ -149,14 +154,18 @@ public class UserController extends BaseController {
         if (postElements == null){
             throw new BusinessException(502,"参数信息有误");
         }
-        ImageCombinerUtil imageCombinerUtil = new ImageCombinerUtil();
         imageCombinerUtil.generatePost(postElements);
-        String filePath="D:/newLabsystem/studentPortrait/src/main/resources/static/post/post_"
-                + DigestUtils.md5DigestAsHex(postElements.getAccount().getBytes()) + "_2024.png";
+        String filePath="/home/portrait/post/post_"
+                + DigestUtils.md5DigestAsHex(postElements.getAccount().getBytes()) + ".png";
+        System.out.println("文件名："+filePath);
         File file = FileUtil.file(filePath);
         try {
+            if (!file.exists()) {
+                throw new FileNotFoundException("File not found: " + filePath);
+            }
             // 使用Hutool获取文件的MIME类型
             String mimeType = FileUtil.getMimeType(filePath);
+            System.out.println("MIME类型 = " + mimeType);
             // 设置响应头，告诉浏览器这是一个下载的文件，并设置文件名
             HttpHeaders headers = new HttpHeaders();
             headers.add("Content-Disposition", "attachment; filename=" + file.getName());

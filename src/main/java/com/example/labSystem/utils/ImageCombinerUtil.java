@@ -11,15 +11,19 @@ import com.freewayso.image.combiner.element.TextElement;
 import com.freewayso.image.combiner.enums.BaseLine;
 import com.freewayso.image.combiner.enums.OutputFormat;
 import com.freewayso.image.combiner.enums.ZoomMode;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
+@Component
 public class ImageCombinerUtil {
 
     @Value("${fileStorage.imageDir}")
@@ -31,20 +35,20 @@ public class ImageCombinerUtil {
     @Autowired
     private ReportMapper reportMapper;
 
-   public int getReportZiShu(String account){
-       List<Report> reports = reportMapper.getReportYearRecords(account);
-       int totalWords = 0;
+    public int getReportZiShu(String account){
+        List<Report> reports = reportMapper.getReportYearRecords(account);
+        int totalWords = 0;
 
-       for (Report report : reports) {
-           if (report.getWorkContent() != null) {
-               totalWords += report.getWorkContent().length();  // 统计 workContent 字符数
-           }
-           if (report.getPlan() != null) {
-               totalWords += report.getPlan().length();  // 统计 plan 字符数
-           }
-       }
-       return totalWords;
-   }
+        for (Report report : reports) {
+            if (report.getWorkContent() != null) {
+                totalWords += report.getWorkContent().length();  // 统计 workContent 字符数
+            }
+            if (report.getPlan() != null) {
+                totalWords += report.getPlan().length();  // 统计 plan 字符数
+            }
+        }
+        return totalWords;
+    }
 
     public void generatePost(PostElementsDto postElements) throws Exception {
         String bgImageUrl = "https://img.tukuppt.com/ad_preview/00/03/32/5c98a5df6f708.jpg!/fw/980";                       //背景图（测试url形式）
@@ -63,9 +67,9 @@ public class ImageCombinerUtil {
         String str8= String.valueOf(getReportZiShu(postElements.getAccount()));
         String str9="个字";
         String str10="超越了实验室";
-        String str11="90";
+        String str11="12";
         String str12="%的人!";
-        String str13="网安实验室卷王非你莫属!";
+        String str13="你还需要再加把劲!";
         //keywords
         String kw1= postElements.getKw1();
         String kw2= postElements.getKw2();
@@ -81,8 +85,8 @@ public class ImageCombinerUtil {
         int offsetY=40;
         int myX=X;
         int myY=480;
-        String xxxFont="方正粗黑宋简体";
-        String font="优设标题黑";
+        String xxxFont="WenQuanYi Zen Hei";
+        String font="Noto Sans CJK SC";
         //合成器和背景图（整个图片的宽高和相关计算依赖于背景图，所以背景图的大小是个基准）
         ImageCombiner combiner = new ImageCombiner(bgImageUrl, OutputFormat.JPG);
 
@@ -185,7 +189,7 @@ public class ImageCombinerUtil {
 
 
         //用户名
-        combiner.addTextElement(username,"华文琥珀",40,66,350);
+        combiner.addTextElement(username,"WenQuanYi Zen Hei Mono",40,66,350);
 
         //头像（圆角设置一定的大小，可以把头像变成圆的）
         combiner.addImageElement(avatar, 66, 200, 130, 130, ZoomMode.WidthHeight)
@@ -195,8 +199,8 @@ public class ImageCombinerUtil {
         combiner.combine();
 
         //保存文件
-        combiner.save("D:/newLabsystem/studentPortrait/src/main/resources/static/post/post_"
-                + DigestUtils.md5DigestAsHex(postElements.getUsername().getBytes())+"_2024.png");
+        combiner.save("/home/portrait/post/post_"
+                + DigestUtils.md5DigestAsHex(postElements.getAccount().getBytes())+".png");
     }
 
 

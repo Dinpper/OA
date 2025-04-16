@@ -1,5 +1,6 @@
 package com.example.labSystem.controller;
 
+import com.example.labSystem.dto.JsonResultDto;
 import com.example.labSystem.dto.UserQuestionDto;
 import io.github.briqt.spark4j.SparkClient;
 import io.github.briqt.spark4j.constant.SparkApiVersion;
@@ -8,20 +9,22 @@ import io.github.briqt.spark4j.model.SparkMessage;
 import io.github.briqt.spark4j.model.SparkSyncChatResponse;
 import io.github.briqt.spark4j.model.request.SparkRequest;
 import io.github.briqt.spark4j.model.response.SparkTextUsage;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/agent")
-public class AgentController {
+public class AgentController extends BaseController {
 
     @PostMapping("/ask")
-    public String question(@RequestBody UserQuestionDto question) {
+    public void question(@RequestBody UserQuestionDto question, HttpServletResponse response) throws IOException {
         SparkClient sparkClient = new SparkClient();
 
         // 设置认证信息
@@ -66,7 +69,7 @@ public class AgentController {
         } catch (SparkException e) {
             System.out.println("发生异常了：" + e.getMessage());
         }
-        return chatResponse.getContent();
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, chatResponse.getContent()));
     }
 }
 
