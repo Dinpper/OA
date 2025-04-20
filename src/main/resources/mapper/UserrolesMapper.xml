@@ -8,16 +8,12 @@
         <result property="roleId" column="roleId" jdbcType="INTEGER"/>
     </resultMap>
 
-    <select id="queryCourseByUserList" parameterType="com.example.labSystem.dto.CommonRequestQto"
-            resultType="com.example.labSystem.dto.CourseDro">
-        SELECT *
-        FROM course
-        WHERE account IN
-        <foreach item="account" collection="list" open="(" separator="," close=")">
-            #{account}
-        </foreach>
-        AND date = #{date}
-    </select>
+    <insert id="insert" keyProperty="userRolesId" useGeneratedKeys="true">
+        insert into userroles (account, roleId)
+        values (#{account}, #{roleId})
+    </insert>
+
+
 
 
 </mapper>

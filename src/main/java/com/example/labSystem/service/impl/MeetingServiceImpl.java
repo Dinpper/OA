@@ -144,4 +144,12 @@ public class MeetingServiceImpl implements MeetingService {
             throw new BusinessException(500, "添加失败");
         }
     }
+
+    @Override
+    public void addKeyword(MeetingsDto qto) throws Exception {
+        Integer result = meetingsMapper.addKeyword(qto.getMeetingId(), qto.getKeyword());
+        if (result != 1) {
+            throw new BusinessException(500, "添加失败");
+        }
+    }
 }

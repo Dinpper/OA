@@ -49,6 +49,15 @@ public class LoginController extends BaseController {
     @Autowired
     private RoleMapper roleMapper;
 
+    @PostMapping("/register")
+    public void register(HttpServletRequest request, HttpServletResponse response,
+                        @RequestBody LoginDto qto) throws Exception {
+
+        loginService.register(qto);
+
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, ""));
+    }
+
     @PostMapping("/loginIn")
     public void loginIn(HttpServletRequest request, HttpServletResponse response,
                         @RequestBody CommonRequestQto qto) throws Exception {

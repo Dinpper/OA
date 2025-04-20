@@ -105,4 +105,13 @@ public class MeetingController extends BaseController {
         meetingService.updateSummary(qto);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
     }
+
+
+    //添加会议关键词
+    @RequestMapping(value = "/addKeyword", method = RequestMethod.POST)
+    public void addKeyword(HttpServletRequest request, HttpServletResponse response,
+                              @RequestBody MeetingsDto qto) throws Exception {
+        meetingService.addKeyword(qto);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
+    }
 }

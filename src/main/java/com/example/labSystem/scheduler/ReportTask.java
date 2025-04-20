@@ -100,10 +100,159 @@ public class ReportTask {
      * 发送周报
      */
     private void sendWeeklyReport() throws Exception {
+        interimWeeklyReport();
+//        List<ReportTaskDto> list = queryWeeklyReport();
+//        String to = "dinpper@163.com";
+//        emailService.sendWeeklyReportEmail(to, list);
+//        log.info("发送日报到" + to);
+    }
+
+
+    //临时周报内容 Interim Weekly Bulletin
+    void interimWeeklyReport() throws Exception{
         List<ReportTaskDto> list = queryWeeklyReport();
-        String to = "dinpper@163.com";
-        emailService.sendWeeklyReportEmail(to, list);
-        log.info("发送日报到" + to);
+
+//        list.forEach(System.out::println);
+//        System.out.println("--------------------------------------------------------");
+        //liuxuejiao0406@163.com 全部
+        String to11 = "liuxuejiao0406@163.com";
+        emailService.sendWeeklyReportEmail(to11, list);
+        String to12 = "dinpper@163.com";
+        emailService.sendWeeklyReportEmail(to12, list);
+        log.info("发送日报到:{}，内容为:{}", to11, list);
+//        System.out.println("全部");
+//        System.out.println(list);
+//        System.out.println("--------------------------------------------------------");
+
+
+        //1544189298@qq.com   36304612@qq.com
+        //        "研究组",
+        //        "网络组",
+        //        "教育实践",
+        //        "实践应用",
+        //        "应用开发"
+        List<ReportTaskDto> res2 = new ArrayList<>();
+        list.forEach(l->{
+            if(Objects.equals(l.getGroupName(), "研究组") || Objects.equals(l.getGroupName(), "网络组")
+                    || Objects.equals(l.getGroupName(), "教育实践") || Objects.equals(l.getGroupName(), "实践应用")
+                    || Objects.equals(l.getGroupName(), "应用开发")){
+                res2.add(l);
+            }
+        });
+        String to21 = "1544189298@qq.com";
+        emailService.sendWeeklyReportEmail(to21, res2);
+        String to22 = "36304612@qq.com";
+        emailService.sendWeeklyReportEmail(to22, res2);
+        log.info("发送日报到:{}，内容为:{}", to21 + " " + to22, res2);
+//        System.out.println("项目组");
+//        System.out.println(res2);
+//        System.out.println("--------------------------------------------------------");
+
+
+        //1614351736@qq.com 研究组 1526957795@qq.com
+        List<ReportTaskDto> res3 = new ArrayList<>();
+        list.forEach(l->{
+            if(Objects.equals(l.getGroupName(), "研究组")){
+                res3.add(l);
+            }
+        });
+        String to31 = "1544189298@qq.com";
+        emailService.sendWeeklyReportEmail(to31, res3);
+        String to32 = "36304612@qq.com";
+        emailService.sendWeeklyReportEmail(to32, res3);
+        log.info("发送日报到:{}，内容为:{}", to31 + " " + to32, res3);
+//        System.out.println("研究组");
+//        System.out.println(res3);
+//        System.out.println("--------------------------------------------------------");
+
+
+        //3045428098@qq.com  1367637939@qq.com 网络组
+        List<ReportTaskDto> res4 = new ArrayList<>();
+        list.forEach(l->{
+            if(Objects.equals(l.getGroupName(), "网络组")){
+                res4.add(l);
+            }
+        });
+        String to41 = "1544189298@qq.com";
+        emailService.sendWeeklyReportEmail(to41, res4);
+        String to42 = "36304612@qq.com";
+        emailService.sendWeeklyReportEmail(to42, res4);
+        log.info("发送日报到:{}，内容为:{}", to41 + " " + to42, res4);
+//        System.out.println("网络组");
+//        System.out.println(res4);
+//        System.out.println("--------------------------------------------------------");
+
+
+        //2941649503@qq.com  781381449@qq.com  教育实践
+        List<ReportTaskDto> res5 = new ArrayList<>();
+        list.forEach(l->{
+            if(Objects.equals(l.getGroupName(), "教育实践")){
+                res5.add(l);
+            }
+        });
+        String to51 = "1544189298@qq.com";
+        emailService.sendWeeklyReportEmail(to51, res5);
+        String to52 = "36304612@qq.com";
+        emailService.sendWeeklyReportEmail(to52, res5);
+        log.info("发送日报到:{}，内容为:{}", to51 + " " + to52, res5);
+//        System.out.println("教育实践");
+//        System.out.println(res5);
+//        System.out.println("--------------------------------------------------------");
+
+
+        //2329647588@qq.com  781381449@qq.com  实践应用
+        List<ReportTaskDto> res6 = new ArrayList<>();
+        list.forEach(l->{
+            if(Objects.equals(l.getGroupName(), "实践应用")){
+                res6.add(l);
+            }
+        });
+        String to61 = "1544189298@qq.com";
+        emailService.sendWeeklyReportEmail(to61, res6);
+        String to62 = "36304612@qq.com";
+        emailService.sendWeeklyReportEmail(to62, res6);
+        log.info("发送日报到:{}，内容为:{}", to61 + " " + to62, res6);
+//        System.out.println("实践应用");
+//        System.out.println(res6);
+//        System.out.println("--------------------------------------------------------");
+
+
+        //2859876806@qq.com  1162844453@qq.com  应用开发
+        List<ReportTaskDto> res7 = new ArrayList<>();
+        list.forEach(l->{
+            if(Objects.equals(l.getGroupName(), "应用开发")){
+                res7.add(l);
+            }
+        });
+        String to71 = "1544189298@qq.com";
+        emailService.sendWeeklyReportEmail(to71, res7);
+        String to72 = "36304612@qq.com";
+        emailService.sendWeeklyReportEmail(to72, res7);
+        log.info("发送日报到:{}，内容为:{}", to71 + " " + to72, res7);
+//        System.out.println("应用开发");
+//        System.out.println(res7);
+//        System.out.println("--------------------------------------------------------");
+
+
+        //3539306573@qq.com  2605452642@qq.com
+        //        "攻防一组(web)",
+        //        "攻防二组(pwn+re)",
+        //        "攻防三组(misc+密码)"
+        List<ReportTaskDto> res8 = new ArrayList<>();
+        list.forEach(l->{
+            if(Objects.equals(l.getGroupName(), "攻防一组") || Objects.equals(l.getGroupName(), "攻防二组")
+                    || Objects.equals(l.getGroupName(), "攻防三组")){
+                res8.add(l);
+            }
+        });
+        String to81 = "1544189298@qq.com";
+        emailService.sendWeeklyReportEmail(to81, res8);
+        String to82 = "36304612@qq.com";
+        emailService.sendWeeklyReportEmail(to82, res8);
+        log.info("发送日报到:{}，内容为:{}", to81 + " " + to82, res8);
+//        System.out.println("攻防");
+//        System.out.println(res8);
+//        System.out.println("--------------------------------------------------------");
     }
 
     public List<ReportTaskDto> queryDailyReport() throws Exception {

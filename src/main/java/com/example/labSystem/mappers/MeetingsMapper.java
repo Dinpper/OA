@@ -27,4 +27,6 @@ public interface MeetingsMapper {
     List<MeetingsDto> queryMeetingByPage(PageRequestQto qto);
 
     Integer updateSummary(@Param("meetingId") Integer meetingId, @Param("summary") String summary);
+
+    Integer addKeyword(@Param("meetingId") Integer meetingId, @Param("keyword") String keyword);
 }

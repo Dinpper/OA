@@ -24,4 +24,6 @@ public interface MeetingService {
     void uploadMultiple(FileRecord fileRecord, List<MultipartFile> files) throws Exception;
 
     void updateSummary(MeetingsDto qto) throws Exception;
+
+    void addKeyword(MeetingsDto qto) throws Exception;
 }

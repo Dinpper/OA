@@ -11,9 +11,9 @@ public class Users implements Serializable {
     //id
     private Integer userId;
     //创建时间
-    private Date inputDate;
+    private String inputDate;
     //修改时间
-    private Date updateDate;
+    private String updateDate;
     //账号
     private String account;
     //密码

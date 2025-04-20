@@ -18,6 +18,12 @@
         <result property="className" column="className" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into users (inputDate, account, password, userName, sex, phone, grade, email, groupName,
+                           reportFlag, stuNumber, className)
+        values (now(), #{account} , #{password}, #{userName}, #{sex}, #{phone}, #{grade}, #{email},
+                #{groupName}, #{reportFlag}, #{stuNumber}, #{className})
+    </insert>
 
     <select id="queryPassword" parameterType="java.lang.String"
             resultType="java.lang.String">
