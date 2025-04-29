@@ -10,6 +10,8 @@ spring:
   url: jdbc:mysql://localhost:3306/labsystem
   username: root
   password: dinpper
+ mvc:
+  static-path-pattern: /static/**
  mail:
   host: smtp.qq.com
   port: 465
@@ -51,6 +53,20 @@ sa-token:
  # 是否输出操作日志
  is-log: true
 
+# 讯飞星火配置
+xunfei:
+ client:
+  appid: 96373c06
+  apiSecret: OThhYjM2MzE2ZDFlNDhiMzg2ODdiMmQ5
+  apiKey: ee2ead46ec3a8a5e13adb5044cd79300
+
+
+dingtalk:
+ baseUrl: https://oapi.dingtalk.com/robot/send?access_token=d48685c1f9129ee03a31956ce3aea205c9d7f23ef02c68756256151f19ed5581
+ secret: SECd4feed8c60b3caecde0dd8b5a2f6cf7a12f39a9d3f4c025875998f9163176246
+
+serverBaseUrl: http://172.22.236.90
+
 
 
 logging:
@@ -66,8 +82,8 @@ logging:
 #  password: ysekssfshlswecgi
 
 fileStorage:
- rootDir: "/www/wwwroot/file"
- reportsDir: "/www/wwwroot/file/reports"
- meetingsDir: "/www/wwwroot/file/meetings"
- projectsDir: "/www/wwwroot/file/projects"
- imageDir: "/home/username/newLabsystem/file"
+ rootDir: "E:\\file"
+ reportsDir: "E:\\file\\reports"
+ meetingsDir: "E:\\file\\meetings"
+ projectsDir: "E:\\file\\projects"
+ imageDir: "E:\\file"

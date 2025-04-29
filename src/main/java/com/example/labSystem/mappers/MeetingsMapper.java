@@ -28,5 +28,7 @@ public interface MeetingsMapper {
 
     Integer updateSummary(@Param("meetingId") Integer meetingId, @Param("summary") String summary);
 
-    Integer addKeyword(@Param("meetingId") Integer meetingId, @Param("keyword") String keyword);
+    Integer updateKeyword(@Param("meetingId") Integer meetingId, @Param("keyword") String keyword);
+
+    MeetingsDto queryMeetingById(@Param("meetingId") Integer meetingId);
 }

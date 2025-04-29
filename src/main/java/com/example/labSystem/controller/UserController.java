@@ -8,6 +8,7 @@ import com.example.labSystem.domain.Report;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.mappers.UsersMapper;
+import com.example.labSystem.service.SparkManagerService;
 import com.example.labSystem.service.UserService;
 import com.example.labSystem.utils.GsonUtil;
 import com.example.labSystem.utils.ImageCombinerUtil;
@@ -41,6 +42,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private ReportMapper reportMapper;
+
+    @Autowired
+    private SparkManagerService sparkManagerService;
 
     @Autowired
     private ImageCombinerUtil imageCombinerUtil;
@@ -123,8 +127,13 @@ public class UserController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "删除成功"));
     }
 
+    @RequestMapping(value = "/generatePersonalSummary", method = RequestMethod.POST)
+    public void generatePersonalSummary(HttpServletRequest request, HttpServletResponse response,
+                           @RequestBody CommonRequestQto qto) throws Exception {
 
-
+        String result = sparkManagerService.generatePersonalSummary(qto.getAccount());
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
 
 
 

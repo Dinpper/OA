@@ -1,9 +1,6 @@
 package com.example.labSystem.scheduler;
 
-import com.example.labSystem.dto.GroupUserDto;
-import com.example.labSystem.dto.ReportDto;
-import com.example.labSystem.dto.ReportTaskDto;
-import com.example.labSystem.dto.UserDto;
+import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.RecordMapper;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.mappers.SystemConfigMapper;
@@ -19,9 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Component
 @Slf4j
@@ -90,7 +85,7 @@ public class ReportTask {
      * 发送日报
      */
     private void sendDailyReport() throws Exception {
-        List<ReportTaskDto> list = queryDailyReport();
+        List<ReportMessageDto> list = queryDailyReport();
         String to = "dinpper@163.com";
         emailService.sendDailyReportEmail(to, list);
         log.info("发送日报到" + to);
@@ -101,16 +96,40 @@ public class ReportTask {
      */
     private void sendWeeklyReport() throws Exception {
         interimWeeklyReport();
-//        List<ReportTaskDto> list = queryWeeklyReport();
+//        List<ReportMessageDto> list = queryWeeklyReport();
 //        String to = "dinpper@163.com";
 //        emailService.sendWeeklyReportEmail(to, list);
 //        log.info("发送日报到" + to);
     }
 
+    //todo 先将数据分装为map，groupId为主键，然后再通过groupId查询拼接个人邮件内容
+//    最终可以使用一个 Map<Integer, Group> 来存储每个小组的详细信息，其中：
+//    Integer：表示小组的 groupId，作为 Map 的键。
+//    Group：表示小组的信息，包括 groupName（小组名称）和 members（小组成员列表）。
+    //Map<groupId, GroupDTO>
+//    {
+//        "1": {
+//        "groupId": 1,
+//                "groupName": "研究组",
+//                "members": [
+//        {"userName": "张三", "signDuration": 120},
+//        {"userName": "李四", "signDuration": 150}
+//        ]
+//    },
+//        "2": {
+//        "groupId": 2,
+//                "groupName": "攻防组",
+//                "members": [
+//        {"userName": "王五", "signDuration": 200},
+//        {"userName": "赵六", "signDuration": 180}
+//        ]
+//    }
+//    }
+
 
     //临时周报内容 Interim Weekly Bulletin
     void interimWeeklyReport() throws Exception{
-        List<ReportTaskDto> list = queryWeeklyReport();
+        List<ReportMessageDto> list = queryWeeklyReport();
 
 //        list.forEach(System.out::println);
 //        System.out.println("--------------------------------------------------------");
@@ -125,120 +144,11 @@ public class ReportTask {
 //        System.out.println("--------------------------------------------------------");
 
 
-        //1544189298@qq.com   36304612@qq.com
-        //        "研究组",
-        //        "网络组",
-        //        "教育实践",
-        //        "实践应用",
-        //        "应用开发"
-        List<ReportTaskDto> res2 = new ArrayList<>();
-        list.forEach(l->{
-            if(Objects.equals(l.getGroupName(), "研究组") || Objects.equals(l.getGroupName(), "网络组")
-                    || Objects.equals(l.getGroupName(), "教育实践") || Objects.equals(l.getGroupName(), "实践应用")
-                    || Objects.equals(l.getGroupName(), "应用开发")){
-                res2.add(l);
-            }
-        });
-        String to21 = "1544189298@qq.com";
-        emailService.sendWeeklyReportEmail(to21, res2);
-        String to22 = "36304612@qq.com";
-        emailService.sendWeeklyReportEmail(to22, res2);
-        log.info("发送日报到:{}，内容为:{}", to21 + " " + to22, res2);
-//        System.out.println("项目组");
-//        System.out.println(res2);
-//        System.out.println("--------------------------------------------------------");
-
-
-        //1614351736@qq.com 研究组 1526957795@qq.com
-        List<ReportTaskDto> res3 = new ArrayList<>();
-        list.forEach(l->{
-            if(Objects.equals(l.getGroupName(), "研究组")){
-                res3.add(l);
-            }
-        });
-        String to31 = "1544189298@qq.com";
-        emailService.sendWeeklyReportEmail(to31, res3);
-        String to32 = "36304612@qq.com";
-        emailService.sendWeeklyReportEmail(to32, res3);
-        log.info("发送日报到:{}，内容为:{}", to31 + " " + to32, res3);
-//        System.out.println("研究组");
-//        System.out.println(res3);
-//        System.out.println("--------------------------------------------------------");
-
-
-        //3045428098@qq.com  1367637939@qq.com 网络组
-        List<ReportTaskDto> res4 = new ArrayList<>();
-        list.forEach(l->{
-            if(Objects.equals(l.getGroupName(), "网络组")){
-                res4.add(l);
-            }
-        });
-        String to41 = "1544189298@qq.com";
-        emailService.sendWeeklyReportEmail(to41, res4);
-        String to42 = "36304612@qq.com";
-        emailService.sendWeeklyReportEmail(to42, res4);
-        log.info("发送日报到:{}，内容为:{}", to41 + " " + to42, res4);
-//        System.out.println("网络组");
-//        System.out.println(res4);
-//        System.out.println("--------------------------------------------------------");
-
-
-        //2941649503@qq.com  781381449@qq.com  教育实践
-        List<ReportTaskDto> res5 = new ArrayList<>();
-        list.forEach(l->{
-            if(Objects.equals(l.getGroupName(), "教育实践")){
-                res5.add(l);
-            }
-        });
-        String to51 = "1544189298@qq.com";
-        emailService.sendWeeklyReportEmail(to51, res5);
-        String to52 = "36304612@qq.com";
-        emailService.sendWeeklyReportEmail(to52, res5);
-        log.info("发送日报到:{}，内容为:{}", to51 + " " + to52, res5);
-//        System.out.println("教育实践");
-//        System.out.println(res5);
-//        System.out.println("--------------------------------------------------------");
-
-
-        //2329647588@qq.com  781381449@qq.com  实践应用
-        List<ReportTaskDto> res6 = new ArrayList<>();
-        list.forEach(l->{
-            if(Objects.equals(l.getGroupName(), "实践应用")){
-                res6.add(l);
-            }
-        });
-        String to61 = "1544189298@qq.com";
-        emailService.sendWeeklyReportEmail(to61, res6);
-        String to62 = "36304612@qq.com";
-        emailService.sendWeeklyReportEmail(to62, res6);
-        log.info("发送日报到:{}，内容为:{}", to61 + " " + to62, res6);
-//        System.out.println("实践应用");
-//        System.out.println(res6);
-//        System.out.println("--------------------------------------------------------");
-
-
-        //2859876806@qq.com  1162844453@qq.com  应用开发
-        List<ReportTaskDto> res7 = new ArrayList<>();
-        list.forEach(l->{
-            if(Objects.equals(l.getGroupName(), "应用开发")){
-                res7.add(l);
-            }
-        });
-        String to71 = "1544189298@qq.com";
-        emailService.sendWeeklyReportEmail(to71, res7);
-        String to72 = "36304612@qq.com";
-        emailService.sendWeeklyReportEmail(to72, res7);
-        log.info("发送日报到:{}，内容为:{}", to71 + " " + to72, res7);
-//        System.out.println("应用开发");
-//        System.out.println(res7);
-//        System.out.println("--------------------------------------------------------");
-
-
         //3539306573@qq.com  2605452642@qq.com
         //        "攻防一组(web)",
         //        "攻防二组(pwn+re)",
         //        "攻防三组(misc+密码)"
-        List<ReportTaskDto> res8 = new ArrayList<>();
+        List<ReportMessageDto> res8 = new ArrayList<>();
         list.forEach(l->{
             if(Objects.equals(l.getGroupName(), "攻防一组") || Objects.equals(l.getGroupName(), "攻防二组")
                     || Objects.equals(l.getGroupName(), "攻防三组")){
@@ -255,14 +165,17 @@ public class ReportTask {
 //        System.out.println("--------------------------------------------------------");
     }
 
-    public List<ReportTaskDto> queryDailyReport() throws Exception {
-        List<ReportTaskDto> resList = new ArrayList<>();
+
+
+
+    public List<ReportMessageDto> queryDailyReport() throws Exception {
+        List<ReportMessageDto> resList = new ArrayList<>();
         List<GroupUserDto> GroupUserList = userService.queryAccountListByReportGroup();
 
         for (GroupUserDto groupUserDto : GroupUserList) {
 
-            ReportTaskDto reportTaskDto = new ReportTaskDto();
-            reportTaskDto.setGroupName(groupUserDto.getGroupName());
+            ReportMessageDto reportMessageDto = new ReportMessageDto();
+            reportMessageDto.setGroupName(groupUserDto.getGroupName());
 
             List<ReportDto> members = new ArrayList<>();
 
@@ -292,21 +205,21 @@ public class ReportTask {
 
                 members.add(reportDto);
             }
-            reportTaskDto.setMembers(members);
-            resList.add(reportTaskDto);
+            reportMessageDto.setMembers(members);
+            resList.add(reportMessageDto);
         }
 
         return resList;
     }
 
-    public List<ReportTaskDto> queryWeeklyReport() throws Exception {
-        List<ReportTaskDto> resList = new ArrayList<>();
+    public List<ReportMessageDto> queryWeeklyReport() throws Exception {
+        List<ReportMessageDto> resList = new ArrayList<>();
         List<GroupUserDto> GroupUserList = userService.queryAccountListByReportGroup();
 
         for (GroupUserDto groupUserDto : GroupUserList) {
 
-            ReportTaskDto reportTaskDto = new ReportTaskDto();
-            reportTaskDto.setGroupName(groupUserDto.getGroupName());
+            ReportMessageDto reportMessageDto = new ReportMessageDto();
+            reportMessageDto.setGroupName(groupUserDto.getGroupName());
 
             List<ReportDto> members = new ArrayList<>();
 
@@ -316,7 +229,7 @@ public class ReportTask {
                 String userName = usersMapper.queryUserNameByAccount(account);
                 reportDto.setUserName(userName);
 
-                Double signDuration = recordMapper.querySignDurationToDayAll(account);
+                Double signDuration = recordMapper.querySignDurationWeekAll(account);
                 reportDto.setSignDuration(signDuration == null ? "" : signDuration + "h");
 
                 List<ReportDto> reportDtoList = reportMapper.queryReportWeeklyByAccount(account);
@@ -336,8 +249,8 @@ public class ReportTask {
 
                 members.add(reportDto);
             }
-            reportTaskDto.setMembers(members);
-            resList.add(reportTaskDto);
+            reportMessageDto.setMembers(members);
+            resList.add(reportMessageDto);
         }
 
         return resList;

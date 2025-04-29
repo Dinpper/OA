@@ -9,6 +9,8 @@ public interface GroupService {
 
     List<String> queryGroupsList();
 
+    List<GroupUserDto> queryReportGroupsList();
+
     GroupByPageDto queryGroupsByPage(PageRequestQto qto);
 
     void download(HttpServletResponse response, PageRequestQto qto) throws Exception;

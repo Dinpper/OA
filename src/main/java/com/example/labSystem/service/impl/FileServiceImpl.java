@@ -6,6 +6,8 @@ import com.example.labSystem.dto.FileDto;
 import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.mappers.FileRecordMapper;
 import com.example.labSystem.service.FileService;
+import com.example.labSystem.utils.FileUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +44,13 @@ public class FileServiceImpl implements FileService {
         Integer pageCount = (dataCount + qto.getSize() - 1) / qto.getSize();
         dto.setPageCount(pageCount);
         return dto;
+    }
+
+    @Override
+    public void downloadFile(HttpServletResponse response, FileDto qto) throws Exception{
+        FileDto dto = fileRecordMapper.queryFileMsgById(qto.getId());
+        System.out.println(dto.getFilePath() + "   " + dto.getFileName());
+        FileUtil.downloadFile(response, dto.getFilePath(), dto.getFileName());
     }
 
 }

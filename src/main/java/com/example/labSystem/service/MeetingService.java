@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface MeetingService {
-    void addMeeting(MeetingsDto qto);
+    void addMeeting(MeetingsDto qto) throws Exception;
 
     void download(HttpServletResponse response, PageRequestQto qto) throws Exception;
 
@@ -25,5 +25,5 @@ public interface MeetingService {
 
     void updateSummary(MeetingsDto qto) throws Exception;
 
-    void addKeyword(MeetingsDto qto) throws Exception;
+    void updateKeyword(MeetingsDto qto) throws Exception;
 }

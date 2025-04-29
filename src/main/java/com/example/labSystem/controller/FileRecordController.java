@@ -3,6 +3,7 @@ package com.example.labSystem.controller;
 import com.example.labSystem.Enum.FileTypeEnum;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.FileByPageDto;
+import com.example.labSystem.dto.FileDto;
 import com.example.labSystem.dto.JsonResultDto;
 import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.service.FileService;
@@ -88,5 +89,13 @@ public class FileRecordController extends BaseController {
         FileByPageDto result = fileService.queryFileByPage(qto);
         log.info("queryFileByPage, result = {}", result);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
+
+    @RequestMapping(value = "/downloadFile", method = RequestMethod.POST)
+    public void downloadFile(HttpServletRequest request, HttpServletResponse response,
+                         @RequestBody FileDto qto) throws Exception {
+        fileService.downloadFile(response, qto);
+        System.out.println("开始下载文件");
+//        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "下载成功"));
     }
 }

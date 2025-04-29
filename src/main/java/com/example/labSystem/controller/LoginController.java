@@ -130,31 +130,4 @@ public class LoginController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 
-//    // 钉钉卡片消息构建
-//    public DingMsgCard buildMeetingCard(Meeting meeting) {
-//        return new DingMsgCard.Builder()
-//                .title(meeting.getTopic())
-//                .text("地点：" + meeting.getRoom().getName() + "\n" +
-//                        "时间：" + DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(meeting.getStartTime()))
-//                .addActionButton("accept", "确认参加", "primary", "/callback/accept")
-//                .addActionButton("reject", "拒绝", "danger", "/callback/reject")
-//                .addActionButton("suggest", "建议调整", "default", "/callback/suggest")
-//                .build();
-//    }
-//
-//    // 回调处理（需配置加签验证）
-//    @PostMapping("/callback/{action}")
-//    public ResponseEntity<?> handleDingCallback(@RequestBody DingCallbackReq request,
-//                                                @PathVariable String action) {
-//        switch(action) {
-//            case "accept" -> meetingService.confirmAttendance(request.getMeetingId(),
-//                    request.getUserId());
-//            case "reject" -> meetingService.rejectWithReason(request.getMeetingId(),
-//                    request.getUserId(),
-//                    request.getReason());
-//            // 其他处理逻辑...
-//        }
-//        return ResponseEntity.ok(ImmutableMap.of("code", 0));
-//    }
-
 }

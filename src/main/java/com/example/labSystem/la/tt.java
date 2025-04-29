@@ -481,25 +481,6 @@ public class tt {
     }
 
     public static void excel() {
-        List<RecordExcelDto> list = new ArrayList<>();
-//        list.add(new RecordExcelDto("张三丰", new Date(),456));
-//        list.add(new RecordExcelDto("张无忌", new Date(),456));
-//        list.add(new RecordExcelDto("张岁三", new Date(),456));
-//        list.add(new RecordExcelDto("张毅", new Date(),456));
-//        list.add(new RecordExcelDto("张天师", new Date(),456));
-        String template = "src/main/resources/templates/用户签到模板.xlsx";
-        String stuFile = "src/main/resources/templates/用户.xlsx";
-        try (ExcelWriter excelWriter = FastExcel.write(stuFile).withTemplate(template).build();) {
-            WriteSheet writeSheet = EasyExcel.writerSheet().build();
 
-            //填充模板第一部分的列表数据
-            FillConfig fillConfig = FillConfig.builder().forceNewRow(Boolean.TRUE).build();
-            excelWriter.fill(list, fillConfig, writeSheet);
-
-            //填充列表下面的total
-            Map<String, Object> extraData = new HashMap<>();
-            extraData.put("total", list.size());
-            excelWriter.fill(extraData, writeSheet);
-        }
     }
 }

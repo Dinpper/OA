@@ -2,10 +2,7 @@ package com.example.labSystem.service.impl;
 
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.Constants;
-import com.example.labSystem.dto.CommonRequestQto;
-import com.example.labSystem.dto.GroupByPageDto;
-import com.example.labSystem.dto.GroupDto;
-import com.example.labSystem.dto.PageRequestQto;
+import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.GroupMapper;
 import com.example.labSystem.mappers.UsersMapper;
 import com.example.labSystem.service.GroupService;
@@ -15,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -30,6 +29,11 @@ public class GroupServiceImpl implements GroupService {
     public List<String> queryGroupsList() {
         List<String> list = groupMapper.queryGroupsList();
         return list;
+    }
+
+    @Override
+    public List<GroupUserDto> queryReportGroupsList(){
+        return groupMapper.queryReportGroupsList();
     }
 
     @Override

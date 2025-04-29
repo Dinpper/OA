@@ -67,7 +67,14 @@
           AND MONTH(m.reportDate) = #{month}
           AND um.status IS NOT NULL
           AND um.account = #{account}
+    </select>
 
+    <select id="queryMeetingMemberPhone" parameterType="java.lang.Integer"
+            resultType="java.lang.String">
+        SELECT u.phone
+        FROM usermeetings m
+        JOIN users u ON u.account = m.account
+        WHERE m.meetingId = #{meetingId}
     </select>
 
 

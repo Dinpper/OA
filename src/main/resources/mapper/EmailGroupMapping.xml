@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.labSystem.mappers.EmailGroupMappingMapper">
+
+    <resultMap type="com.example.labSystem.domain.EmailGroupMapping" id="UserMeetingsMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="inputDate" column="inputDate" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="updateDate" jdbcType="TIMESTAMP"/>
+        <result property="account" column="account" jdbcType="VARCHAR"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
+        <result property="groupId" column="groupId" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into email_group_mapping (inputDate, account, userName, email, groupId)
+        values (now(), #{account}, #{userName}, #{email}, #{groupId})
+    </insert>
+
+    <!-- 定义结果映射 -->
+    <resultMap id="EmailGroupMappingResultMap" type="com.example.labSystem.dto.EmailGroupMappingDto">
+        <id property="account" column="account" />
+        <result property="userName" column="userName" />
+        <result property="email" column="email" />
+
+        <!-- 使用 collection 将 groupId 和 groupName 汇总到 groupList -->
+        <collection property="groupList" ofType="com.example.labSystem.dto.EmailGroupDto">
+            <result property="groupId" column="groupId" />
+            <result property="groupName" column="groupName" />
+        </collection>
+    </resultMap>
+
+    <!-- 查询小组信息 -->
+    <select id="queryEmailGroupMapping" resultMap="EmailGroupMappingResultMap">
+        SELECT egm.account, egm.userName, egm.email, g.groupId, g.groupName
+        FROM email_group_mapping egm
+        JOIN `groups` g ON egm.groupId = g.groupId
+        WHERE egm.deleteFlag = 0
+        ORDER BY egm.inputDate, g.groupId
+    </select>
+
+    <update id="delete">
+        UPDATE email_group_mapping
+        SET updateDate = NOW(),
+            deleteFlag = 1
+        WHERE account = #{account}
+    </update>
+
+
+</mapper>

@@ -56,11 +56,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<GroupUserDto> queryAccountListByReportGroup() {
         List<GroupUserDto> resList = new ArrayList<>();
-        List<String> groupList = groupMapper.queryReportGroupsList();
-        for (String groupName : groupList) {
+        List<GroupUserDto> groupList = groupMapper.queryReportGroupsList();
+        for (GroupUserDto group : groupList) {
             GroupUserDto dto = new GroupUserDto();
-            dto.setGroupName(groupName);
-            List<String> accountList = usersMapper.queryAccountByGroup(groupName);
+            dto.setGroupId(group.getGroupId());
+            dto.setGroupName(group.getGroupName());
+            List<String> accountList = usersMapper.queryAccountByGroup(group.getGroupName());
             dto.setAccountList(accountList);
             resList.add(dto);
         }

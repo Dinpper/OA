@@ -10,6 +10,7 @@ import com.example.labSystem.mappers.FileRecordMapper;
 import com.example.labSystem.mappers.MeetingsMapper;
 import com.example.labSystem.mappers.UserMeetingsMapper;
 import com.example.labSystem.mappers.UsersMapper;
+import com.example.labSystem.service.DingDingService;
 import com.example.labSystem.service.MeetingService;
 import com.example.labSystem.utils.DownloadUtil;
 import com.example.labSystem.utils.FileUtil;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -35,11 +37,14 @@ public class MeetingServiceImpl implements MeetingService {
     @Autowired
     private FileRecordMapper fileRecordMapper;
 
+    @Autowired
+    private DingDingService dingDingService;
+
     @Value("${fileStorage.rootDir}")
     private String uploadDir;
 
     @Override
-    public void addMeeting(MeetingsDto qto) {
+    public void addMeeting(MeetingsDto qto) throws Exception {
         if (qto.getMemberList() == null) {
             throw new BusinessException(399, "未选择参会人员");
         }
@@ -59,6 +64,8 @@ public class MeetingServiceImpl implements MeetingService {
             userMeetings.setAccount(account);
             userMeetingsMapper.insert(userMeetings);
         });
+
+        dingDingService.sendMeetingMessage(meetingId);
     }
 
     @Override
@@ -121,18 +128,32 @@ public class MeetingServiceImpl implements MeetingService {
         if (files == null) {
             return;
         }
-        String filePath = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(2));
-        FileUtil.uploadBatch(files, filePath);
+        //通用路径
+        String catalog = uploadDir + FileUtil.generateFilePath(FileTypeEnum.getDesc(1));
+        FileUtil.createCatalog(catalog);
 
-        fileRecord.setFilePath(filePath);
         fileRecord.setVisibility(1);
         fileRecord.setSourceType(2);
         for (MultipartFile file : files) {
             String fileName = file.getOriginalFilename();
             fileRecord.setFileName(fileName);
+
+            String uuid = FileUtil.generateFileNameWithSuffix(fileName);
+            fileRecord.setStoredFileName(uuid);
+
+            String filePath = catalog + "/" + uuid;
+            fileRecord.setFilePath(filePath);
+
+            fileRecord.setFileMd5(FileUtil.calculateFileMd5(file));
+
             fileRecord.setFileType(FileUtil.getFileType(fileName));
+
+            //todo 描述
+            fileRecord.setDescription("");
+
+            FileUtil.saveFile(file, filePath);
+
             fileRecordMapper.fileSubmit(fileRecord);
-//                FileUtil.getFormattedFileSize();
 
         }
     }
@@ -146,8 +167,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public void addKeyword(MeetingsDto qto) throws Exception {
-        Integer result = meetingsMapper.addKeyword(qto.getMeetingId(), qto.getKeyword());
+    public void updateKeyword(MeetingsDto qto) throws Exception {
+        Integer result = meetingsMapper.updateKeyword(qto.getMeetingId(), qto.getKeyword());
         if (result != 1) {
             throw new BusinessException(500, "添加失败");
         }

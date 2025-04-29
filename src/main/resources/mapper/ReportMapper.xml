@@ -25,6 +25,15 @@
         ORDER BY reportDate ASC
     </select>
 
+    <select id="getReportsByAccountAndMonth" resultType="com.example.labSystem.domain.Report">
+        SELECT reportDate, workContent, problems, plan
+        FROM report
+        WHERE account = #{account}
+            AND YEAR(reportDate) = YEAR(CURDATE())  -- 当前年份
+--           AND MONTH(reportDate) = MONTH(CURDATE())  -- 当前月份
+        ORDER BY reportDate ASC;
+    </select>
+
     <select id="getReportYearRecords" parameterType="java.lang.String"
             resultType="com.example.labSystem.domain.Report">
         SELECT workContent, plan

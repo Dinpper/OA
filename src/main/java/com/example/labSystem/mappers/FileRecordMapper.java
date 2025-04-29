@@ -18,4 +18,6 @@ public interface FileRecordMapper {
     Integer queryCountByPage(PageRequestQto qto);
 
     List<FileDto> queryFileByPage(PageRequestQto qto);
+
+    FileDto queryFileMsgById(@Param("id") Integer id);
 }

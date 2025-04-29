@@ -101,11 +101,13 @@ public class FileUtil {
 
 
     public static void downloadFile(HttpServletResponse response, String filePath, String fileName) throws IOException {
-        File file = new File(filePath + "\\" + fileName);
+        Path path = Paths.get(filePath).normalize();
+        File file = path.toFile();
+
 
         // 确保文件存在
         if (!file.exists()) {
-            throw new IOException("File not found: " + filePath + "\\" + fileName);
+            throw new IOException("File not found: " + filePath);
         }
 
         try (FileInputStream fis = new FileInputStream(file);

@@ -22,6 +22,8 @@ public interface ReportMapper {
      */
     List<Report> getReportsByAccountAndYear(@Param("account") String account,@Param("year") String year);
 
+    List<Report> getReportsByAccountAndMonth(@Param("account") String account);
+
     /**
      * 返回用户今年一年的周报
      * @param account 用户账号

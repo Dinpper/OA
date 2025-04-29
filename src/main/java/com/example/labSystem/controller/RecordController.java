@@ -107,7 +107,7 @@ public class RecordController extends BaseController {
         log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
         recordService.download(response, qto);
         log.info("queryReportByPage, 导出成功");
-        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
+//        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
     }
 
     @RequestMapping(value = "/querySignDurationWeek", method = RequestMethod.POST)

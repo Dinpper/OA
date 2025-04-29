@@ -110,7 +110,7 @@ public class ReportServiceImpl implements ReportService {
         response.setHeader("Content-disposition", "attachment;filename*=utf-8''" + fileName + ".xlsx");
         // 获取数据
         List<ReportDto> list = reportMapper.queryReportByPage(qto);
-        String template = "src/main/resources/templates/日报模板.xlsx";
+        String template = "src/main/resources/templates/reportTemplate.xlsx";
 
         // 使用 FastExcel 库生成 Excel 文件并写入到输出流
         try (OutputStream outputStream = response.getOutputStream()) {

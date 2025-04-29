@@ -3,6 +3,7 @@ package com.example.labSystem.controller;
 import com.example.labSystem.domain.FileRecord;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.service.MeetingService;
+import com.example.labSystem.service.SparkManagerService;
 import com.example.labSystem.utils.GsonUtil;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +29,9 @@ public class MeetingController extends BaseController {
 
     @Autowired
     private MeetingService meetingService;
+
+    @Autowired
+    private SparkManagerService sparkManagerService;
 
     @RequestMapping(value = "/addMeeting", method = RequestMethod.POST)
     public void addMeeting(HttpServletRequest request, HttpServletResponse response,
@@ -108,10 +112,20 @@ public class MeetingController extends BaseController {
 
 
     //添加会议关键词
-    @RequestMapping(value = "/addKeyword", method = RequestMethod.POST)
-    public void addKeyword(HttpServletRequest request, HttpServletResponse response,
+    @RequestMapping(value = "/updateKeyword", method = RequestMethod.POST)
+    public void updateKeyword(HttpServletRequest request, HttpServletResponse response,
                               @RequestBody MeetingsDto qto) throws Exception {
-        meetingService.addKeyword(qto);
+        meetingService.updateKeyword(qto);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "提交成功"));
     }
+
+    //添加会议关键词
+    @RequestMapping(value = "/getMeetingMinutes", method = RequestMethod.POST)
+    public void getMeetingMinutes(HttpServletRequest request, HttpServletResponse response,
+                           @RequestBody MeetingsDto qto) throws Exception {
+        sparkManagerService.generateMeetingMinutes(qto.getMeetingId());
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "添加总结成功"));
+    }
+
+
 }

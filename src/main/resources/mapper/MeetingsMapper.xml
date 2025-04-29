@@ -75,7 +75,8 @@
     <select id="queryMeetingByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.MeetingsDto">
         SELECT m.meetingId, m.meetingName, m.reportDate, m.description, m.startTime, m.endTime, m.location,
-               o.userName AS organizerName, GROUP_CONCAT(u.userName SEPARATOR ', ') AS membersName
+               o.userName AS organizerName, GROUP_CONCAT(u.userName SEPARATOR ', ') AS membersName,
+               m.keyword, m.summary
         FROM meetings m
         JOIN usermeetings um ON m.meetingId = um.meetingId
         JOIN users u ON um.account = u.account
@@ -102,9 +103,17 @@
         WHERE meetingId = #{meetingId}
     </update>
 
-    <update id="addKeyword">
+    <update id="updateKeyword">
         UPDATE meetings
         SET keyword = #{keyword}
         WHERE meetingId = #{meetingId}
     </update>
+
+    <select id="queryMeetingById" parameterType="java.lang.Integer"
+            resultType="com.example.labSystem.dto.MeetingsDto">
+        SELECT m.meetingName, m.reportDate, m.description, m.startTime, m.location, u.userName
+        FROM meetings m
+        JOIN users u ON u.account = m.organizerAccount
+        WHERE meetingId = #{meetingId}
+    </select>
 </mapper>

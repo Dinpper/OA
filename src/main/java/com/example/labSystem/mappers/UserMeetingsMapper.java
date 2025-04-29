@@ -2,6 +2,7 @@ package com.example.labSystem.mappers;
 
 import com.example.labSystem.domain.UserMeeting;
 import com.example.labSystem.dto.CommonRequestQto;
+import com.example.labSystem.dto.MeetingsDto;
 import com.example.labSystem.dto.UserMeetingDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -23,4 +24,6 @@ public interface UserMeetingsMapper {
     Integer checkOutMeeting(@Param("meetingId") Integer meetingId, @Param("account") String account);
 
     List<String> queryMeetingDateByMonth(CommonRequestQto qto);
+
+    List<String> queryMeetingMemberPhone(@Param("meetingId") Integer meetingId);
 }

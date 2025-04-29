@@ -24,8 +24,8 @@
     </select>
 
     <select id="queryReportGroupsList" parameterType="com.example.labSystem.dto.CommonRequestQto"
-            resultType="java.lang.String">
-        SELECT groupName
+            resultType="com.example.labSystem.dto.GroupUserDto">
+        SELECT groupId, groupName
         FROM `groups`
         WHERE deleteFlag = 0
         AND reportFlag = 1

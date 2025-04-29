@@ -33,6 +33,12 @@ public class GroupController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 
+    @PostMapping("/queryReportGroupsList")
+    public void queryReportGroupsList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<GroupUserDto> result = groupService.queryReportGroupsList();
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
+
     @PostMapping("/queryGroupsByPage")
     public void queryGroupsByPage(HttpServletRequest request, HttpServletResponse response,
                                  @RequestBody PageRequestQto qto) throws Exception {

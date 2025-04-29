@@ -1,33 +1,48 @@
     package com.example.labSystem;
 
-import com.example.labSystem.common.BusinessException;
-import com.example.labSystem.dto.GroupUserDto;
-import com.example.labSystem.dto.ReportDto;
-import com.example.labSystem.dto.ReportTaskDto;
-import com.example.labSystem.mappers.RecordMapper;
-import com.example.labSystem.mappers.ReportMapper;
-import com.example.labSystem.mappers.SystemConfigMapper;
-import com.example.labSystem.mappers.UsersMapper;
+import  com.example.labSystem.common.BusinessException;
+import com.example.labSystem.domain.Report;
+import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.*;
 import com.example.labSystem.service.EmailService;
 import com.example.labSystem.service.HolidayDateService;
+import com.example.labSystem.service.SparkManagerService;
 import com.example.labSystem.service.UserService;
 import com.example.labSystem.service.impl.EmailServiceImpl;
+import com.example.labSystem.utils.DingDingUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
+import org.apache.commons.codec.binary.Base64;
+
 
 @SpringBootTest
 @Slf4j
@@ -54,6 +69,9 @@ public class RecordMapperTest {
     @Autowired
     private UsersMapper usersMapper;
 
+    @Autowired
+    private EmailGroupMappingMapper emailGroupMappingMapper;
+
 
 
 
@@ -66,13 +84,13 @@ public class RecordMapperTest {
 
     @Test
     void test1() throws Exception{
-        List<ReportTaskDto> resList = new ArrayList<>();
+        List<ReportMessageDto> resList = new ArrayList<>();
         List<GroupUserDto> GroupUserList = userService.queryAccountListByReportGroup();
 
         for (GroupUserDto groupUserDto : GroupUserList) {
 
-            ReportTaskDto reportTaskDto = new ReportTaskDto();
-            reportTaskDto.setGroupName(groupUserDto.getGroupName());
+            ReportMessageDto reportMessageDto = new ReportMessageDto();
+            reportMessageDto.setGroupName(groupUserDto.getGroupName());
 
             List<ReportDto> members = new ArrayList<>();
 
@@ -102,8 +120,8 @@ public class RecordMapperTest {
 
                 members.add(reportDto);
             }
-            reportTaskDto.setMembers(members);
-            resList.add(reportTaskDto);
+            reportMessageDto.setMembers(members);
+            resList.add(reportMessageDto);
         }
 
         resList.forEach(System.out::println);
@@ -119,7 +137,7 @@ public class RecordMapperTest {
         //        "教育实践",
         //        "实践应用",
         //        "应用开发"
-        List<ReportTaskDto> res2 = new ArrayList<>();
+        List<ReportMessageDto> res2 = new ArrayList<>();
         resList.forEach(l->{
             if(Objects.equals(l.getGroupName(), "研究组") || Objects.equals(l.getGroupName(), "网络组")
                     || Objects.equals(l.getGroupName(), "教育实践") || Objects.equals(l.getGroupName(), "实践应用")
@@ -132,7 +150,7 @@ public class RecordMapperTest {
         System.out.println("--------------------------------------------------------");
 
         //1614351736@qq.com 研究组 1526957795@qq.com
-        List<ReportTaskDto> res3 = new ArrayList<>();
+        List<ReportMessageDto> res3 = new ArrayList<>();
         resList.forEach(l->{
             if(Objects.equals(l.getGroupName(), "研究组")){
                 res3.add(l);
@@ -143,7 +161,7 @@ public class RecordMapperTest {
         System.out.println("--------------------------------------------------------");
 
         //3045428098@qq.com  1367637939@qq.com 网络组
-        List<ReportTaskDto> res4 = new ArrayList<>();
+        List<ReportMessageDto> res4 = new ArrayList<>();
         resList.forEach(l->{
             if(Objects.equals(l.getGroupName(), "网络组")){
                 res4.add(l);
@@ -154,7 +172,7 @@ public class RecordMapperTest {
         System.out.println("--------------------------------------------------------");
 
         //2941649503@qq.com  781381449@qq.com  教育实践
-        List<ReportTaskDto> res5 = new ArrayList<>();
+        List<ReportMessageDto> res5 = new ArrayList<>();
         resList.forEach(l->{
             if(Objects.equals(l.getGroupName(), "教育实践")){
                 res5.add(l);
@@ -164,7 +182,7 @@ public class RecordMapperTest {
         System.out.println(res5);
         System.out.println("--------------------------------------------------------");
         //2329647588@qq.com  781381449@qq.com  实践应用
-        List<ReportTaskDto> res6 = new ArrayList<>();
+        List<ReportMessageDto> res6 = new ArrayList<>();
         resList.forEach(l->{
             if(Objects.equals(l.getGroupName(), "实践应用")){
                 res6.add(l);
@@ -174,7 +192,7 @@ public class RecordMapperTest {
         System.out.println(res6);
         System.out.println("--------------------------------------------------------");
         //2859876806@qq.com  1162844453@qq.com  应用开发
-        List<ReportTaskDto> res7 = new ArrayList<>();
+        List<ReportMessageDto> res7 = new ArrayList<>();
         resList.forEach(l->{
             if(Objects.equals(l.getGroupName(), "应用开发")){
                 res7.add(l);
@@ -187,7 +205,7 @@ public class RecordMapperTest {
         //        "攻防一组(web)",
         //        "攻防二组(pwn+re)",
         //        "攻防三组(misc+密码)"
-        List<ReportTaskDto> res8 = new ArrayList<>();
+        List<ReportMessageDto> res8 = new ArrayList<>();
         resList.forEach(l->{
             if(Objects.equals(l.getGroupName(), "攻防一组") || Objects.equals(l.getGroupName(), "攻防二组")
                     || Objects.equals(l.getGroupName(), "攻防三组")){
@@ -207,13 +225,13 @@ public class RecordMapperTest {
 
     @Test
     void testSendDailyReportEmail() throws MessagingException {
-            List<ReportTaskDto> resList = new ArrayList<>();
+            List<ReportMessageDto> resList = new ArrayList<>();
             List<GroupUserDto> GroupUserList = userService.queryAccountListByReportGroup();
 
             for (GroupUserDto groupUserDto : GroupUserList) {
 
-                ReportTaskDto reportTaskDto = new ReportTaskDto();
-                reportTaskDto.setGroupName(groupUserDto.getGroupName());
+                ReportMessageDto ReportMessageDto = new ReportMessageDto();
+                ReportMessageDto.setGroupName(groupUserDto.getGroupName());
 
                 List<ReportDto> members = new ArrayList<>();
 
@@ -243,12 +261,141 @@ public class RecordMapperTest {
 
                     members.add(reportDto);
                 }
-                reportTaskDto.setMembers(members);
-                resList.add(reportTaskDto);
+                ReportMessageDto.setMembers(members);
+                resList.add(ReportMessageDto);
             }
 
         emailService.sendDailyReportEmail("dinpper@163.com", resList);
     }
 
+
+    @Test
+    void testQueryEmailGroupMapping() throws Exception {
+        List<EmailGroupMappingDto> emailUserList = emailGroupMappingMapper.queryEmailGroupMapping();
+        Map<Integer, ReportMessageDto> reportMessageMap = emailService.queryReportMessage("2");
+        List<ReportTaskDto> result = new ArrayList<>();
+
+        for (EmailGroupMappingDto emailUser : emailUserList) {
+            ReportTaskDto reportTaskDto = new ReportTaskDto();
+            reportTaskDto.setUserName(emailUser.getUserName());
+            reportTaskDto.setEmail(emailUser.getEmail());
+            reportTaskDto.setAccount(emailUser.getAccount());
+
+            List<ReportMessageDto> relatedGroups = new ArrayList<>();
+            for (EmailGroupDto groupDto : emailUser.getGroupList()) {
+                ReportMessageDto groupReport = reportMessageMap.get(groupDto.getGroupId());
+                if (groupReport != null) {
+                    relatedGroups.add(groupReport);
+                }
+            }
+
+            reportTaskDto.setGroupReports(relatedGroups);
+            result.add(reportTaskDto);
+        }
+
+//        System.out.println(result);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT); // 格式化输出
+        String jsonResult = mapper.writeValueAsString(result);
+        System.out.println(jsonResult);
+
+
+    }
+
+
+    @Test
+    void testDingDing() throws Exception{
+        // 钉钉群机器人id号
+        String url = "https://oapi.dingtalk.com/robot/send?access_token=d48685c1f9129ee03a31956ce3aea205c9d7f23ef02c68756256151f19ed5581";
+        // hello,为关键字
+        String msg = "hello, 大家好";
+        DingDingUtil.send(url, msg);
+    }
+
+    @Test
+    void sendTextTest2() throws Exception {
+        Long timestamp = System.currentTimeMillis();
+        String sign = DingDingUtil.getSign(timestamp);
+
+
+        // 钉钉群机器人id号
+        String baseUrl = "https://oapi.dingtalk.com/robot/send?access_token=d48685c1f9129ee03a31956ce3aea205c9d7f23ef02c68756256151f19ed5581";
+        String msg = "这是一条ceshi的消息！";
+
+        String fullUrl =
+                String.format(baseUrl + "&timestamp=%s&sign=%s", timestamp, sign);
+        DingDingUtil.send(fullUrl, msg);
+    }
+
+
+    @Resource
+    private SparkManagerService sparkManager;
+
+
+
+    @Autowired
+    private MeetingsMapper meetingsMapper;
+
+    @Autowired SparkManagerService sparkManagerService;
+    @Test
+    public void mm() throws Exception {
+            List<ReportMessageDto> list = queryWeeklyReport();
+
+//        list.forEach(System.out::println);
+//        System.out.println("--------------------------------------------------------");
+            //liuxuejiao0406@163.com 全部
+            String to12 = "dinpper@163.com";
+            emailService.sendWeeklyReportEmail(to12, list);
+//            log.info("发送日报到:{}，内容为:{}", , list);
+//        System.out.println("全部");
+//        System.out.println(list);
+//        System.out.println("--------------------------------------------------------");
+
+
+    }
+
+    public List<ReportMessageDto> queryWeeklyReport() throws Exception {
+        List<ReportMessageDto> resList = new ArrayList<>();
+        List<GroupUserDto> GroupUserList = userService.queryAccountListByReportGroup();
+
+        for (GroupUserDto groupUserDto : GroupUserList) {
+
+            ReportMessageDto reportMessageDto = new ReportMessageDto();
+            reportMessageDto.setGroupName(groupUserDto.getGroupName());
+
+            List<ReportDto> members = new ArrayList<>();
+
+            for (String account : groupUserDto.getAccountList()) {
+                ReportDto reportDto = new ReportDto();
+
+                String userName = usersMapper.queryUserNameByAccount(account);
+                reportDto.setUserName(userName);
+
+                Double signDuration = recordMapper.querySignDurationWeekAll(account);
+                reportDto.setSignDuration(signDuration == null ? "" : signDuration + "h");
+
+                List<ReportDto> reportDtoList = reportMapper.queryReportWeeklyByAccount(account);
+                StringBuffer workContent = new StringBuffer();
+                StringBuffer problems = new StringBuffer();
+                StringBuffer plan = new StringBuffer();
+                if (reportDtoList != null) {
+                    reportDtoList.forEach(l -> {
+                        workContent.append(l.getWorkContent()).append(";  ");
+                        problems.append(l.getProblems()).append(";  ");
+                        plan.append(l.getPlan()).append(";  ");
+                    });
+                }
+                reportDto.setWorkContent(workContent.toString());
+                reportDto.setProblems(problems.toString());
+                reportDto.setPlan(plan.toString());
+
+                members.add(reportDto);
+            }
+            reportMessageDto.setMembers(members);
+            resList.add(reportMessageDto);
+        }
+
+        return resList;
+    }
 
 }

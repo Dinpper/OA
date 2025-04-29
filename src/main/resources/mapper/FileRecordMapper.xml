@@ -73,4 +73,11 @@
     </select>
 
 
+    <select id="queryFileMsgById" parameterType="java.lang.Integer"
+            resultType="com.example.labSystem.dto.FileDto">
+        SELECT id,file_name AS fileName, file_path AS filePath
+        FROM file_record
+        WHERE id = #{id}
+    </select>
+
 </mapper>

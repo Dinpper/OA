@@ -29,6 +29,8 @@ public class MeetingsDto {
     //主办方用户账号
     private String organizerAccount;
 
+    private String userName;
+
     private String keyword;
 
     private String summary;
