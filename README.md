@@ -2,6 +2,20 @@
 
 此项目为后端部分，前端项目: https://github.com/Dinpper/LabSystem-web
 
+## 打jar包
+
+```
+mvn clean package -DskipTests=true -Dspring.profiles.active=prod -P release 
+```
+
+## 生产环境部署
+
+```
+/www/server/java/jdk-17.0.8/bin/java -Duser.timezone=Asia/Shanghai -Xmx1024M -Xms256M -jar /www/wwwroot/labsystem/backend/LabSystem-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod --server.port=8880
+```
+
+
+
 ## 功能描述
 
 包括签到签退、日报周报、会议管理、请假管理、文件管理、组织管理、个人分析、邮件提醒等功能
