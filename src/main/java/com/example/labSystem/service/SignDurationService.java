@@ -13,7 +13,7 @@ public interface SignDurationService {
 
     RecordDto queryTodayWeekMonth(CommonRequestQto qto);
 
-    void download(HttpServletResponse response, PageRequestQto qto) throws Exception;
+    void signDurationDownload(HttpServletResponse response, PageRequestQto qto);
 
     RecordByPageDto querySignDurationByPage(PageRequestQto qto) throws Exception;
 

@@ -94,9 +94,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void download(HttpServletResponse response, PageRequestQto qto){
-        String fileName = "签到统计报表";
-        String template = Constants.TEMPLATE_PATH + Constants.SIGNDURATION_TEMPLATE_EXCEL_XLSX;
+    public void checkInRecordDownload(HttpServletResponse response, PageRequestQto qto){
+        String fileName = "签到记录统计报表";
+        String template = Constants.TEMPLATE_PATH + Constants.USER_RECORD_TEMPLATE_EXCEL_XLSX;
         List<RecordExcelDto> list = recordMapper.queryRecordByPage(qto);
         DownloadUtil.downloadXlsx(response, fileName, template, list);
     }

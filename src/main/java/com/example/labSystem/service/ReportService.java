@@ -13,5 +13,5 @@ public interface ReportService {
 
     ReportByPageDto queryReportByPage(PageRequestQto qto) throws Exception;
 
-    void download(HttpServletResponse response, PageRequestQto qto) throws Exception;
+    void download(HttpServletResponse response, PageRequestQto qto);
 }

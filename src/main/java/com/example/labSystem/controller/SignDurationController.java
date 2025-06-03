@@ -5,6 +5,7 @@ import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.service.RecordService;
 import com.example.labSystem.service.SignDurationService;
+import com.example.labSystem.utils.DownloadUtil;
 import com.example.labSystem.utils.GsonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -88,13 +89,16 @@ public class SignDurationController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 
-    @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public void download(HttpServletRequest request, HttpServletResponse response,
-                         @RequestBody PageRequestQto qto) throws Exception {
-        log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
-        signDurationService.download(response, qto);
-        log.info("queryReportByPage, 导出成功");
-        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
+    @RequestMapping(value = "/signDurationDownload", method = RequestMethod.POST)
+    public void signDurationDownload(HttpServletRequest request, HttpServletResponse response,
+                                     @RequestBody PageRequestQto qto) throws Exception {
+        try {
+            signDurationService.signDurationDownload(response, qto);
+            log.info("queryReportByPage, 导出成功");
+        } catch (Exception e) {
+            log.error("导出失败", e);
+            DownloadUtil.writePlainTextError(response, "导出失败：" + e.getMessage());
+        }
     }
 
 }

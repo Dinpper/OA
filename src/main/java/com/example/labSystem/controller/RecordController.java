@@ -118,21 +118,16 @@ public class RecordController extends BaseController {
         log.info("queryRecordByPage, result = {}", result);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
-
-    @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public void download(HttpServletRequest request, HttpServletResponse response,
+    @RequestMapping(value = "/checkInRecordDownload", method = RequestMethod.POST)
+    public void checkInRecordDownload(HttpServletRequest request, HttpServletResponse response,
                          @RequestBody PageRequestQto qto) throws Exception {
-        log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
-        recordService.download(response, qto);
-        log.info("queryReportByPage, 导出成功");
         try {
-            recordService.download(response, qto);
+            recordService.checkInRecordDownload(response, qto);
             log.info("queryReportByPage, 导出成功");
         } catch (Exception e) {
             log.error("导出失败", e);
             DownloadUtil.writePlainTextError(response, "导出失败：" + e.getMessage());
         }
-//        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
     }
 
     @RequestMapping(value = "/querySignDurationWeek", method = RequestMethod.POST)

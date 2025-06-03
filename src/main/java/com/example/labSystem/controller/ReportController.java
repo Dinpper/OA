@@ -4,6 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.service.ReportService;
+import com.example.labSystem.utils.DownloadUtil;
 import com.example.labSystem.utils.FileUtil;
 import com.example.labSystem.utils.GsonUtil;
 import com.google.gson.Gson;
@@ -97,11 +98,14 @@ public class ReportController extends BaseController {
 
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void download(HttpServletRequest request, HttpServletResponse response,
-                         @RequestBody PageRequestQto qto) throws Exception {
-        log.info("download,query = {}", GsonUtil.ObjectToJson(qto));
-        reportService.download(response, qto);
-        log.info("download, 导出成功");
-        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
+                                      @RequestBody PageRequestQto qto) throws Exception {
+        try {
+            reportService.download(response, qto);
+            log.info("queryReportByPage, 导出成功");
+        } catch (Exception e) {
+            log.error("导出失败", e);
+            DownloadUtil.writePlainTextError(response, "导出失败：" + e.getMessage());
+        }
     }
 
 }
