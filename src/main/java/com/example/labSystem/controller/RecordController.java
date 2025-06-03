@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.apache.commons.lang3.StringUtils;
+import com.example.labSystem.utils.DownloadUtil;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -100,10 +101,10 @@ public class RecordController extends BaseController {
             throw new BusinessException(399, "参数错误");
         }
         //签到通过内网ip访问
-        String visitIp = IpUtil.getIpAddr(request);
-        if (!Objects.equals(visitIp, labIp)) {
-            throw new BusinessException(403, "签退失败，请通过实验室内网签退");
-        }
+//        String visitIp = IpUtil.getIpAddr(request);
+//        if (!Objects.equals(visitIp, labIp)) {
+//            throw new BusinessException(403, "签退失败，请通过实验室内网签退");
+//        }
         recordService.attendanceCheckOut(account);
         log.info("User {} checked out at {}", account, LocalDateTime.now());
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "签退成功"));
@@ -124,6 +125,13 @@ public class RecordController extends BaseController {
         log.info("queryReportByPage,query = {}", GsonUtil.ObjectToJson(qto));
         recordService.download(response, qto);
         log.info("queryReportByPage, 导出成功");
+        try {
+            recordService.download(response, qto);
+            log.info("queryReportByPage, 导出成功");
+        } catch (Exception e) {
+            log.error("导出失败", e);
+            DownloadUtil.writePlainTextError(response, "导出失败：" + e.getMessage());
+        }
 //        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "导出成功"));
     }
 

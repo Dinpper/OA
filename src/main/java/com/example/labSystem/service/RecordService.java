@@ -17,7 +17,7 @@ public interface RecordService {
 
     void attendanceCheckOut(String account);
 
-    void download(HttpServletResponse response, PageRequestQto qto) throws Exception;
+    void download(HttpServletResponse response, PageRequestQto qto);
 
     RecordByPageDto queryRecordByPage(PageRequestQto qto) throws Exception;
 
