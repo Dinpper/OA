@@ -23,4 +23,6 @@ public class UserExcelDto {
     private String stuNumber;
 
     private Integer reportFlag;
+
+    private String roleDescription;
 }

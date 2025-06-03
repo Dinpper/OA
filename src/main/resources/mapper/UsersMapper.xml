@@ -98,18 +98,21 @@
 
     <select id="queryUserByPage" parameterType="com.example.labSystem.dto.PageRequestQto"
             resultType="com.example.labSystem.dto.UserExcelDto">
-        SELECT account, userName, sex, phone, grade, email, groupName, reportFlag, stuNumber, className
-        FROM users
-        WHERE deleteFlag = 0
+        SELECT u.account, u.userName, u.sex, u.phone, u.grade, u.email, u.groupName, u.reportFlag, u.stuNumber, u.className,
+                r.description AS roleDescription
+        FROM users u
+        LEFT JOIN userroles ur ON u.account = ur.account
+        LEFT JOIN roles r ON ur.roleId = r.roleId
+        WHERE u.deleteFlag = 0
         <if test="userName != null and userName != ''">
-            AND userName LIKE concat('%', #{userName} ,'%')
+            AND u.userName LIKE concat('%', #{userName}, '%')
         </if>
         <if test="groupName != null and groupName != ''">
-            AND groupName = #{groupName}
+            AND u.groupName = #{groupName}
         </if>
-        ORDER BY groupName, grade, userName ASC
-        <if test="size != null and size != ''" >
-            LIMIT #{size} OFFSET #{offset};
+        ORDER BY u.groupName, u.grade, u.userName ASC
+        <if test="size != null and size != ''">
+            LIMIT #{size} OFFSET #{offset}
         </if>
     </select>
 
@@ -152,6 +155,12 @@
     <update id="deleteUser">
         UPDATE users
         SET deleteFlag = 1
+        WHERE account = #{account}
+    </update>
+
+    <update id="updateUserRole">
+        UPDATE userroles
+        SET roleId = #{roleId}
         WHERE account = #{account}
     </update>
 

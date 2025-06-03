@@ -34,4 +34,6 @@ public interface UsersMapper {
     Integer deleteUser(@Param("account") String account);
 
     List<String> queryAccountByGroup(@Param("groupName") String groupName);
+
+    Integer updateUserRole(UserDto users);
 }

@@ -39,4 +39,5 @@ public class UserDto {
     //班级
     private String className;
     private String role;
+    private Integer roleId;
 }

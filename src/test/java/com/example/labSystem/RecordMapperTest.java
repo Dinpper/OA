@@ -10,11 +10,13 @@ import com.example.labSystem.service.SparkManagerService;
 import com.example.labSystem.service.UserService;
 import com.example.labSystem.service.impl.EmailServiceImpl;
 import com.example.labSystem.utils.DingDingUtil;
+import com.example.labSystem.utils.IpUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import jakarta.annotation.Resource;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -28,6 +30,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -325,6 +329,14 @@ public class RecordMapperTest {
         String fullUrl =
                 String.format(baseUrl + "&timestamp=%s&sign=%s", timestamp, sign);
         DingDingUtil.send(fullUrl, msg);
+    }
+
+    @Test
+    void getIp() {
+        HttpServletRequest request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes()))
+                .getRequest();
+        String ip = IpUtil.getIpAddr(request);
+        System.out.println(ip);
     }
 
 

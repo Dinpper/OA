@@ -127,4 +127,12 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(500, "删除失败");
         }
     }
+
+    @Override
+    public void updateUserRole(UserDto qto) throws Exception {
+        Integer result = usersMapper.updateUserRole(qto);
+        if (result != 1) {
+            throw new BusinessException(500, "修改失败");
+        }
+    }
 }

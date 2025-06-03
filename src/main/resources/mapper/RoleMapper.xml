@@ -17,5 +17,11 @@
         WHERE ur.account = #{account}
     </select>
 
+    <select id="queryRoleList"
+            resultType="com.example.labSystem.dto.RoleDto">
+        SELECT roleId, roleName, description
+        FROM roles
+    </select>
+
 
 </mapper>

@@ -20,4 +20,6 @@ public interface UserService {
     void updateUser(UserDto qto);
 
     void deleteUser(String account) throws Exception;
+
+    void updateUserRole(UserDto qto) throws Exception;
 }

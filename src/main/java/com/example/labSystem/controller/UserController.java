@@ -8,6 +8,7 @@ import com.example.labSystem.domain.Report;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.mappers.UsersMapper;
+import com.example.labSystem.service.RoleService;
 import com.example.labSystem.service.SparkManagerService;
 import com.example.labSystem.service.UserService;
 import com.example.labSystem.utils.GsonUtil;
@@ -42,6 +43,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private ReportMapper reportMapper;
+
+    @Autowired
+    private RoleService roleService;
 
     @Autowired
     private SparkManagerService sparkManagerService;
@@ -135,6 +139,18 @@ public class UserController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
     }
 
+    @RequestMapping(value = "/updateUserRole", method = RequestMethod.POST)
+    public void updateUserRole(HttpServletRequest request, HttpServletResponse response,
+                           @RequestBody UserDto qto) throws Exception {
+        userService.updateUserRole(qto);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "修改成功"));
+    }
+
+    @RequestMapping(value = "/queryRoleList", method = RequestMethod.POST)
+    public void queryRoleList(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        List<RoleDto> result = roleService.queryRoleList();
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
 
 
 

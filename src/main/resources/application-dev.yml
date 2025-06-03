@@ -87,3 +87,7 @@ fileStorage:
  meetingsDir: "E:\\file\\meetings"
  projectsDir: "E:\\file\\projects"
  imageDir: "E:\\file"
+
+ipConfig:
+ labIp: 172.22.236.10
+ hznuIp: 10.18.206.180
