@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.example.labSystem.utils.DownloadUtil;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,7 +36,7 @@ public class RecordController extends BaseController {
     private RecordService recordService;
 
     @Value("${ipConfig.labIp}")
-    private String labIp;
+    private String[] labIp;
 
     /**
      * 查询签到状态
@@ -76,7 +77,7 @@ public class RecordController extends BaseController {
         }
         //签到通过内网ip访问
         String visitIp = IpUtil.getIpAddr(request);
-        if (!Objects.equals(visitIp, labIp)) {
+        if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
             throw new BusinessException(403, "签到失败，请通过实验室内网签到");
         }
         recordService.attendanceCheckIn(account);
@@ -97,14 +98,16 @@ public class RecordController extends BaseController {
                                    @RequestBody CommonRequestQto qto) throws Exception {
         String account = qto.getAccount();
         log.info("User {} checkOut,query = {}", account, GsonUtil.ObjectToJson(qto));
+
         if (StringUtils.isEmpty(account)) {
             throw new BusinessException(399, "参数错误");
         }
-        //签到通过内网ip访问
 //        String visitIp = IpUtil.getIpAddr(request);
 //        if (!Objects.equals(visitIp, labIp)) {
 //            throw new BusinessException(403, "签退失败，请通过实验室内网签退");
 //        }
+
+
         recordService.attendanceCheckOut(account);
         log.info("User {} checked out at {}", account, LocalDateTime.now());
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "签退成功"));

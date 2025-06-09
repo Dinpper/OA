@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 
 
 public class IpUtil {
@@ -43,6 +44,43 @@ public class IpUtil {
         // ipAddress = this.getRequest().getRemoteAddr();
         System.out.println("用户ip：" + ipAddress);
         return ipAddress;
+    }
+
+
+    public static boolean isInNetworkIpv4(String ipStr, String networkStr) {
+        try {
+            // 解析输入的IP地址和网络段
+            InetAddress ip = InetAddress.getByName(ipStr);
+            String[] parts = networkStr.split("/");
+            InetAddress networkIp = InetAddress.getByName(parts[0]);
+            int prefix = Integer.parseInt(parts[1]);
+
+            // 只支持IPv4
+            if (ip instanceof java.net.Inet4Address && networkIp instanceof java.net.Inet4Address) {
+                byte[] ipBytes = ip.getAddress();
+                byte[] networkBytes = networkIp.getAddress();
+
+                // 将掩码转换为32位整数
+                int mask = -1 << (32 - prefix); // 左移得到前缀掩码
+
+                // 将字节数组转为整数
+                int ipInt = byteArrayToInt(ipBytes);
+                int networkInt = byteArrayToInt(networkBytes);
+
+                // 应用掩码进行比较
+                return (ipInt & mask) == (networkInt & mask);
+            } else {
+                throw new IllegalArgumentException("Only IPv4 is supported.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private static int byteArrayToInt(byte[] bytes) {
+        ByteBuffer bb = ByteBuffer.wrap(bytes);
+        return bb.getInt();
     }
 }
 ///**
