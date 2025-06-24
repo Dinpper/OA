@@ -4,6 +4,7 @@ package com.example.labSystem.service.impl;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.common.Constants;
 import com.example.labSystem.dto.*;
+import com.example.labSystem.mappers.EmailGroupMappingMapper;
 import com.example.labSystem.mappers.RecordMapper;
 import com.example.labSystem.mappers.ReportMapper;
 import com.example.labSystem.mappers.UsersMapper;
@@ -12,6 +13,7 @@ import com.example.labSystem.service.UserService;
 import com.example.labSystem.utils.DateUtil;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import org.thymeleaf.context.Context;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -47,6 +50,9 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private ReportMapper reportMapper;
+
+    @Autowired
+    private EmailGroupMappingMapper emailGroupMappingMapper;
 
     @Autowired
     private UserService userService;
@@ -165,6 +171,22 @@ public class EmailServiceImpl implements EmailService {
 
         // 发送邮件
         javaMailSender.send(message);
+    }
+
+    @Override
+    public Map<String, List<ReportMessageDto>> getEmailSenderMapping(String reportType) throws Exception {
+        var map = new HashMap<String,List<ReportMessageDto>>();
+        var receiverGroup = emailGroupMappingMapper.queryEmailGroupMapping();
+        var groupMessageMap = queryReportMessage(reportType);
+        for (EmailGroupMappingDto emailGroupMappingDto : receiverGroup) {
+            var lst = map.getOrDefault(emailGroupMappingDto.getEmail(),new ArrayList<>());
+            lst.addAll(emailGroupMappingDto.getGroupList().stream().map((it)->
+                            groupMessageMap
+                            .get(it.getGroupId()))
+                            .toList());
+            map.put(emailGroupMappingDto.getEmail(),lst);
+        }
+        return map;
     }
 
     /**

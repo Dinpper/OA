@@ -85,18 +85,21 @@ public class ReportTask {
      * 发送日报
      */
     private void sendDailyReport() throws Exception {
-        interimDailyReport();
-//        List<ReportMessageDto> list = queryDailyReport();
-//        String to = "dinpper@163.com";
-//        emailService.sendDailyReportEmail(to, list);
-//        log.info("发送日报到" + to);
+        var mapping = emailService.getEmailSenderMapping("1");
+        for (Map.Entry<String, List<ReportMessageDto>> stringListEntry : mapping.entrySet()) {
+            emailService.sendWeeklyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
+        }
     }
 
     /**
      * 发送周报
      */
     private void sendWeeklyReport() throws Exception {
-        interimWeeklyReport();
+        //interimWeeklyReport();
+        var mapping = emailService.getEmailSenderMapping("2");
+        for (Map.Entry<String, List<ReportMessageDto>> stringListEntry : mapping.entrySet()) {
+            emailService.sendWeeklyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
+        }
 //        List<ReportMessageDto> list = queryWeeklyReport();
 //        String to = "dinpper@163.com";
 //        emailService.sendWeeklyReportEmail(to, list);
@@ -129,45 +132,8 @@ public class ReportTask {
 
 
     //临时周报内容 Interim Weekly Bulletin
-    void interimDailyReport() throws Exception{
-        List<ReportMessageDto> list = queryDailyReport();
-
-//        list.forEach(System.out::println);
-//        System.out.println("--------------------------------------------------------");
-        //liuxuejiao0406@163.com 全部
-        String to11 = "liuxuejiao0406@163.com";
-        emailService.sendWeeklyReportEmail(to11, list);
-        String to12 = "dinpper@163.com";
-        emailService.sendWeeklyReportEmail(to12, list);
-        log.info("发送日报到:{}，内容为:{}", to11, list);
-//        System.out.println("全部");
-//        System.out.println(list);
-//        System.out.println("--------------------------------------------------------");
-
-
-        //3539306573@qq.com  2605452642@qq.com
-        //        "攻防一组(web)",
-        //        "攻防二组(pwn+re)",
-        //        "攻防三组(misc+密码)"
-        List<ReportMessageDto> res8 = new ArrayList<>();
-        list.forEach(l->{
-            if(Objects.equals(l.getGroupName(), "攻防一组") || Objects.equals(l.getGroupName(), "攻防二组")
-                    || Objects.equals(l.getGroupName(), "攻防三组")){
-                res8.add(l);
-            }
-        });
-        String to81 = "1544189298@qq.com";
-        emailService.sendWeeklyReportEmail(to81, res8);
-        String to82 = "36304612@qq.com";
-        emailService.sendWeeklyReportEmail(to82, res8);
-        log.info("发送日报到:{}，内容为:{}", to81 + " " + to82, res8);
-//        System.out.println("攻防");
-//        System.out.println(res8);
-//        System.out.println("--------------------------------------------------------");
-    }
-
-    //临时周报内容 Interim Weekly Bulletin
     void interimWeeklyReport() throws Exception{
+        //var mapping = emailService.getEmailSenderMapping("0");
         List<ReportMessageDto> list = queryWeeklyReport();
 
 //        list.forEach(System.out::println);

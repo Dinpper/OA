@@ -29,6 +29,7 @@ public class EmailGroupMappingController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "发起成功"));
     }
 
+
     @PostMapping("/queryEmailGroup")
     public void queryEmailGroup(HttpServletRequest request, HttpServletResponse response) throws Exception {
         List<EmailGroupMappingDto> result =  emailGroupMappingService.queryEmailGroup();
