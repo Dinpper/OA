@@ -116,7 +116,21 @@ public class UserController extends BaseController {
         log.info("operator {} updateUser {} 成功", operator, account);
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "修改成功"));
     }
+    @RequestMapping(value = "/updateUsers", method = RequestMethod.POST)
+    public void updateUsers(HttpServletRequest request, HttpServletResponse response,
+                            @RequestBody BatchUpdateUserDto batchDto) throws Exception {
+        String operator = batchDto.getOperator();
+        List<UserDto> users = batchDto.getUsers();
+        log.info("operator {} 批量 updateUsers, size = {}", operator, users.size());
 
+        if (StringUtils.isEmpty(operator) || users == null || users.isEmpty()) {
+            throw new BusinessException(399, "参数错误");
+        }
+
+        userService.updateUsers(batchDto);
+        log.info("operator {} 批量更新用户成功", operator);
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "批量修改成功"));
+    }
     @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
     public void deleteUser(HttpServletRequest request, HttpServletResponse response,
                                 @RequestBody CommonRequestQto qto) throws Exception {

@@ -1,0 +1,97 @@
+server:
+ port: 8880
+ address: 0.0.0.0
+
+spring:
+ application:
+  name: LabSystem
+ datasource:
+  driver-class-name: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://localhost:3306/labsystem
+  username: root
+  password: 123
+ mvc:
+  static-path-pattern: /static/**
+ mail:
+  host: smtp.qq.com
+  port: 465
+  username: 1772775873@qq.com
+  password: sirebdlcvyoacejc
+  protocol: smtp
+  default-encoding: UTF-8
+  properties:
+    mail:
+      smtp:
+       auth: true
+       starttls.enable: true
+       ssl.enable: true
+  multipart:
+   enabled: true
+   max-file-size: 1000MB
+   max-request-size: 1000MB
+ jpa:
+  database-platform: org.hibernate.dialect.MySQLDialect
+  hibernate:
+   ddl-auto: create
+
+mybatis:
+ mapper-locations: classpath:mapper/*.xml
+ type-aliases-package: com.example.labSystem.domain
+
+
+
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+ # token 名称（同时也是 cookie 名称）
+ token-name: satoken
+ # token 有效期（单位：秒） 默认30天，-1 代表永久有效
+ timeout: 2592000
+ # token 最低活跃频率（单位：秒），如果 token 超过此时间没有访问系统就会被冻结，默认-1 代表不限制，永不冻结
+ active-timeout: -1
+ # 是否允许同一账号多地同时登录 （为 true 时允许一起登录, 为 false 时新登录挤掉旧登录）
+ is-concurrent: true
+ # 在多人登录同一账号时，是否共用一个 token （为 true 时所有登录共用一个 token, 为 false 时每次登录新建一个 token）
+ is-share: true
+ # token 风格（默认可取值：uuid、simple-uuid、random-32、random-64、random-128、tik）
+ token-style: uuid
+ # 是否输出操作日志
+ is-log: true
+
+# 讯飞星火配置
+xunfei:
+ client:
+  appid: 96373c06
+  apiSecret: OThhYjM2MzE2ZDFlNDhiMzg2ODdiMmQ5
+  apiKey: ee2ead46ec3a8a5e13adb5044cd79300
+
+
+dingtalk:
+ baseUrl: https://oapi.dingtalk.com/robot/send?access_token=d48685c1f9129ee03a31956ce3aea205c9d7f23ef02c68756256151f19ed5581
+ secret: SECd4feed8c60b3caecde0dd8b5a2f6cf7a12f39a9d3f4c025875998f9163176246
+
+serverBaseUrl: http://172.22.236.90
+
+
+
+logging:
+# config: src/main/resources/logback.xml
+ level:
+  root: INFO
+  org.mybatis: DEBUG
+  com.example.labSystem: DEBUG
+
+#  username: 1772775873@qq.com
+#  password: sirebdlcvyoacejc
+#  username: 2434714918@qq.com
+#  password: ysekssfshlswecgi
+
+fileStorage:
+ rootDir: "E:\\file"
+ reportsDir: "E:\\file\\reports"
+ meetingsDir: "E:\\file\\meetings"
+ projectsDir: "E:\\file\\projects"
+ imageDir: "E:\\file"
+
+ipConfig:
+ labIp: 172.22.236.10/24
+ hznuIp: 10.18.206.180/8

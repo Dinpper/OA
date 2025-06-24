@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
 import java.net.URLEncoder;
@@ -113,6 +114,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUser(UserDto qto) {
         Integer result = usersMapper.updateUser(qto);
         if (result != 1) {
@@ -133,6 +135,14 @@ public class UserServiceImpl implements UserService {
         Integer result = usersMapper.updateUserRole(qto);
         if (result != 1) {
             throw new BusinessException(500, "修改失败");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateUsers(BatchUpdateUserDto buDto) throws Exception {
+        for (UserDto user : buDto.getUsers()) {
+            updateUser(user);
         }
     }
 }

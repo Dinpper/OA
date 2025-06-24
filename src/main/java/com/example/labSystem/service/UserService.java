@@ -22,4 +22,6 @@ public interface UserService {
     void deleteUser(String account) throws Exception;
 
     void updateUserRole(UserDto qto) throws Exception;
+
+    void updateUsers(BatchUpdateUserDto buDto) throws Exception;
 }
