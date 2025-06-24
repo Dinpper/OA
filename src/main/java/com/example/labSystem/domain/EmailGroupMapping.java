@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "email_group_mapping")
+@Table(name = "email_group_mapping_fake")
 public class EmailGroupMapping {
 
     @Id
