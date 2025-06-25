@@ -3,6 +3,7 @@ package com.example.labSystem.service;
 import com.example.labSystem.dto.PageRequestQto;
 import com.example.labSystem.dto.RecordByPageDto;
 import com.example.labSystem.dto.RecordDto;
+import com.example.labSystem.dto.RecordExcelDto;
 import com.example.labSystem.dto.RecordSonDto;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.ibatis.annotations.Param;
@@ -24,5 +25,7 @@ public interface RecordService {
     List<RecordSonDto> querySignDurationWeek(String account);
 
     List<RecordSonDto> queryGroupSignDuration();
+
+    List<RecordExcelDto> queryRecentCheckInUsers();
 
 }

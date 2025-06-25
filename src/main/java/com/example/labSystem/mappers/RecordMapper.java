@@ -51,4 +51,6 @@ public interface RecordMapper {
     Integer automaticSignOut(@Param("recordId") Integer recordId);
 
     List<RecordDto> SignOutReminderUserList();
+
+    List<RecordExcelDto> queryRecentCheckInUsers();
 }

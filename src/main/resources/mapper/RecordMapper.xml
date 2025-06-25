@@ -285,4 +285,16 @@
           AND u.deleteFlag = 0
     </select>
 
+    <select id="queryRecentCheckInUsers"
+            resultType="com.example.labSystem.dto.RecordExcelDto">
+        SELECT u.userName, u.groupName, r.startDate
+        FROM record r
+        JOIN users u ON r.account = u.account
+        WHERE r.reportDate = CURDATE()
+          AND r.statusType = 0
+          AND u.deleteFlag = 0
+        ORDER BY r.startDate DESC
+        LIMIT 10
+    </select>
+
 </mapper>

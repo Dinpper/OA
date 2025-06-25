@@ -111,4 +111,9 @@ public class RecordServiceImpl implements RecordService {
         return recordMapper.queryGroupSignDuration();
     }
 
+    @Override
+    public List<RecordExcelDto> queryRecentCheckInUsers() {
+        return recordMapper.queryRecentCheckInUsers();
+    }
+
 }

@@ -154,4 +154,17 @@ public class RecordController extends BaseController {
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, resList));
     }
 
+    @RequestMapping(value = "/queryRecentCheckInUsers", method = RequestMethod.POST)
+    public void queryRecentCheckInUsers(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        log.info("queryRecentCheckInUsers request");
+        try {
+            List<RecordExcelDto> resList = recordService.queryRecentCheckInUsers();
+            log.info("queryRecentCheckInUsers result count: {}", resList.size());
+            BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, resList));
+        } catch (Exception e) {
+            log.error("queryRecentCheckInUsers error", e);
+            BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_ERROR, "Query failed"));
+        }
+    }
+
 }
