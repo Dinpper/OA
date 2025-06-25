@@ -37,4 +37,18 @@ public class SystemConfigServiceImpl implements SystemConfigService {
             throw new BusinessException(500, "修改失败");
         }
     }
+
+    @Override
+    public boolean queryEnableNetWorkRestriction() {
+        return "true".equals(systemConfigMapper.queryValueByKey("networkRestriction"));
+    }
+
+    @Override
+    public void updateEnableNetWorkRestriction(Boolean value) {
+        Integer result = systemConfigMapper.updateValue("networkRestriction",value.toString());
+
+        if (result != 1) {
+            throw new BusinessException(500, "修改失败");
+        }
+    }
 }

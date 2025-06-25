@@ -3,6 +3,7 @@ package com.example.labSystem.controller;
 import com.example.labSystem.common.BusinessException;
 import com.example.labSystem.dto.*;
 import com.example.labSystem.service.RecordService;
+import com.example.labSystem.service.SystemConfigService;
 import com.example.labSystem.utils.GsonUtil;
 import com.example.labSystem.utils.IpUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,6 +35,8 @@ import java.util.Objects;
 public class RecordController extends BaseController {
     @Autowired
     private RecordService recordService;
+    @Autowired
+    private SystemConfigService systemConfigService;
 
     @Value("${ipConfig.labIp}")
     private String[] labIp;
@@ -76,9 +79,11 @@ public class RecordController extends BaseController {
             throw new BusinessException(399, "参数错误");
         }
         //签到通过内网ip访问
-        String visitIp = IpUtil.getIpAddr(request);
-        if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
-            throw new BusinessException(403, "签到失败，请通过实验室内网签到");
+        if(systemConfigService.queryEnableNetWorkRestriction()){
+            String visitIp = IpUtil.getIpAddr(request);
+            if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
+                throw new BusinessException(403, "签到失败，请通过实验室内网签到");
+            }
         }
         recordService.attendanceCheckIn(account);
         log.info("User {} checked in at {}", account, LocalDateTime.now());
@@ -102,11 +107,12 @@ public class RecordController extends BaseController {
         if (StringUtils.isEmpty(account)) {
             throw new BusinessException(399, "参数错误");
         }
-        String visitIp = IpUtil.getIpAddr(request);
-        if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
-            throw new BusinessException(403, "签到失败，请通过实验室内网签到");
+        if(systemConfigService.queryEnableNetWorkRestriction()){
+            String visitIp = IpUtil.getIpAddr(request);
+            if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
+                throw new BusinessException(403, "签到失败，请通过实验室内网签到");
+            }
         }
-
 
         recordService.attendanceCheckOut(account);
         log.info("User {} checked out at {}", account, LocalDateTime.now());

@@ -8,4 +8,8 @@ public interface SystemConfigService {
     String queryIsSkipHolidays();
 
     void updateIsSkipHolidays(String value);
+
+    boolean queryEnableNetWorkRestriction();
+
+    void updateEnableNetWorkRestriction(Boolean value);
 }

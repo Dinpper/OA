@@ -46,4 +46,17 @@ public class SystemConfigController extends BaseController {
         systemConfigService.updateIsSkipHolidays(qto.getConfigValue());
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "修改成功"));
     }
+
+    @RequestMapping(value = "/queryNetWorkRestriction", method = RequestMethod.POST)
+    public void queryNetWorkRestriction(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Boolean result = systemConfigService.queryEnableNetWorkRestriction();
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, result));
+    }
+
+    @RequestMapping(value = "/updateNetWorkRestriction", method = RequestMethod.POST)
+    public void updateNetWorkRestriction(HttpServletRequest request, HttpServletResponse response,
+                                     @RequestBody SystemConfigDto qto) throws Exception {
+        systemConfigService.updateEnableNetWorkRestriction(Boolean.valueOf(qto.getConfigValue()));
+        BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "修改成功"));
+    }
 }
