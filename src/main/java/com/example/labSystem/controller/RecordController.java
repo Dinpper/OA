@@ -76,10 +76,10 @@ public class RecordController extends BaseController {
             throw new BusinessException(399, "参数错误");
         }
         //签到通过内网ip访问
-//        String visitIp = IpUtil.getIpAddr(request);
-//        if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
-//            throw new BusinessException(403, "签到失败，请通过实验室内网签到");
-//        }
+        String visitIp = IpUtil.getIpAddr(request);
+        if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
+            throw new BusinessException(403, "签到失败，请通过实验室内网签到");
+        }
         recordService.attendanceCheckIn(account);
         log.info("User {} checked in at {}", account, LocalDateTime.now());
         BackJsonResult(response, new JsonResultDto(JsonResultDto.CODE_OK, "签到成功"));
@@ -102,10 +102,10 @@ public class RecordController extends BaseController {
         if (StringUtils.isEmpty(account)) {
             throw new BusinessException(399, "参数错误");
         }
-//        String visitIp = IpUtil.getIpAddr(request);
-//        if (!Objects.equals(visitIp, labIp)) {
-//            throw new BusinessException(403, "签退失败，请通过实验室内网签退");
-//        }
+        String visitIp = IpUtil.getIpAddr(request);
+        if(Arrays.stream(labIp).noneMatch((ip)->IpUtil.isInNetworkIpv4(visitIp,ip))){
+            throw new BusinessException(403, "签到失败，请通过实验室内网签到");
+        }
 
 
         recordService.attendanceCheckOut(account);
