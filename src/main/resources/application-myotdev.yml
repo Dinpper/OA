@@ -7,9 +7,9 @@ spring:
   name: LabSystem
  datasource:
   driver-class-name: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/labsystem
-  username: root
-  password: 123
+  url: jdbc:mysql://172.22.236.90:3306/labsystem
+  username: labsystem
+  password: 123456
  mvc:
   static-path-pattern: /static/**
  mail:

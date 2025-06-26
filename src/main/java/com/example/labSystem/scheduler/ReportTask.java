@@ -87,7 +87,8 @@ public class ReportTask {
     private void sendDailyReport() throws Exception {
         var mapping = emailService.getEmailSenderMapping("1");
         for (Map.Entry<String, List<ReportMessageDto>> stringListEntry : mapping.entrySet()) {
-            emailService.sendWeeklyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
+            emailService.sendDailyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
+            log.info("发送日报到:{}",stringListEntry.getKey());
         }
     }
 
@@ -99,6 +100,7 @@ public class ReportTask {
         var mapping = emailService.getEmailSenderMapping("2");
         for (Map.Entry<String, List<ReportMessageDto>> stringListEntry : mapping.entrySet()) {
             emailService.sendWeeklyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
+            log.info("发送周报到:{}",stringListEntry.getKey());
         }
 //        List<ReportMessageDto> list = queryWeeklyReport();
 //        String to = "dinpper@163.com";

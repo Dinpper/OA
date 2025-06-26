@@ -51,7 +51,7 @@ public class ScheduledService implements ApplicationRunner {
      */
     public void autoCheck() {
         List<HolidayDate> holidays = holidayDateService.getHolidays(DateUtil.getCurDate());
-        if (holidays == null||holidays.size()==0) {
+        if (holidays == null|| holidays.isEmpty()) {
             int currentYear = LocalDate.now().getYear();
             holidayDateService.initWorkDay(currentYear);
         }

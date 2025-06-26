@@ -22,9 +22,7 @@ public class SignOutScheduler {
     public void executeSignOutTask() throws Exception {
         log.info("开始自动签退...");
         List<Record> list = recordMapper.queryNotSignOutToday();
-        list.forEach(l->{
-            recordMapper.automaticSignOut(l.getRecordId());
-        });
+        list.forEach(l-> recordMapper.automaticSignOut(l.getRecordId()));
         log.info("自动签退完毕...");
     }
 
