@@ -260,14 +260,14 @@
             resultType="com.example.labSystem.domain.Record">
         SELECT *
         FROM record r
-        WHERE reportDate &lt; CURDATE()
+        WHERE reportDate &lt;= CURDATE()
           AND statusType = 0
     </select>
 
     <update id="automaticSignOut">
         UPDATE record
-        SET endDate = CONCAT(startDate, ' 23:59:59'),
-            signDuration = TIMESTAMPDIFF(MINUTE, startDate, CONCAT(startDate, ' 23:59:59')),
+        SET endDate = CONCAT(DATE(startDate), ' 23:59:59'),
+            signDuration = TIMESTAMPDIFF(MINUTE, startDate, CONCAT(DATE(startDate), ' 23:59:59')),
             statusType = 1
         WHERE recordId = #{recordId}
     </update>
@@ -294,7 +294,6 @@
           AND r.statusType = 0
           AND u.deleteFlag = 0
         ORDER BY r.startDate DESC
-        LIMIT 10
     </select>
 
 </mapper>

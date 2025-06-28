@@ -21,10 +21,10 @@ public class EmailServiceTest {
 
     @Test
     void testEmailSend() throws Exception {
-        var mapping = emailService.getEmailSenderMapping("2");
+        var mapping = emailService.getEmailSenderMapping("1");
         for (Map.Entry<String, List<ReportMessageDto>> stringListEntry : mapping.entrySet()) {
-            if(stringListEntry.getKey().startsWith("1544189298@qq.com"))
-                emailService.sendWeeklyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
+            if(stringListEntry.getKey().startsWith("3204420579@qq.com"))
+                emailService.sendDailyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
         }
     }
 

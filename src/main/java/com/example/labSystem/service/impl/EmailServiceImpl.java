@@ -151,6 +151,7 @@ public class EmailServiceImpl implements EmailService {
 
         // 发送邮件
         javaMailSender.send(message);
+
     }
 
     @Override
