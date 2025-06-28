@@ -39,6 +39,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -269,7 +270,7 @@ public class RecordMapperTest {
                 resList.add(ReportMessageDto);
             }
 
-        emailService.sendDailyReportEmail("dinpper@163.com", resList);
+        emailService.sendDailyReportEmail("dinpper@163.com", LocalDate.now(),resList);
     }
 
 

@@ -7,6 +7,7 @@ import com.example.labSystem.dto.ReportMessageDto;
 import com.example.labSystem.dto.ReportTaskDto;
 import jakarta.mail.MessagingException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -15,11 +16,11 @@ public interface EmailService {
 
     void sendReportReminderEmail(String to, String name) throws MessagingException;
 
-    void sendDailyReportEmail(String to, List<ReportMessageDto> dailyReports) throws MessagingException;
+    void sendDailyReportEmail(String to,LocalDate date, List<ReportMessageDto> dailyReports) throws MessagingException;
 
     void sendWeeklyReportEmail(String to, List<ReportMessageDto> dailyReports) throws MessagingException;
 
     Map<String, List<ReportMessageDto>> getEmailSenderMapping(String reportType) throws Exception;
-
+    Map<String, List<ReportMessageDto>> getEmailSenderMappingByDate(String reportType, LocalDate date) throws Exception;
     Map<Integer, ReportMessageDto> queryReportMessage(String reportType) throws Exception;
 }

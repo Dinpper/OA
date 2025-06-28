@@ -5,6 +5,8 @@ import com.example.labSystem.domain.Record;
 import com.example.labSystem.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -25,6 +27,7 @@ public interface RecordMapper {
     Integer attendanceCheckOut(@Param("account") String account);
 
     Double querySignDurationToDayAll(@Param("account") String account);
+    Double querySignDurationToDaySelect(SelectSignDateDto dto);
     Double querySignDurationWeekAll(@Param("account") String account);
     Double querySignDurationMonthAll(@Param("account") String account);
 

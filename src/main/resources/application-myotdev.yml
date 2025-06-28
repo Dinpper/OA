@@ -13,31 +13,31 @@ spring:
  mvc:
   static-path-pattern: /static/**
  mail:
-  host: smtp.qq.com
-  port: 465
-  username: 1772775873@qq.com
-  password: sirebdlcvyoacejc
-  protocol: smtp
-  default-encoding: UTF-8
-  properties:
+   host: smtp.gmail.com
+   port: 587
+   username: gsycl2004@gmail.com
+   password: gpkgvrkgagtmbzis
+   protocol: smtp
+   default-encoding: UTF-8
+   properties:
     mail:
       smtp:
-       auth: true
+
        starttls.enable: true
-       ssl.enable: true
-  multipart:
-   enabled: true
-   max-file-size: 1000MB
-   max-request-size: 1000MB
+
  jpa:
   database-platform: org.hibernate.dialect.MySQLDialect
   hibernate:
    ddl-auto: create
+ servlet:
+  multipart:
+   enabled: true
+   max-file-size: 1000MB
+   max-request-size: 1000MB
 
 mybatis:
  mapper-locations: classpath:mapper/*.xml
  type-aliases-package: com.example.labSystem.domain
-
 
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############

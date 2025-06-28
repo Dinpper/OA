@@ -54,6 +54,17 @@
           AND reportDate = CURDATE()
     </select>
 
+    <select id="querySignDurationToDaySelect" parameterType="com.example.labSystem.dto.SelectSignDateDto"
+            resultType="java.lang.Double">
+        SELECT
+            ROUND(SUM(CASE WHEN statusType = 1 THEN CASE WHEN signDuration > 480 THEN 0 ELSE signDuration END
+                           ELSE CASE WHEN TIMESTAMPDIFF(MINUTE, startDate, NOW()) > 480 THEN 0 ELSE TIMESTAMPDIFF(MINUTE, startDate, NOW()) END
+                END) / 60, 1) AS signDuration
+        FROM record
+        WHERE account = #{account}
+          AND reportDate = #{date}
+    </select>
+
     <select id="querySignDurationWeekAll" parameterType="java.lang.String"
             resultType="java.lang.Double">
         SELECT

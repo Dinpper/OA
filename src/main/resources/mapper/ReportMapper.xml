@@ -150,5 +150,11 @@
           AND g.reportFlag = 1
 
     </select>
+    <select id="queryReportDailyByAccountAndDate" parameterType="com.example.labSystem.dto.SelectSignDateDto" resultType="com.example.labSystem.dto.ReportDto">
+        SELECT workContent, problems, plan
+        FROM report
+        WHERE account = #{account}
+          AND reportDate = #{date}
+    </select>
 
 </mapper>

@@ -87,7 +87,7 @@ public class ReportTask {
     private void sendDailyReport() throws Exception {
         var mapping = emailService.getEmailSenderMapping("1");
         for (Map.Entry<String, List<ReportMessageDto>> stringListEntry : mapping.entrySet()) {
-            emailService.sendDailyReportEmail(stringListEntry.getKey(),stringListEntry.getValue());
+            emailService.sendDailyReportEmail(stringListEntry.getKey(),LocalDate.now(),stringListEntry.getValue());
             log.info("发送日报到:{}",stringListEntry.getKey());
         }
     }

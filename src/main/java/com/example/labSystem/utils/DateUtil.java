@@ -510,10 +510,10 @@ public class DateUtil {
         return calendar.getTime();
     }
 
-    public static String getTodayByMMDD() {
-        LocalDate today = LocalDate.now();  // 获取今天的日期
+    public static String getTodayByMMDD(LocalDate date) {
+        // 获取今天的日期
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMdd");  // 定义日期格式
-        return today.format(formatter);
+        return date.format(formatter);
     }
 
 

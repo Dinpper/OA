@@ -15,6 +15,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.cglib.core.Local;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ import org.thymeleaf.context.Context;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -131,14 +133,14 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendDailyReportEmail(String to, List<ReportMessageDto> dailyReports) throws MessagingException {
+    public void sendDailyReportEmail(String to, LocalDate date, List<ReportMessageDto> dailyReports) throws MessagingException {
 
         // 构造邮件内容
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-        helper.setFrom(username);
+        helper.setFrom("noreply@lab404.hznu.edu.cn");
         helper.setTo(to);
-        helper.setSubject(DateUtil.getTodayByMMDD() + "日报");
+        helper.setSubject(DateUtil.getTodayByMMDD(date) + "日报");
 
         // 设置模板上下文
         Context context = new Context();
@@ -191,6 +193,102 @@ public class EmailServiceImpl implements EmailService {
             map.put(emailGroupMappingDto.getEmail(),lst);
         }
         return map;
+    }
+
+    @Override
+    public Map<String, List<ReportMessageDto>> getEmailSenderMappingByDate(String reportType, LocalDate date) throws Exception {
+        var map = new HashMap<String,List<ReportMessageDto>>();
+        var receiverGroup = emailGroupMappingMapper.queryEmailGroupMapping();
+        var groupMessageMap = queryReportMessageByDate(reportType,date);
+        for (EmailGroupMappingDto emailGroupMappingDto : receiverGroup) {
+            var lst = map.getOrDefault(emailGroupMappingDto.getEmail(),new ArrayList<>());
+            lst.addAll(emailGroupMappingDto.getGroupList().stream().map((it)->
+                            groupMessageMap
+                                    .get(it.getGroupId()))
+                    .toList());
+            map.put(emailGroupMappingDto.getEmail(),lst);
+        }
+        return map;
+    }
+
+    private Map<Integer, ReportMessageDto> queryReportMessageByDate(String reportType, LocalDate date) {
+        // 初始化结果 Map，key 为 groupId，value 为每个小组的详细信息
+        Map<Integer, ReportMessageDto> resultMap = new LinkedHashMap<>();
+
+        // 获取每个小组对应的成员账号列表（包含 groupId、groupName、accountList）
+        List<GroupUserDto> groupUserList = userService.queryAccountListByReportGroup();
+
+        // 遍历每个小组
+        for (GroupUserDto groupUserDto : groupUserList) {
+            Integer groupId = groupUserDto.getGroupId();
+            String groupName = groupUserDto.getGroupName();
+
+            // 若该 groupId 尚未存在于 Map 中，则初始化一个新的 ReportMessageDto
+            ReportMessageDto reportMessageDto = resultMap.getOrDefault(groupId, new ReportMessageDto());
+            reportMessageDto.setGroupId(groupId);
+            reportMessageDto.setGroupName(groupName);
+
+            // 初始化或获取已有的成员列表
+            List<ReportDto> members = reportMessageDto.getMembers() == null ? new ArrayList<>() : reportMessageDto.getMembers();
+
+            // 遍历该组下的所有账号
+            for (String account : groupUserDto.getAccountList()) {
+                ReportDto reportDto = new ReportDto();
+
+                // 查询用户名
+                reportDto.setUserName(usersMapper.queryUserNameByAccount(account));
+
+                Double signDuration = null;
+                List<ReportDto> reportDtoList = null;
+
+                if(Objects.equals(reportType, "1")){
+                    // 查询今日签到时长（单位：小时）
+                    var dto = new SelectSignDateDto();
+                    dto.setAccount(account);
+                    dto.setDate(date);
+                    signDuration = recordMapper.querySignDurationToDaySelect(dto);
+                    // 查询该用户当天的日报记录
+                    reportDtoList = reportMapper.queryReportDailyByAccountAndDate(dto);
+                }else if(Objects.equals(reportType, "2")){
+                    // 查询本周签到时长（单位：小时）
+                    signDuration = recordMapper.querySignDurationWeekAll(account);
+                    // 查询该用户本周的周报记录
+                    reportDtoList = reportMapper.queryReportWeeklyByAccount(account);
+                }
+
+                reportDto.setSignDuration(signDuration == null ? "" : signDuration + "h");
+
+                // 汇总多个日报中的工作内容、问题与计划
+                StringBuilder workContent = new StringBuilder();
+                StringBuilder problems = new StringBuilder();
+                StringBuilder plan = new StringBuilder();
+
+                if (reportDtoList != null) {
+                    for (ReportDto r : reportDtoList) {
+                        workContent.append(r.getWorkContent()).append("; ");
+                        problems.append(r.getProblems()).append("; ");
+                        plan.append(r.getPlan()).append("; ");
+                    }
+                }
+
+                // 设置汇总字段
+                reportDto.setWorkContent(workContent.toString());
+                reportDto.setProblems(problems.toString());
+                reportDto.setPlan(plan.toString());
+
+                // 加入成员列表
+                members.add(reportDto);
+            }
+
+            // 更新成员列表到该小组 DTO 中
+            reportMessageDto.setMembers(members);
+
+            // 放入结果 Map（以 groupId 为键）
+            resultMap.put(groupId, reportMessageDto);
+        }
+
+        // 返回 Map 格式的小组日报信息（方便做个性化邮件、报表等处理）
+        return resultMap;
     }
 
     /**
